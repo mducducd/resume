@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites — Minh Duc Nguyen</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #222;
+            line-height: 1.6;
+        }
+        .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
+        nav { margin-bottom: 40px; display: flex; gap: 20px; font-size: 0.9rem; }
+        nav a { color: #555; text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.15s, border-color 0.15s; }
+        nav a:hover, nav a.active { color: #111; border-bottom-color: #111; }
+        h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+        hr { border: none; border-top: 1px solid #eaeaea; margin: 32px 0; }
+        section { margin-bottom: 36px; }
+        h2 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 16px; }
+        .fav-item { margin-bottom: 20px; }
+        .fav-item a { font-size: 1rem; font-weight: 600; color: #111; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+        .fav-item a:hover { border-bottom-color: #111; }
+        .fav-item p { font-size: 0.9rem; color: #555; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="learning.html">Learning</a>
+            <a href="works.html">Works</a>
+            <a href="favorites.html" class="active">Favorites</a>
+        </nav>
+        <h1>Favorites</h1>
+        <p style="color:#555; font-size:0.95rem;">Things I love outside of research and code.</p>
+        <hr>
+        <section>
+            <h2>Photography</h2>
+            <div class="fav-item">
+                <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">My Flickr</a>
+                <p>A collection of photos I've taken — moments, places, and light captured along my travels and daily life. Photography is how I slow down and pay attention to the world around me.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
