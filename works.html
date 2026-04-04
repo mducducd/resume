@@ -21,35 +21,46 @@
         hr { border: none; border-top: 1px solid #eaeaea; margin: 32px 0; }
         section { margin-bottom: 36px; }
         h2 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 16px; }
-        .project { margin-bottom: 36px; padding-bottom: 36px; border-bottom: 1px solid #f0f0f0; }
+
+        .project {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 36px;
+            padding-bottom: 36px;
+            border-bottom: 1px solid #f0f0f0;
+        }
         .project:last-child { border-bottom: none; }
+
+        .project-info { flex: 1; }
+
         .project-thumb {
-            width: 100%;
-            height: 180px;
+            width: 110px;
+            height: 110px;
+            flex-shrink: 0;
             border-radius: 8px;
             overflow: hidden;
             background: #f4f4f5;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .project-thumb img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: center center;
             display: block;
         }
+        /* Logo: contain centered */
         .project-thumb.logo-thumb img {
             object-fit: contain;
-            padding: 24px;
+            padding: 16px;
             background: #fff;
         }
-        .project-thumb.crop-middle img {
-            object-position: center 33%;
+        /* Illustration: crop horizontally — show middle third vertically */
+        .project-thumb.crop-h img {
             object-fit: cover;
+            object-position: center 50%;
+            transform: scaleY(3);
+            transform-origin: center center;
         }
+
         .project-date { font-size: 0.78rem; color: #bbb; margin-bottom: 4px; }
         .project-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
         .project-title a { color: #111; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
@@ -74,24 +85,28 @@
 
             <!-- Pathology Agent — older, listed first -->
             <div class="project">
-                <div class="project-thumb crop-middle">
+                <div class="project-info">
+                    <p class="project-date">Mar 2026</p>
+                    <p class="project-title"><a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Pathology Agent</a></p>
+                    <p class="project-lang">Python</p>
+                    <p class="project-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
+                </div>
+                <div class="project-thumb crop-h">
                     <img src="https://raw.githubusercontent.com/mducducd/Pathology_agent/main/static/assets/illustration.png" alt="Pathology Agent illustration">
                 </div>
-                <p class="project-date">Mar 2026</p>
-                <p class="project-title"><a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Pathology Agent</a></p>
-                <p class="project-lang">Python</p>
-                <p class="project-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
             </div>
 
             <!-- STAMP-Workbench — newer, listed second -->
             <div class="project">
+                <div class="project-info">
+                    <p class="project-date">Mar 2026</p>
+                    <p class="project-title"><a href="https://github.com/mducducd/STAMP-Workbench" target="_blank" rel="noopener">STAMP-Workbench</a></p>
+                    <p class="project-lang">JavaScript</p>
+                    <p class="project-desc">A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction — making computational pathology pipelines accessible without deep engineering overhead.</p>
+                </div>
                 <div class="project-thumb logo-thumb">
                     <img src="https://raw.githubusercontent.com/mducducd/STAMP-Workbench/installable-package/stamp_workbench/static/assets/STAMP_logo.svg" alt="STAMP-Workbench logo">
                 </div>
-                <p class="project-date">Mar 2026</p>
-                <p class="project-title"><a href="https://github.com/mducducd/STAMP-Workbench" target="_blank" rel="noopener">STAMP-Workbench</a></p>
-                <p class="project-lang">JavaScript</p>
-                <p class="project-desc">A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction — making computational pathology pipelines accessible without deep engineering overhead.</p>
             </div>
 
         </section>
