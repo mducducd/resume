@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favorites — Minh Duc Nguyen</title>
+    <title>Favorites — Duc Nguyen (Duke)</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -14,24 +14,46 @@
             line-height: 1.6;
             opacity: 0;
             animation: fadeIn 0.4s ease forwards;
+            transition: background 0.3s, color 0.3s;
         }
+        body.dark { background: #111; color: #ddd; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to   { opacity: 1; transform: translateY(0); }
         }
         .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
-        nav { margin-bottom: 40px; display: flex; gap: 20px; font-size: 0.9rem; }
+        nav { margin-bottom: 40px; display: flex; gap: 20px; font-size: 0.9rem; align-items: center; }
         nav a { color: #555; text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s; }
         nav a:hover, nav a.active { color: #111; border-bottom-color: #111; }
+        body.dark nav a { color: #aaa; }
+        body.dark nav a:hover, body.dark nav a.active { color: #fff; border-bottom-color: #fff; }
+        .dark-toggle {
+            margin-left: auto;
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #555;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        body.dark .dark-toggle { border-color: #444; color: #aaa; }
+        .dark-toggle:hover { background: #f4f4f5; }
+        body.dark .dark-toggle:hover { background: #222; }
         h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
         hr { border: none; border-top: 1px solid #eaeaea; margin: 32px 0; }
+        body.dark hr { border-top-color: #333; }
         section { margin-bottom: 36px; }
         h2 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 16px; }
         .fav-item { margin-bottom: 20px; transition: transform 0.2s; }
         .fav-item:hover { transform: translateX(4px); }
         .fav-item a { font-size: 1rem; font-weight: 600; color: #111; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+        body.dark .fav-item a { color: #eee; }
         .fav-item a:hover { border-bottom-color: #111; }
+        body.dark .fav-item a:hover { border-bottom-color: #eee; }
         .fav-item p { font-size: 0.9rem; color: #555; margin-top: 4px; }
+        body.dark .fav-item p { color: #aaa; }
     </style>
 </head>
 <body>
@@ -41,6 +63,7 @@
             <a href="learning.html">Learning</a>
             <a href="works.html">Projects</a>
             <a href="favorites.html" class="active">Favorites</a>
+            <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
         </nav>
         <h1>Favorites</h1>
         <p style="color:#555; font-size:0.95rem;">Things I love outside of research and code.</p>
@@ -64,6 +87,20 @@
 
     </div>
     <script>
+        function toggleDark() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.querySelector('.dark-toggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+        }
+        (function() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');
+                document.addEventListener('DOMContentLoaded', function() {
+                    const btn = document.querySelector('.dark-toggle');
+                    if (btn) btn.textContent = '☀️ Light';
+                });
+            }
+        })();
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
