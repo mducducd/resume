@@ -195,8 +195,10 @@
             document.querySelectorAll('.track-item').forEach(function (item) { item.classList.remove('playing'); });
             el.classList.add('playing');
             currentIndex = index;
+            var trackUrl = TRACKS[index].permalink_url;
+            sessionStorage.setItem('sc_track_url', trackUrl);
             var src = 'https://w.soundcloud.com/player/?url=' +
-                encodeURIComponent(TRACKS[index].permalink_url) +
+                encodeURIComponent(trackUrl) +
                 '&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
             document.getElementById('sc-player').src = src;
             document.getElementById('player-bar').classList.add('visible');
@@ -205,6 +207,7 @@
         function closePlayer() {
             document.getElementById('player-bar').classList.remove('visible');
             document.getElementById('sc-player').src = '';
+            sessionStorage.removeItem('sc_track_url');
             document.querySelectorAll('.track-item').forEach(function (item) { item.classList.remove('playing'); });
             currentIndex = -1;
         }
