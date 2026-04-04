@@ -32,7 +32,11 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #888;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+        }
+        .goal-line {
+            font-size: 0.95rem;
+            color: #333;
         }
         .subsection-title {
             font-size: 1rem;
@@ -46,23 +50,12 @@
             margin-bottom: 14px;
         }
         .note-list { list-style: none; }
-        .note-list li { margin-bottom: 16px; transition: transform 0.2s; }
+        .note-list li { margin-bottom: 14px; transition: transform 0.2s; }
         .note-list li:hover { transform: translateX(4px); }
         .note-list a { font-size: 0.95rem; color: #0070f3; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
         .note-list a:hover { border-bottom-color: #0070f3; }
-        .note-list .desc { font-size: 0.85rem; color: #777; margin-top: 2px; }
         .credit { font-size: 0.8rem; color: #aaa; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaeaea; }
         .credit a { color: #aaa; text-decoration: underline; }
-        .view-all {
-            display: inline-block;
-            margin-top: 14px;
-            font-size: 0.85rem;
-            color: #0070f3;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
-        }
-        .view-all:hover { border-bottom-color: #0070f3; }
     </style>
 </head>
 <body>
@@ -79,6 +72,11 @@
         <hr>
 
         <section>
+            <p class="section-label">Current Learning Goals</p>
+            <p class="goal-line">German A1, Real and Complex Analysis</p>
+        </section>
+
+        <section>
             <p class="section-label">Study Notes</p>
 
             <p class="subsection-title">Selected Study Notes</p>
@@ -86,40 +84,18 @@
 
             <ul class="note-list">
                 <li>
-                    <a href="https://phucnguyen.dev/writing/build-your-own-rag" target="_blank" rel="noopener">Build Your Own RAG</a>
-                    <p class="desc">A hands-on walkthrough of building a Retrieval-Augmented Generation pipeline from scratch.</p>
+                    <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">A complete breakdown of the implementation details of Megatron-LM, torchgpipe, and OSLO codebases</a>
                 </li>
                 <li>
-                    <a href="https://phucnguyen.dev/writing/transformer-attention" target="_blank" rel="noopener">Understanding Transformer Attention</a>
-                    <p class="desc">Breaking down self-attention, multi-head attention, and positional encodings intuitively.</p>
+                    <a href="https://phrygian-alarm-029.notion.site/Clean-FP8-LM-Training-FP8-Large-Language-Models-c1e88b30bbe64ed9b6d5df124aae267e" target="_blank" rel="noopener">FP8-LM: Training FP8 Large Language Models</a>
                 </li>
                 <li>
-                    <a href="https://phucnguyen.dev/writing/diffusion-models" target="_blank" rel="noopener">Diffusion Models from Scratch</a>
-                    <p class="desc">How denoising diffusion probabilistic models work — forward process, reverse process, and training.</p>
+                    <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod - Elastic Training and Fault-Tolerance</a>
                 </li>
                 <li>
-                    <a href="https://phucnguyen.dev/writing/llm-agents" target="_blank" rel="noopener">LLM Agents and Tool Use</a>
-                    <p class="desc">Patterns for building autonomous agents powered by large language models, including tool calling and planning.</p>
-                </li>
-                <li>
-                    <a href="https://phucnguyen.dev/writing/fine-tuning-llms" target="_blank" rel="noopener">Fine-Tuning LLMs</a>
-                    <p class="desc">A practical guide to instruction tuning, LoRA, and RLHF for adapting large language models.</p>
-                </li>
-                <li>
-                    <a href="https://phucnguyen.dev/writing/vector-databases" target="_blank" rel="noopener">Vector Databases Explained</a>
-                    <p class="desc">What vector databases are, how they index embeddings, and when to use them.</p>
-                </li>
-                <li>
-                    <a href="https://phucnguyen.dev/writing/contrastive-learning" target="_blank" rel="noopener">Contrastive Learning</a>
-                    <p class="desc">SimCLR, MoCo, and CLIP — learning representations by comparing similar and dissimilar pairs.</p>
-                </li>
-                <li>
-                    <a href="https://phucnguyen.dev/writing/multimodal-models" target="_blank" rel="noopener">Multimodal Models</a>
-                    <p class="desc">How vision-language models bridge image and text — architectures, training objectives, and applications.</p>
+                    <a href="https://phrygian-alarm-029.notion.site/notes-reading-7b6946b8f4074771b9922654d61075d6" target="_blank" rel="noopener">All other unorganized notes</a>
                 </li>
             </ul>
-
-            <a class="view-all" href="https://phucnguyen.dev" target="_blank" rel="noopener">View all notes on phucnguyen.dev →</a>
 
             <p class="credit">
                 Notes originally compiled by <a href="https://phucnguyen.dev" target="_blank" rel="noopener">Phuc Nguyen</a> — shared with credit and appreciation.
