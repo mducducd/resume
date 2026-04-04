@@ -586,8 +586,10 @@
         (function() {
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark');
-                var btn = document.querySelector('.dark-toggle');
-                if (btn) btn.textContent = '☀️ Light';
+                document.addEventListener('DOMContentLoaded', function() {
+                    var btn = document.querySelector('.dark-toggle');
+                    if (btn) btn.textContent = '☀️ Light';
+                });
             }
         })();
 
