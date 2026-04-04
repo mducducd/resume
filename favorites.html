@@ -154,6 +154,14 @@
             margin-top: 2px;
         }
 
+        /* Loading */
+        .track-loading {
+            padding: 16px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
         /* Player bar */
         #player-bar {
             position: fixed;
@@ -224,36 +232,7 @@
                 <span class="playlist-title">Random rhymes for lovely minds</span>
             </div>
             <div class="track-list" id="track-list">
-                <div class="track-item" onclick="playTrack(this,0)">
-                    <div class="track-num">
-                        <span class="track-num-text">1</span>
-                        <div class="track-wave"><span></span><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="track-info">
-                        <div class="track-name">Loading…</div>
-                        <div class="track-artist">SoundCloud</div>
-                    </div>
-                </div>
-                <div class="track-item" onclick="playTrack(this,1)">
-                    <div class="track-num">
-                        <span class="track-num-text">2</span>
-                        <div class="track-wave"><span></span><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="track-info">
-                        <div class="track-name">Loading…</div>
-                        <div class="track-artist">SoundCloud</div>
-                    </div>
-                </div>
-                <div class="track-item" onclick="playTrack(this,2)">
-                    <div class="track-num">
-                        <span class="track-num-text">3</span>
-                        <div class="track-wave"><span></span><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="track-info">
-                        <div class="track-name">Loading…</div>
-                        <div class="track-artist">SoundCloud</div>
-                    </div>
-                </div>
+                <div class="track-loading" id="track-loading">Loading tracks…</div>
             </div>
         </section>
     </div>
@@ -263,44 +242,80 @@
         <iframe id="sc-player" allow="autoplay" src=""></iframe>
     </div>
 
+    <!-- Hidden SoundCloud widget for playlist data -->
+    <iframe id="sc-widget-iframe"
+        src="https://w.soundcloud.com/player/?url=https%3A//on.soundcloud.com/wEK3uk6JhhJwDjpyWV&auto_play=false"
+        style="display:none; width:1px; height:1px;"
+        title="SoundCloud playlist widget"
+        allow="autoplay">
+    </iframe>
+
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
     <script>
-        var TRACKS = [
-            { name: "Track 1", artist: "SoundCloud", url: "https://on.soundcloud.com/zBNuVp8WS0NG0ID28M" },
-            { name: "Track 2", artist: "SoundCloud", url: "https://on.soundcloud.com/sbhJvgkXtSv3DlllU8" },
-            { name: "Track 3", artist: "SoundCloud", url: "https://on.soundcloud.com/5qkmFWTxMaduZyVq0p" }
-        ];
+        var TRACKS = [];
+        var currentIndex = -1;
 
-        var trackItems = document.querySelectorAll(".track-item");
+        // Initialise SoundCloud Widget API to fetch playlist tracks
+        var scWidgetIframe = document.getElementById("sc-widget-iframe");
+        var widget = SC.Widget(scWidgetIframe);
 
-        TRACKS.forEach(function(t, i) {
-            fetch("https://soundcloud.com/oembed?format=json&url=" + encodeURIComponent(t.url))
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    var raw = data.title || "";
-                    var parts = raw.split(" by ");
-                    TRACKS[i].name = parts[0] ? parts[0].trim() : raw;
-                    TRACKS[i].artist = parts[1] ? parts[1].trim() : "SoundCloud";
-                    trackItems[i].querySelector(".track-name").textContent = TRACKS[i].name;
-                    trackItems[i].querySelector(".track-artist").textContent = TRACKS[i].artist;
-                })
-                .catch(function() {
-                    trackItems[i].querySelector(".track-name").textContent = "Song " + (i + 1);
+        widget.bind(SC.Widget.Events.READY, function() {
+            widget.getSounds(function(sounds) {
+                var trackList = document.getElementById("track-list");
+                var loading = document.getElementById("track-loading");
+                if (loading) loading.remove();
+
+                if (!sounds || sounds.length === 0) {
+                    var err = document.createElement("div");
+                    err.className = "track-loading";
+                    err.textContent = "No tracks found.";
+                    trackList.appendChild(err);
+                    return;
+                }
+
+                TRACKS = sounds;
+
+                sounds.forEach(function(sound, i) {
+                    var item = document.createElement("div");
+                    item.className = "track-item";
+                    item.setAttribute("onclick", "playTrack(this," + i + ")");
+                    item.innerHTML =
+                        '<div class="track-num">' +
+                            '<span class="track-num-text">' + (i + 1) + '</span>' +
+                            '<div class="track-wave"><span></span><span></span><span></span><span></span></div>' +
+                        '</div>' +
+                        '<div class="track-info">' +
+                            '<div class="track-name">' + escapeHtml(sound.title) + '</div>' +
+                            '<div class="track-artist">' + escapeHtml(sound.user.username) + '</div>' +
+                        '</div>';
+                    trackList.appendChild(item);
                 });
+            });
         });
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
 
         function togglePlaylist() {
             document.getElementById("playlist-toggle").classList.toggle("open");
             document.getElementById("track-list").classList.toggle("open");
         }
 
-        var currentIndex = -1;
-
         function playTrack(el, index) {
-            trackItems.forEach(function(item) { item.classList.remove("playing"); });
+            if (!TRACKS[index]) return;
+            document.querySelectorAll(".track-item").forEach(function(item) { item.classList.remove("playing"); });
             el.classList.add("playing");
             currentIndex = index;
+            var trackUrl = TRACKS[index].permalink_url;
             var src = "https://w.soundcloud.com/player/?url=" +
-                encodeURIComponent(TRACKS[index].url) +
+                encodeURIComponent(trackUrl) +
                 "&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
             document.getElementById("sc-player").src = src;
             document.getElementById("player-bar").classList.add("visible");
@@ -309,7 +324,7 @@
         function closePlayer() {
             document.getElementById("player-bar").classList.remove("visible");
             document.getElementById("sc-player").src = "";
-            trackItems.forEach(function(item) { item.classList.remove("playing"); });
+            document.querySelectorAll(".track-item").forEach(function(item) { item.classList.remove("playing"); });
             currentIndex = -1;
         }
 
