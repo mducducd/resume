@@ -4,181 +4,386 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duc Nguyen (Duke)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --accent: #e07b54;
+            --navy: #0f172a;
+            --text: #334155;
+            --bg: #fffaf7;
+            --border: #e2e8f0;
+            --font-hand: 'Caveat', cursive;
+        }
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #fff;
-            color: #222;
-            line-height: 1.6;
-            transition: background 0.3s, color 0.3s;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            background-color: var(--bg);
+            background-image: radial-gradient(var(--accent) 0.5px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
             padding-bottom: 90px;
         }
-        body.dark { background: #111; color: #ddd; }
-        .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
-        nav { margin-bottom: 40px; display: flex; gap: 20px; font-size: 0.9rem; align-items: center; }
-        nav a { color: #555; text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s; cursor: pointer; }
-        nav a:hover, nav a.active { color: #111; border-bottom-color: #111; }
-        body.dark nav a { color: #aaa; }
-        body.dark nav a:hover, body.dark nav a.active { color: #fff; border-bottom-color: #fff; }
+
+        body.dark {
+            --bg: #0f172a;
+            --text: #cbd5e1;
+            --navy: #e2e8f0;
+            background-image: radial-gradient(rgba(224,123,84,0.15) 0.5px, transparent 0);
+            background-size: 40px 40px;
+        }
+        body.dark .container { background: rgba(15,23,42,0.98); }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 40px 80px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 0 40px rgba(0,0,0,0.03);
+            min-height: 100vh;
+        }
+
+        /* ── Nav ── */
+        nav {
+            margin-bottom: 48px;
+            display: flex;
+            gap: 24px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            transition: color 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+        body.dark nav a { color: #94a3b8; }
+        body.dark nav a:hover, body.dark nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
         .dark-toggle {
             margin-left: auto;
             background: none;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 3px 10px;
-            font-size: 0.8rem;
+            padding: 4px 14px;
+            font-size: 0.78rem;
+            font-weight: 500;
             cursor: pointer;
-            color: #555;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
             transition: background 0.2s, color 0.2s, border-color 0.2s;
         }
-        body.dark .dark-toggle { border-color: #444; color: #aaa; }
-        .dark-toggle:hover { background: #f4f4f5; }
-        body.dark .dark-toggle:hover { background: #222; }
+        body.dark .dark-toggle { border-color: #334155; color: #94a3b8; }
+        .dark-toggle:hover { background: var(--navy); color: #fff; }
+        body.dark .dark-toggle:hover { background: #e2e8f0; color: #0f172a; }
 
-        /* Page sections — hidden by default, shown via JS */
+        /* ── Page sections ── */
         .page-section { display: none; }
 
-        /* ── Home ── */
-        h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
-        .role { font-size: 1rem; color: #555; margin-top: 4px; }
-        body.dark .role { color: #aaa; }
-        .meta { margin-top: 20px; font-size: 0.9rem; color: #555; }
-        body.dark .meta { color: #aaa; }
-        .meta span + span::before { content: " · "; }
-        .links { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; }
-        .links a { font-size: 0.9rem; color: #0070f3; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-        .links a:hover { border-bottom-color: #0070f3; }
-        hr { border: none; border-top: 1px solid #eaeaea; margin: 32px 0; }
-        body.dark hr { border-top-color: #333; }
-        section { margin-bottom: 28px; }
-        h2 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 12px; }
-        .skills { display: flex; flex-wrap: wrap; gap: 8px; }
-        .skill {
-            background: #f4f4f5;
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-size: 0.85rem;
-            color: #333;
-            transition: background 0.2s, color 0.2s;
+        /* ── Section titles (Playfair Display) ── */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 60px;
+            margin-bottom: 24px;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title span {
+            font-family: var(--font-hand);
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        /* ── HOME: Header grid ── */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 560px) {
+            .header-grid { grid-template-columns: 1fr; }
+            .avatar-wrapper { order: -1; text-align: center; }
+            .container { padding: 32px 20px 80px; }
+        }
+
+        .name-block h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        .name-block h1 .cn-name {
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        .role-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 14px;
+            background: rgba(224,123,84,0.1);
+            border: 1px solid rgba(224,123,84,0.3);
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--accent);
+        }
+        .intro {
+            margin-top: 18px;
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.75;
+        }
+        .intro a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(224,123,84,0.4);
+            transition: border-color 0.2s;
+        }
+        .intro a:hover { border-bottom-color: var(--accent); }
+
+        /* Social pills */
+        .social-pills {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .pill {
+            padding: 5px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .pill:hover {
+            border-color: var(--navy);
+            background: var(--navy);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .pill.highlight {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .pill.highlight:hover {
+            background: #c9643d;
+            border-color: #c9643d;
+        }
+        body.dark .pill { border-color: #334155; color: #94a3b8; }
+        body.dark .pill:hover { background: #e2e8f0; color: #0f172a; border-color: #e2e8f0; }
+
+        /* Avatar */
+        .avatar-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .hand-note {
+            font-family: var(--font-hand);
+            font-size: 16px;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .avatar-placeholder {
+            width: 160px;
+            height: 160px;
+            border-radius: 50% 40% 40% 50% / 50% 50% 40% 40%;
+            border: 3px solid var(--navy);
+            background: var(--navy);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.4s ease-in-out;
             cursor: default;
         }
-        body.dark .skill { background: #222; color: #bbb; }
-        .skill:hover { background: #e0e0e0; color: #111; }
-        body.dark .skill:hover { background: #333; color: #fff; }
-        .cv-link {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 10px 22px;
-            background: #111;
-            color: #fff;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.2s;
+        .avatar-placeholder:hover {
+            border-color: var(--accent);
+            transform: scale(1.05) rotate(3deg);
+            border-radius: 50%;
         }
-        body.dark .cv-link { background: #eee; color: #111; }
-        .cv-link:hover { background: #333; transform: translateY(-2px); }
-        body.dark .cv-link:hover { background: #ccc; }
-        p { color: #444; }
-        body.dark p { color: #bbb; }
-        @media (max-width: 480px) { h1 { font-size: 1.6rem; } }
+        body.dark .avatar-placeholder { background: #1e293b; border-color: #475569; }
 
-        /* ── Learning ── */
+        /* Quote box */
+        .quote-box {
+            margin-top: 32px;
+            padding: 16px 24px;
+            border-left: 3px solid var(--accent);
+            background: rgba(224,123,84,0.05);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--text);
+        }
+        body.dark .quote-box { background: rgba(224,123,84,0.08); }
+
+        /* Fira Code skill tags */
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+        .tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            cursor: default;
+            letter-spacing: 0.5px;
+        }
+
+        hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+        body.dark hr { border-top-color: #1e293b; }
+
+        p { color: var(--text); }
+
+        /* ── LEARNING ── */
         .section-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #888;
-            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            margin-bottom: 10px;
         }
-        .goal-line { font-size: 0.95rem; color: #333; }
-        .subsection-title { font-size: 1rem; font-weight: 600; color: #111; margin-bottom: 4px; }
-        .subsection-meta { font-size: 0.82rem; color: #aaa; margin-bottom: 14px; }
-        .note-list { list-style: none; }
-        .note-list li { margin-bottom: 14px; transition: transform 0.2s; }
-        .note-list li:hover { transform: translateX(4px); }
-        .note-list a { font-size: 0.95rem; color: #0070f3; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-        .note-list a:hover { border-bottom-color: #0070f3; }
-        .credit { font-size: 0.8rem; color: #aaa; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaeaea; }
-        .credit a { color: #aaa; text-decoration: underline; }
+        .goal-line { font-size: 0.95rem; color: var(--text); }
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        .subsection-meta { font-size: 0.82rem; color: #94a3b8; margin-bottom: 14px; }
+        .subsection-meta a { color: #94a3b8; text-decoration: underline; }
 
-        /* ── Works / Projects ── */
-        .project {
-            margin-bottom: 36px;
-            padding-bottom: 36px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: transform 0.2s;
+        /* Timeline list */
+        .timeline-list { list-style: none; padding: 0; border-left: 2px solid var(--border); margin-left: 10px; }
+        .timeline-list li { padding: 0 0 16px 24px; position: relative; font-size: 0.93rem; color: var(--text); }
+        .dot {
+            position: absolute; left: -6px; top: 6px;
+            width: 10px; height: 10px;
+            background: #cbd5e1;
+            border-radius: 50%;
         }
-        body.dark .project { border-bottom-color: #222; }
-        .project:hover { transform: translateX(3px); }
-        .project:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .project-row {
+        .dot.active { background: var(--accent); }
+        .timeline-list a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(224,123,84,0.35); transition: border-color 0.2s; }
+        .timeline-list a:hover { border-bottom-color: var(--accent); }
+
+        .credit { font-size: 0.8rem; color: #94a3b8; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
+        .credit a { color: #94a3b8; text-decoration: underline; }
+
+        /* ── WORKS / PROJECTS ── */
+        .pub-item {
+            margin-bottom: 40px;
             display: flex;
+            gap: 28px;
             align-items: flex-start;
-            gap: 20px;
-            cursor: pointer;
         }
-        .project-info { flex: 1; }
-        .project-date { font-size: 0.78rem; color: #bbb; margin-bottom: 4px; }
-        .project-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; color: #111; }
-        body.dark .project-title { color: #eee; }
-        .project-title a { color: inherit; text-decoration: none; }
-        .project-tag { font-size: 0.78rem; color: #aaa; margin-bottom: 6px; }
-        .project-desc { font-size: 0.9rem; color: #555; margin-bottom: 10px; }
-        body.dark .project-desc { color: #aaa; }
-        .demo-btn {
-            display: inline-block;
-            margin-top: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #0070f3;
-            border: 1px solid #0070f3;
-            border-radius: 4px;
-            padding: 4px 12px;
-            cursor: pointer;
-            background: none;
-            transition: background 0.2s, color 0.2s, transform 0.2s;
-        }
-        .demo-btn:hover { background: #0070f3; color: #fff; transform: translateY(-1px); }
-        .project-thumb {
-            width: 110px;
-            height: 110px;
-            flex-shrink: 0;
-            border-radius: 8px;
+        .pub-teaser {
+            width: 150px;
+            min-height: 100px;
+            border-radius: 6px;
             overflow: hidden;
-            background: #f4f4f5;
+            box-shadow: 4px 4px 0 var(--navy);
+            border: 2px solid var(--navy);
+            flex-shrink: 0;
             transition: transform 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
         }
-        body.dark .project-thumb { background: #222; }
-        .project-thumb:hover { transform: scale(1.04); box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
-        .project-thumb img {
+        .pub-item:hover .pub-teaser {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--navy);
+        }
+        body.dark .pub-teaser { box-shadow: 4px 4px 0 #475569; border-color: #475569; background: #1e293b; }
+        body.dark .pub-item:hover .pub-teaser { box-shadow: 2px 2px 0 #475569; }
+
+        .pub-teaser img {
             width: 100%;
             height: 100%;
             display: block;
             object-fit: cover;
-            object-position: center center;
+            object-position: center;
         }
-        .project-thumb.logo-thumb img {
+        .pub-teaser.logo-thumb img {
             object-fit: contain;
-            padding: 16px;
+            padding: 14px;
             background: #fff;
         }
-        body.dark .project-thumb.logo-thumb img { background: #1a1a1a; }
-        .project-thumb.crop-h img {
+        body.dark .pub-teaser.logo-thumb img { background: #1e293b; }
+        .pub-teaser.crop-h img {
             object-fit: cover;
             object-position: center 50%;
             transform: scaleY(3);
             transform-origin: center center;
         }
-        .project-thumb.no-thumb {
+        .pub-teaser.no-thumb {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            font-size: 0.75rem;
+            font-family: var(--font-hand);
+            font-size: 14px;
+            color: #94a3b8;
+            min-height: 100px;
         }
+
+        .pub-info { flex: 1; min-width: 0; }
+        .pub-date { font-size: 0.75rem; color: #94a3b8; font-family: 'Fira Code', monospace; margin-bottom: 5px; }
+        .pub-title { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 5px; line-height: 1.4; }
+        body.dark .pub-title { color: #e2e8f0; }
+        .pub-title a { color: inherit; text-decoration: none; border-bottom: none; }
+        .pub-title a:hover { color: var(--accent); }
+        .pub-tags { margin-bottom: 8px; }
+        .pub-desc { font-size: 0.88rem; color: var(--text); line-height: 1.65; margin-bottom: 10px; }
+        .pub-desc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(224,123,84,0.35); }
+        .pub-desc a:hover { border-bottom-color: var(--accent); }
+
+        .demo-btn {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            background: none;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .demo-btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+
+        /* Project demo expand */
         .project-demo {
             display: grid;
             grid-template-rows: 0fr;
@@ -192,65 +397,112 @@
         .project-demo img { width: 100%; display: block; }
         .project-demo video { width: 100%; display: block; }
 
-        /* ── Favorites ── */
-        .fav-item { margin-bottom: 20px; transition: transform 0.2s; }
-        .fav-item:hover { transform: translateX(4px); }
-        .fav-item a { font-size: 1rem; font-weight: 600; color: #111; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-        body.dark .fav-item a { color: #eee; }
-        .fav-item a:hover { border-bottom-color: #111; }
-        body.dark .fav-item a:hover { border-bottom-color: #eee; }
-        .fav-item p { font-size: 0.9rem; color: #555; margin-top: 4px; }
-        body.dark .fav-item p { color: #aaa; }
+        /* ── FAVORITES ── */
+        .life-list { list-style: none; padding: 0; }
+        .life-list li {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 10px 0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        .life-list li:last-child { border-bottom: none; }
+        .life-list .li-emoji { font-size: 1.2rem; flex-shrink: 0; }
+        .life-list a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(224,123,84,0.35); transition: border-color 0.2s; }
+        .life-list a:hover { border-bottom-color: var(--accent); }
+
+        /* Playlist */
         .playlist-header { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; margin-bottom: 12px; }
-        .playlist-header .chevron { font-size: 0.7rem; color: #aaa; transition: transform 0.25s; }
+        .playlist-header .chevron { font-size: 0.65rem; color: #94a3b8; transition: transform 0.25s; }
         .playlist-header.open .chevron { transform: rotate(90deg); }
-        .playlist-header .playlist-title { font-size: 1rem; font-weight: 600; color: #111; }
-        body.dark .playlist-header .playlist-title { color: #eee; }
-        .track-list { display: none; flex-direction: column; border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
-        body.dark .track-list { border-color: #2a2a2a; }
+        .playlist-header .playlist-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        body.dark .playlist-header .playlist-title { color: #e2e8f0; }
+
+        .track-list {
+            display: none;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        body.dark .track-list { border-color: #1e293b; }
         .track-list.open { display: flex; }
-        .track-loading { padding: 16px; text-align: center; font-size: 0.9rem; color: #888; }
-        .track-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background 0.15s; }
-        body.dark .track-item { border-bottom-color: #222; }
+        .track-loading { padding: 16px; text-align: center; font-size: 0.9rem; color: #94a3b8; }
+        .track-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        body.dark .track-item { border-bottom-color: #1e293b; }
         .track-item:last-child { border-bottom: none; }
-        .track-item:hover { background: #f9f9f9; }
-        body.dark .track-item:hover { background: #1a1a1a; }
-        .track-item.playing { background: #fff7f0; }
-        body.dark .track-item.playing { background: #1e1510; }
-        .track-num { font-size: 0.8rem; color: #aaa; width: 20px; text-align: center; flex-shrink: 0; position: relative; }
+        .track-item:hover { background: rgba(224,123,84,0.05); }
+        body.dark .track-item:hover { background: rgba(224,123,84,0.08); }
+        .track-item.playing { background: rgba(224,123,84,0.1); }
+        body.dark .track-item.playing { background: rgba(224,123,84,0.12); }
+
+        .track-num { font-size: 0.8rem; color: #94a3b8; font-family: 'Fira Code', monospace; width: 22px; text-align: center; flex-shrink: 0; position: relative; }
         .track-item.playing .track-num-text { display: none; }
         .track-wave { display: none; align-items: center; gap: 2px; height: 16px; }
         .track-item.playing .track-wave { display: flex; }
-        .track-wave span { display: inline-block; width: 3px; background: #ff5500; border-radius: 2px; animation: wave 0.8s ease-in-out infinite alternate; }
+        .track-wave span { display: inline-block; width: 3px; background: var(--accent); border-radius: 2px; animation: wave 0.8s ease-in-out infinite alternate; }
         .track-wave span:nth-child(1) { height: 6px;  animation-delay: 0s; }
         .track-wave span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
         .track-wave span:nth-child(3) { height: 8px;  animation-delay: 0.3s; }
         .track-wave span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
         @keyframes wave { from { transform: scaleY(0.4); } to { transform: scaleY(1); } }
+
         .track-info { flex: 1; min-width: 0; }
-        .track-name { font-size: 0.92rem; font-weight: 600; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        body.dark .track-name { color: #ddd; }
-        .track-item.playing .track-name { color: #ff5500; }
-        .track-artist { font-size: 0.78rem; color: #888; margin-top: 2px; }
+        .track-name { font-size: 0.92rem; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        body.dark .track-name { color: #e2e8f0; }
+        .track-item.playing .track-name { color: var(--accent); }
+        .track-artist { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
 
         /* ── Player bar ── */
         #player-bar {
             position: fixed; bottom: 0; left: 0; right: 0;
-            background: #fff; border-top: 1px solid #eaeaea;
-            z-index: 1000; transform: translateY(100%);
+            background: #fff;
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(.4,0,.2,1);
             box-shadow: 0 -2px 16px rgba(0,0,0,0.07);
         }
-        body.dark #player-bar { background: #181818; border-top-color: #2a2a2a; }
+        body.dark #player-bar { background: #0f172a; border-top-color: #1e293b; }
         #player-bar.visible { transform: translateY(0); }
         #player-bar iframe { display: block; width: 100%; height: 80px; border: none; }
         #player-close {
             position: absolute; top: 6px; right: 10px;
             background: none; border: none; font-size: 1rem;
-            color: #aaa; cursor: pointer; padding: 2px 6px;
+            color: #94a3b8; cursor: pointer; padding: 2px 6px;
             z-index: 2; transition: color 0.2s;
         }
-        #player-close:hover { color: #555; }
+        #player-close:hover { color: var(--navy); }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 80px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        footer p { font-size: 0.85rem; color: #94a3b8; margin-top: 6px; }
+
+        @media (max-width: 480px) {
+            .name-block h1 { font-size: 1.8rem; }
+            .pub-item { flex-direction: column; gap: 16px; }
+            .pub-teaser { width: 100%; min-height: 160px; }
+        }
     </style>
 </head>
 <body>
@@ -267,81 +519,88 @@
              HOME
         ══════════════════════════════════════ -->
         <div id="page-home" class="page-section">
-            <h1>Duc Nguyen (Duke)</h1>
-            <p class="role">AI Medical Research Engineer</p>
-
-            <div class="meta">
-                <span>Dresden, Germany</span>
-            </div>
-
-            <div class="links">
-                <a href="https://github.com/mducducd" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener">LinkedIn</a>
-                <a href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener">Google Scholar</a>
-                <a href="mailto:minhducddd@gmail.com">Email</a>
-                <a href="https://discord.com/users/duke3500" target="_blank" rel="noopener">Discord</a>
-            </div>
-
-            <hr>
-
-            <section>
-                <h2>About</h2>
-                <p>I'm currently a research engineer building clinical ML pipelines at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener" style="color:#0070f3; text-decoration:none; border-bottom:1px solid #0070f3;">EKFZ</a> in Germany. I work at the intersection of deep learning, multimodal AI, and clinical medicine — building explainable pipelines for biomedical data analysis, LLM agents for clinical applications, and tools that make computational pathology accessible.</p>
-            </section>
-
-            <section>
-                <h2>Skills</h2>
-                <div class="skills">
-                    <span class="skill">Python</span>
-                    <span class="skill">PyTorch</span>
-                    <span class="skill">HuggingFace</span>
-                    <span class="skill">CUDA</span>
-                    <span class="skill">Diffusion Models</span>
-                    <span class="skill">Multimodal Learning</span>
-                    <span class="skill">Vision-Language Modeling</span>
-                    <span class="skill">LLM Agents</span>
-                    <span class="skill">Docker</span>
-                    <span class="skill">Linux</span>
+            <header class="header-grid">
+                <div class="name-block">
+                    <h1>Duc Nguyen <span class="cn-name">(Duke)</span></h1>
+                    <div class="role-badge">AI Medical Research Engineer · EKFZ, TU Dresden</div>
+                    <p class="intro">I'm currently a research engineer building clinical ML pipelines at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a> in Germany. I work at the intersection of deep learning, multimodal AI, and clinical medicine — building explainable pipelines for biomedical data analysis, LLM agents for clinical applications, and tools that make computational pathology accessible.</p>
+                    <div class="social-pills">
+                        <a href="data_science_resume.pdf" class="pill highlight" target="_blank" rel="noopener">📄 View CV</a>
+                        <a href="https://github.com/mducducd" class="pill" target="_blank" rel="noopener">GitHub</a>
+                        <a href="https://linkedin.com/in/mducducd" class="pill" target="_blank" rel="noopener">LinkedIn</a>
+                        <a href="https://scholar.google.com/citations?user=mducducd" class="pill" target="_blank" rel="noopener">Google Scholar</a>
+                        <a href="mailto:minhducddd@gmail.com" class="pill">Email</a>
+                        <a href="https://discord.com/users/duke3500" class="pill" target="_blank" rel="noopener">Discord</a>
+                    </div>
                 </div>
-            </section>
+                <div class="avatar-wrapper">
+                    <div class="hand-note">Hi there! 👋</div>
+                    <div class="avatar-placeholder">DN</div>
+                </div>
+            </header>
 
-            <section>
-                <h2>Resume</h2>
-                <p style="font-size:0.9rem;margin-bottom:12px;">Full details — experience, education, publications, and awards — are in the PDF.</p>
-                <a class="cv-link" href="data_science_resume.pdf" target="_blank" rel="noopener">View CV (PDF)</a>
-            </section>
+            <div class="quote-box">
+                Building explainable AI for clinical medicine — one pipeline at a time.
+            </div>
+
+            <h2 class="section-title">Skills <span>(stack)</span></h2>
+            <div class="tag-list">
+                <span class="tag">Python</span>
+                <span class="tag">PyTorch</span>
+                <span class="tag">HuggingFace</span>
+                <span class="tag">CUDA</span>
+                <span class="tag">Diffusion Models</span>
+                <span class="tag">Multimodal Learning</span>
+                <span class="tag">Vision-Language Modeling</span>
+                <span class="tag">LLM Agents</span>
+                <span class="tag">Docker</span>
+                <span class="tag">Linux</span>
+            </div>
+
+            <h2 class="section-title">Resume <span>(CV)</span></h2>
+            <p style="font-size:0.9rem; margin-bottom:16px; color:var(--text);">Full details — experience, education, publications, and awards — are in the PDF.</p>
+            <a class="pill highlight" href="data_science_resume.pdf" target="_blank" rel="noopener" style="font-size:14px;">📄 Download CV (PDF)</a>
+
+            <footer>
+                <p style="font-family: var(--font-hand); color: var(--accent); font-size: 20px;">Thanks for visiting!</p>
+                <p>© 2026 Duc Nguyen (Duke). Dresden, Germany.</p>
+            </footer>
         </div>
 
         <!-- ══════════════════════════════════════
              LEARNING
         ══════════════════════════════════════ -->
         <div id="page-learning" class="page-section">
-            <h1>Learning</h1>
-            <p style="color:#555; font-size:0.95rem;">Things I've studied, explored, and documented along the way.</p>
+            <h2 class="section-title" style="margin-top:0;">Learning <span>(notes)</span></h2>
+            <p style="font-size:0.95rem; color:var(--text);">Things I've studied, explored, and documented along the way.</p>
+
             <hr>
 
-            <section>
+            <div style="margin-bottom:28px;">
                 <p class="section-label">Current Learning Goals</p>
                 <p class="goal-line">German A1, Real and Complex Analysis</p>
-            </section>
+            </div>
 
-            <section>
+            <div>
                 <p class="section-label">Study Notes</p>
-
                 <p class="subsection-title">Selected Study Notes</p>
-                <p class="subsection-meta">Curated from <a href="https://phucnguyen.dev" target="_blank" rel="noopener" style="color:#aaa; text-decoration:underline;">phucnguyen.dev</a></p>
+                <p class="subsection-meta">Curated from <a href="https://phucnguyen.dev" target="_blank" rel="noopener">phucnguyen.dev</a></p>
 
-                <ul class="note-list">
+                <ul class="timeline-list">
                     <li>
+                        <div class="dot active"></div>
                         <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">A complete breakdown of the implementation details of Megatron-LM, torchgpipe, and OSLO codebases</a>
                     </li>
                     <li>
+                        <div class="dot active"></div>
                         <a href="https://phrygian-alarm-029.notion.site/Clean-FP8-LM-Training-FP8-Large-Language-Models-c1e88b30bbe64ed9b6d5df124aae267e" target="_blank" rel="noopener">FP8-LM: Training FP8 Large Language Models</a>
                     </li>
                     <li>
+                        <div class="dot active"></div>
                         <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod - Elastic Training and Fault-Tolerance</a>
                     </li>
                     <li>
+                        <div class="dot"></div>
                         <a href="https://phrygian-alarm-029.notion.site/notes-reading-7b6946b8f4074771b9922654d61075d6" target="_blank" rel="noopener">All other unorganized notes</a>
                     </li>
                 </ul>
@@ -349,150 +608,137 @@
                 <p class="credit">
                     Notes originally compiled by <a href="https://phucnguyen.dev" target="_blank" rel="noopener">Phuc Nguyen</a> — shared with credit and appreciation.
                 </p>
-            </section>
+            </div>
         </div>
 
         <!-- ══════════════════════════════════════
              WORKS / PROJECTS
         ══════════════════════════════════════ -->
         <div id="page-works" class="page-section">
-            <h1>Projects</h1>
-            <p>Things I've built across AI, medicine, and human-computer interaction.</p>
+            <h2 class="section-title" style="margin-top:0;">Projects <span>(works)</span></h2>
+            <p style="color:var(--text); font-size:0.95rem;">Things I've built across AI, medicine, and human-computer interaction.</p>
             <hr>
-            <section>
-                <h2>Timeline</h2>
 
-                <!-- 1. STAMP-Workbench -->
-                <div class="project">
-                    <div class="project-row">
-                        <div class="project-info">
-                            <p class="project-date">Mar 2026</p>
-                            <p class="project-title"><a href="https://github.com/mducducd/stamp-workbench" target="_blank" rel="noopener">STAMP-Workbench</a></p>
-                            <p class="project-tag">JavaScript</p>
-                            <p class="project-desc">A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction — making computational pathology pipelines accessible without deep engineering overhead.</p>
-                        </div>
-                        <div class="project-thumb logo-thumb">
-                            <img src="https://raw.githubusercontent.com/mducducd/STAMP-Workbench/installable-package/stamp_workbench/static/assets/STAMP_logo.svg" alt="STAMP-Workbench logo">
-                        </div>
+            <!-- 1. STAMP-Workbench -->
+            <div class="pub-item">
+                <div class="pub-teaser logo-thumb">
+                    <img src="https://raw.githubusercontent.com/mducducd/STAMP-Workbench/installable-package/stamp_workbench/static/assets/STAMP_logo.svg" alt="STAMP-Workbench logo">
+                </div>
+                <div class="pub-info">
+                    <p class="pub-date">Mar 2026</p>
+                    <p class="pub-title"><a href="https://github.com/mducducd/stamp-workbench" target="_blank" rel="noopener">STAMP-Workbench</a></p>
+                    <div class="pub-tags"><span class="tag">JavaScript</span></div>
+                    <p class="pub-desc">A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction — making computational pathology pipelines accessible without deep engineering overhead.</p>
+                </div>
+            </div>
+
+            <!-- 2. Pathology Agent -->
+            <div class="pub-item">
+                <div class="pub-teaser crop-h">
+                    <img src="https://raw.githubusercontent.com/mducducd/Pathology_agent/main/static/assets/illustration.png" alt="Pathology Agent">
+                </div>
+                <div class="pub-info">
+                    <p class="pub-date">Mar 2026</p>
+                    <p class="pub-title"><a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Pathology Agent</a></p>
+                    <div class="pub-tags"><span class="tag">Python</span></div>
+                    <p class="pub-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
+                </div>
+            </div>
+
+            <!-- 3. Multiple Face Reaction Generation -->
+            <div class="pub-item" style="flex-direction:column;">
+                <div style="display:flex; gap:28px; align-items:flex-start; cursor:pointer;" onclick="toggleDemo('face')">
+                    <div class="pub-teaser no-thumb">
+                        <span>demo ↓</span>
+                    </div>
+                    <div class="pub-info">
+                        <p class="pub-date">2024</p>
+                        <p class="pub-title">Multiple Appropriate Facial Reaction Generation</p>
+                        <div class="pub-tags"><span class="tag">Python</span>&nbsp;<span class="tag">Deep Learning</span>&nbsp;<span class="tag">Published</span></div>
+                        <p class="pub-desc">Research on generating multiple appropriate and diverse facial reactions in dyadic interactions using latent diffusion models. Work published at two international venues:<br><br>
+                        <span style="font-size:0.82rem;">
+                            · <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener">Latent Behavior Diffusion for Sequential Reaction Generation in Dyadic Setting</a> — ICPR 2024, LNCS<br>
+                            · <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener">Vector Quantized Diffusion Models for Multiple Appropriate Reactions Generation</a> — IEEE FG 2024
+                        </span>
+                        </p>
+                        <button class="demo-btn" onclick="event.stopPropagation(); toggleDemo('face')">&#9654; Click to see DEMO</button>
                     </div>
                 </div>
-
-                <!-- 2. Pathology Agent -->
-                <div class="project">
-                    <div class="project-row">
-                        <div class="project-info">
-                            <p class="project-date">Mar 2026</p>
-                            <p class="project-title"><a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Pathology Agent</a></p>
-                            <p class="project-tag">Python</p>
-                            <p class="project-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
-                        </div>
-                        <div class="project-thumb crop-h">
-                            <img src="https://raw.githubusercontent.com/mducducd/Pathology_agent/main/static/assets/illustration.png" alt="Pathology Agent">
-                        </div>
+                <div class="project-demo" id="demo-face">
+                    <div class="project-demo-inner">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="assets/face_synthesis.mp4" type="video/mp4">
+                        </video>
                     </div>
                 </div>
+            </div>
 
-                <!-- 3. Multiple Face Reaction Generation -->
-                <div class="project">
-                    <div class="project-row" onclick="toggleDemo('face')">
-                        <div class="project-info">
-                            <p class="project-date">2024</p>
-                            <p class="project-title">Multiple Appropriate Facial Reaction Generation</p>
-                            <p class="project-tag">Python · Deep Learning · Published</p>
-                            <p class="project-desc">Research on generating multiple appropriate and diverse facial reactions in dyadic interactions using latent diffusion models. Work published at two international venues:<br><br>
-                            <span style="font-size:0.82rem; color:#777;">
-                                · <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener" style="color:#0070f3; text-decoration:none;">Latent Behavior Diffusion for Sequential Reaction Generation in Dyadic Setting</a> — ICPR 2024, LNCS<br>
-                                · <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener" style="color:#0070f3; text-decoration:none;">Vector Quantized Diffusion Models for Multiple Appropriate Reactions Generation</a> — IEEE FG 2024
-                            </span>
-                            </p>
-                            <button class="demo-btn" onclick="event.stopPropagation(); toggleDemo('face')">&#9654; Click to see DEMO</button>
-                        </div>
-                        <div class="project-thumb no-thumb">
-                            <span>No thumb yet</span>
-                        </div>
+            <!-- 4. TalkingChat -->
+            <div class="pub-item">
+                <div class="pub-teaser">
+                    <img src="assets/talking_face.png" alt="TalkingChat thumbnail">
+                </div>
+                <div class="pub-info">
+                    <p class="pub-date">2024</p>
+                    <p class="pub-title">TalkingChat 🎆</p>
+                    <div class="pub-tags"><span class="tag">Python</span>&nbsp;<span class="tag">Hackathon Award</span></div>
+                    <p class="pub-desc">A fully functional web-based GPT chatbot that generates a cartoon talking face to accompany text responses — creating an expressive, animated conversational experience. Awarded at hackathon competition.</p>
+                </div>
+            </div>
+
+            <!-- 5. Nursing Simulation -->
+            <div class="pub-item" style="flex-direction:column;">
+                <div style="display:flex; gap:28px; align-items:flex-start; cursor:pointer;" onclick="toggleDemo('nursing')">
+                    <div class="pub-teaser">
+                        <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation thumbnail">
                     </div>
-                    <div class="project-demo" id="demo-face">
-                        <div class="project-demo-inner">
-                            <video controls autoplay muted loop playsinline>
-                                <source src="assets/face_synthesis.mp4" type="video/mp4">
-                            </video>
-                        </div>
+                    <div class="pub-info">
+                        <p class="pub-date">2024</p>
+                        <p class="pub-title">Nursing Simulation</p>
+                        <div class="pub-tags"><span class="tag">Python</span>&nbsp;<span class="tag">Web</span>&nbsp;<span class="tag">ChatGPT</span></div>
+                        <p class="pub-desc">A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education — enhancing clinical learning through AI-driven interactive scenarios. <em style="font-size:0.82rem;color:#94a3b8;">Internship @ JLG Inc.</em></p>
+                        <button class="demo-btn" onclick="event.stopPropagation(); toggleDemo('nursing')">&#9654; Click to see DEMO</button>
                     </div>
                 </div>
-
-                <!-- 4. TalkingChat -->
-                <div class="project">
-                    <div class="project-row">
-                        <div class="project-info">
-                            <p class="project-date">2024</p>
-                            <p class="project-title">TalkingChat 🎆</p>
-                            <p class="project-tag">Python · Hackathon Award</p>
-                            <p class="project-desc">A fully functional web-based GPT chatbot that generates a cartoon talking face to accompany text responses — creating an expressive, animated conversational experience. Awarded at hackathon competition.</p>
-                        </div>
-                        <div class="project-thumb">
-                            <img src="assets/talking_face.png" alt="TalkingChat thumbnail">
-                        </div>
+                <div class="project-demo" id="demo-nursing">
+                    <div class="project-demo-inner">
+                        <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation demo">
                     </div>
                 </div>
+            </div>
 
-                <!-- 5. Nursing Simulation -->
-                <div class="project">
-                    <div class="project-row" onclick="toggleDemo('nursing')">
-                        <div class="project-info">
-                            <p class="project-date">2024</p>
-                            <p class="project-title">Nursing Simulation</p>
-                            <p class="project-tag">Python · Web · ChatGPT · Internship @ JLG Inc.</p>
-                            <p class="project-desc">A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education — enhancing clinical learning through AI-driven interactive scenarios.</p>
-                            <button class="demo-btn" onclick="event.stopPropagation(); toggleDemo('nursing')">&#9654; Click to see DEMO</button>
-                        </div>
-                        <div class="project-thumb">
-                            <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation thumbnail">
-                        </div>
-                    </div>
-                    <div class="project-demo" id="demo-nursing">
-                        <div class="project-demo-inner">
-                            <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation demo">
-                        </div>
-                    </div>
-                </div>
-
-            </section>
         </div>
 
         <!-- ══════════════════════════════════════
              FAVORITES
         ══════════════════════════════════════ -->
         <div id="page-favorites" class="page-section">
-            <h1>Favorites</h1>
-            <p style="color:#555; font-size:0.95rem;">Things I love outside of research and code.</p>
-            <hr>
+            <h2 class="section-title" style="margin-top:0;">Offline Mode <span>(Life)</span></h2>
+            <p style="font-size:0.95rem; color:var(--text); margin-bottom:24px;">Things I love outside of research and code.</p>
 
-            <section>
-                <h2>Photography</h2>
-                <div class="fav-item">
-                    <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">My Flickr</a>
-                    <p>A collection of photos I've taken — moments, places, and light captured along my travels and daily life. Photography is how I slow down and pay attention to the world around me.</p>
-                </div>
-            </section>
+            <ul class="life-list">
+                <li>
+                    <span class="li-emoji">📷</span>
+                    <span>Photography lover — <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">My Flickr</a>. Moments, places, and light captured along travels and daily life. Photography is how I slow down and pay attention to the world.</span>
+                </li>
+                <li>
+                    <span class="li-emoji">🎨</span>
+                    <span>Drawing on Procreate — I've been drawing since I was a child, just lost some inspiration along the way. Finding my way back in digital form. Nothing to showcase yet, but it's coming.</span>
+                </li>
+                <li>
+                    <span class="li-emoji">🎵</span>
+                    <span>Instrumental music — see the playlist below ↓</span>
+                </li>
+            </ul>
 
-            <section>
-                <h2>Drawing</h2>
-                <div class="fav-item">
-                    <span style="font-size:1rem; font-weight:600; color:#111;">Procreate</span>
-                    <p>I've been drawing since I was a child — just lost some inspiration along the way. Now finding my way back to it in digital form, via Procreate. Nothing to showcase yet, but it's coming.</p>
-                </div>
-            </section>
-
-            <section>
-                <h2>Instrumental</h2>
-                <div class="playlist-header" id="playlist-toggle" onclick="togglePlaylist()">
-                    <span class="chevron">&#9654;</span>
-                    <span class="playlist-title">Random rhymes for lovely minds</span>
-                </div>
-                <div class="track-list" id="track-list">
-                    <div class="track-loading" id="track-loading">Loading tracks…</div>
-                </div>
-            </section>
+            <h2 class="section-title">Playlist <span>(listen)</span></h2>
+            <div class="playlist-header" id="playlist-toggle" onclick="togglePlaylist()">
+                <span class="chevron">&#9654;</span>
+                <span class="playlist-title">Random rhymes for lovely minds</span>
+            </div>
+            <div class="track-list" id="track-list">
+                <div class="track-loading" id="track-loading">Loading tracks…</div>
+            </div>
         </div>
 
     </div><!-- /.container -->
