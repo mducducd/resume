@@ -12,10 +12,16 @@
             background: #fff;
             color: #222;
             line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         .container { max-width: 680px; margin: 0 auto; padding: 60px 24px 80px; }
         nav { margin-bottom: 40px; display: flex; gap: 20px; font-size: 0.9rem; }
-        nav a { color: #555; text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.15s, border-color 0.15s; }
+        nav a { color: #555; text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s; }
         nav a:hover, nav a.active { color: #111; border-bottom-color: #111; }
         h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
         hr { border: none; border-top: 1px solid #eaeaea; margin: 32px 0; }
@@ -26,7 +32,9 @@
             margin-bottom: 36px;
             padding-bottom: 36px;
             border-bottom: 1px solid #f0f0f0;
+            transition: transform 0.2s;
         }
+        .project:hover { transform: translateX(3px); }
         .project:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
         .project-row {
@@ -52,9 +60,9 @@
             padding: 4px 12px;
             cursor: pointer;
             background: none;
-            transition: background 0.15s, color 0.15s;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
         }
-        .demo-btn:hover { background: #0070f3; color: #fff; }
+        .demo-btn:hover { background: #0070f3; color: #fff; transform: translateY(-1px); }
 
         .project-thumb {
             width: 110px;
@@ -63,7 +71,9 @@
             border-radius: 8px;
             overflow: hidden;
             background: #f4f4f5;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .project-thumb:hover { transform: scale(1.04); box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
         .project-thumb img {
             width: 100%;
             height: 100%;
@@ -90,14 +100,23 @@
             font-size: 0.75rem;
         }
 
+        /* Animated expand for demo area */
         .project-demo {
-            display: none;
-            margin-top: 16px;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease;
             border-radius: 8px;
+            overflow: hidden;
+            margin-top: 0;
+        }
+        .project-demo-inner {
             overflow: hidden;
             background: #000;
         }
-        .project-demo.open { display: block; }
+        .project-demo.open {
+            grid-template-rows: 1fr;
+            margin-top: 16px;
+        }
         .project-demo img { width: 100%; display: block; }
         .project-demo video { width: 100%; display: block; }
     </style>
@@ -116,7 +135,7 @@
         <section>
             <h2>Timeline</h2>
 
-            <!-- 1. STAMP-Workbench — Mar 2026 latest -->
+            <!-- 1. STAMP-Workbench -->
             <div class="project">
                 <div class="project-row">
                     <div class="project-info">
@@ -131,7 +150,7 @@
                 </div>
             </div>
 
-            <!-- 2. Pathology Agent — Mar 2026 -->
+            <!-- 2. Pathology Agent -->
             <div class="project">
                 <div class="project-row">
                     <div class="project-info">
@@ -146,7 +165,7 @@
                 </div>
             </div>
 
-            <!-- 3. Multiple Face Reaction Generation — 2024 latest -->
+            <!-- 3. Multiple Face Reaction Generation -->
             <div class="project">
                 <div class="project-row" onclick="toggleDemo('face')">
                     <div class="project-info">
@@ -166,13 +185,15 @@
                     </div>
                 </div>
                 <div class="project-demo" id="demo-face">
-                    <video controls autoplay muted loop playsinline>
-                        <source src="assets/face_synthesis.mp4" type="video/mp4">
-                    </video>
+                    <div class="project-demo-inner">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="assets/face_synthesis.mp4" type="video/mp4">
+                        </video>
+                    </div>
                 </div>
             </div>
 
-            <!-- 4. TalkingChat — 2024 -->
+            <!-- 4. TalkingChat -->
             <div class="project">
                 <div class="project-row">
                     <div class="project-info">
@@ -187,7 +208,7 @@
                 </div>
             </div>
 
-            <!-- 5. Nursing Simulation — 2024 earliest -->
+            <!-- 5. Nursing Simulation -->
             <div class="project">
                 <div class="project-row" onclick="toggleDemo('nursing')">
                     <div class="project-info">
@@ -202,7 +223,9 @@
                     </div>
                 </div>
                 <div class="project-demo" id="demo-nursing">
-                    <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation demo">
+                    <div class="project-demo-inner">
+                        <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation demo">
+                    </div>
                 </div>
             </div>
 
@@ -220,6 +243,18 @@
                 if (!isOpen) { video.play(); } else { video.pause(); }
             }
         }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (!href || href.startsWith('http') || href.startsWith('#')) return;
+                e.preventDefault();
+                document.body.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                document.body.style.opacity = '0';
+                document.body.style.transform = 'translateY(-8px)';
+                setTimeout(() => { window.location.href = href; }, 260);
+            });
+        });
     </script>
 </body>
 </html>
