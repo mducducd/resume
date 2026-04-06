@@ -525,6 +525,71 @@
             .pub-item { flex-direction: column; gap: 16px; }
             .pub-teaser { width: 100%; min-height: 160px; }
         }
+
+        /* ── YouTube player card ── */
+        .yt-player-card {
+            display: flex;
+            gap: 0;
+            border: 2px solid var(--navy);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 4px 4px 0 var(--navy);
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .yt-player-card:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--navy);
+        }
+        body.dark .yt-player-card {
+            border-color: #475569;
+            box-shadow: 4px 4px 0 #475569;
+        }
+        body.dark .yt-player-card:hover {
+            box-shadow: 2px 2px 0 #475569;
+        }
+        .yt-player-left {
+            flex: 1;
+            min-width: 0;
+        }
+        .yt-player-left iframe {
+            width: 100%;
+            height: 80px;
+            border: none;
+            display: block;
+        }
+        .yt-thumb {
+            width: 120px;
+            flex-shrink: 0;
+            position: relative;
+            display: block;
+            overflow: hidden;
+            border-left: 2px solid var(--navy);
+        }
+        body.dark .yt-thumb { border-left-color: #475569; }
+        .yt-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .yt-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #fff;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .yt-thumb:hover .yt-thumb-overlay { opacity: 1; }
+
+        @media (max-width: 480px) {
+            .yt-thumb { width: 80px; }
+        }
     </style>
 </head>
 <body>
@@ -760,6 +825,22 @@
             </div>
             <div class="track-list" id="track-list">
                 <div class="track-loading" id="track-loading">Loading tracks…</div>
+            </div>
+            <h2 class="section-title">YouTube <span>(playlist)</span></h2>
+            <div class="yt-player-card">
+                <div class="yt-player-left">
+                    <iframe
+                        id="yt-player"
+                        src="https://www.youtube.com/embed/videoseries?list=PLaOC4UNMWibIXKNTVNxUWyORvNycD6x48&autoplay=0&controls=1&modestbranding=1&rel=0&vq=tiny"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        title="YouTube playlist player">
+                    </iframe>
+                </div>
+                <a class="yt-thumb" href="https://youtube.com/playlist?list=PLaOC4UNMWibIXKNTVNxUWyORvNycD6x48" target="_blank" rel="noopener" title="Open playlist on YouTube">
+                    <img src="https://img.youtube.com/vi/86TUpxqNqGI/mqdefault.jpg" alt="YouTube playlist thumbnail">
+                    <span class="yt-thumb-overlay">▶</span>
+                </a>
             </div>
         </div>
 
