@@ -526,6 +526,119 @@
             .pub-teaser { width: 100%; min-height: 160px; }
         }
 
+        /* ── Art Gallery ── */
+        .art-li { flex-direction: column !important; align-items: flex-start !important; }
+        .art-li > div:first-child { width: 100%; }
+
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .art-item {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            background: #f8fafc;
+            position: relative;
+        }
+        body.dark .art-item { background: #1e293b; border-color: #334155; }
+        .art-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+        .art-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .art-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(224,123,84,0.15);
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .art-item:hover .art-item-overlay { opacity: 1; }
+
+        .art-coming-soon {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .art-coming-soon span { font-size: 2.5rem; margin-bottom: 12px; }
+        .art-coming-soon p { margin: 0; }
+
+        .art-show-more {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #94a3b8;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s, color 0.2s;
+            text-align: center;
+        }
+        .art-show-more:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Art lightbox */
+        .art-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .art-lightbox.open { display: flex; }
+        .art-lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+        .art-lightbox-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 10px;
+        }
+
+        @media (max-width: 480px) {
+            .art-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         /* ── YouTube player card ── */
         .yt-player-card {
             display: flex;
@@ -807,9 +920,22 @@
                     <span class="li-emoji">📷</span>
                     <span>Photography lover — <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">My Flickr</a>. Moments, places, and light captured along travels and daily life. Photography is how I slow down and pay attention to the world.</span>
                 </li>
-                <li>
-                    <span class="li-emoji">🎨</span>
-                    <span>Drawing on Procreate — I've been drawing since I was a child, just lost some inspiration along the way. Finding my way back in digital form. Nothing to showcase yet, but it's coming.</span>
+                <li class="art-li" onclick="toggleArtGallery()" style="cursor:pointer; flex-direction: column; align-items: flex-start; gap: 4px;">
+                    <div style="display:flex; align-items:baseline; gap:10px; width:100%;">
+                        <span class="li-emoji">🎨</span>
+                        <span>Art <span style="font-size:0.78rem; color:#94a3b8; font-weight:400;">— click to explore ↓</span></span>
+                        <span id="art-chevron" style="margin-left:auto; font-size:0.65rem; color:#94a3b8; transition: transform 0.25s;">&#9654;</span>
+                    </div>
+                    <div id="art-gallery" style="display:none; width:100%; padding-top: 16px;">
+                        <div class="art-grid" id="art-grid">
+                            <div class="art-coming-soon">
+                                <span>🎨</span>
+                                <p>Coming soon</p>
+                                <p style="font-size:0.78rem; color:#94a3b8; margin-top:4px;">Working on it — check back later!</p>
+                            </div>
+                        </div>
+                        <button id="art-show-more" class="art-show-more" onclick="event.stopPropagation(); toggleArtShowMore()">↓ Show more</button>
+                    </div>
                 </li>
                 <li>
                     <span class="li-emoji">🎵</span>
@@ -1056,6 +1182,82 @@
                 });
             };
         }
+        /* ── Art Gallery ── */
+        var ART_IMAGES = [
+            // { src: 'assets/art/piece1.jpg', alt: 'Artwork 1' },
+            // Add images here when ready
+        ];
+        var ART_LIMIT = 6;
+        var artExpanded = false;
+
+        function toggleArtGallery() {
+            var gallery = document.getElementById('art-gallery');
+            var chevron = document.getElementById('art-chevron');
+            var isOpen = gallery.style.display !== 'none';
+            gallery.style.display = isOpen ? 'none' : 'block';
+            chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
+        }
+
+        function renderArtGallery() {
+            var grid = document.getElementById('art-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (ART_IMAGES.length === 0) {
+                grid.innerHTML = '<div class="art-coming-soon"><span>🎨</span><p>Coming soon</p><p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Working on it — check back later!</p></div>';
+                return;
+            }
+
+            var toShow = artExpanded ? ART_IMAGES : ART_IMAGES.slice(0, ART_LIMIT);
+            toShow.forEach(function(img, i) {
+                var item = document.createElement('div');
+                item.className = 'art-item';
+                item.innerHTML = '<img src="' + esc(img.src) + '" alt="' + esc(img.alt) + '" loading="lazy"><div class="art-item-overlay">🔍</div>';
+                item.onclick = function() { openArtLightbox(img.src, img.alt); };
+                grid.appendChild(item);
+            });
+
+            var btn = document.getElementById('art-show-more');
+            if (btn) {
+                if (ART_IMAGES.length > ART_LIMIT) {
+                    btn.style.display = 'block';
+                    btn.textContent = artExpanded ? '↑ Show less' : '↓ Show more (' + (ART_IMAGES.length - ART_LIMIT) + ' more)';
+                } else {
+                    btn.style.display = 'none';
+                }
+            }
+        }
+
+        function toggleArtShowMore() {
+            artExpanded = !artExpanded;
+            renderArtGallery();
+        }
+
+        function openArtLightbox(src, alt) {
+            var lb = document.getElementById('art-lightbox');
+            var img = document.getElementById('art-lightbox-img');
+            if (!lb || !img) return;
+            img.src = src;
+            img.alt = alt || '';
+            lb.classList.add('open');
+        }
+
+        function closeArtLightbox() {
+            var lb = document.getElementById('art-lightbox');
+            if (lb) lb.classList.remove('open');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { closeArtLightbox(); }
+        });
+
+        renderArtGallery();
     </script>
+
+    <!-- Art lightbox -->
+    <div id="art-lightbox" class="art-lightbox" role="dialog" aria-modal="true" aria-label="Art lightbox" onclick="closeArtLightbox()">
+        <button class="art-lightbox-close" aria-label="Close lightbox" onclick="closeArtLightbox()">&#x2715;</button>
+        <img id="art-lightbox-img" src="" alt="">
+    </div>
 </body>
 </html>
