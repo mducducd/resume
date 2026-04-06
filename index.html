@@ -426,6 +426,25 @@
         }
         body.dark .playlist-header .playlist-title { color: #e2e8f0; }
 
+        #shuffle-btn {
+            margin-left: auto;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #94a3b8;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            letter-spacing: 0.5px;
+        }
+        #shuffle-btn:hover { border-color: var(--accent); color: var(--accent); }
+        #shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        body.dark #shuffle-btn { border-color: #334155; color: #64748b; }
+        body.dark #shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
         .track-list {
             display: none;
             flex-direction: column;
@@ -736,6 +755,7 @@
             <div class="playlist-header" id="playlist-toggle" onclick="togglePlaylist()">
                 <span class="chevron">&#9654;</span>
                 <span class="playlist-title">Random rhymes for lovely minds</span>
+                <button id="shuffle-btn" onclick="toggleShuffle(event)" title="Shuffle" aria-label="Toggle shuffle" aria-pressed="false">⇄</button>
             </div>
             <div class="track-list" id="track-list">
                 <div class="track-loading" id="track-loading">Loading tracks…</div>
@@ -861,6 +881,9 @@
 
         /* ── SoundCloud widget ── */
         var TRACKS = [];
+        var shuffleOn = false;
+        var currentTrackIndex = -1;
+        var playerWidget = null;
 
         var widget = SC.Widget(document.getElementById('sc-widget-iframe'));
 
@@ -906,15 +929,50 @@
             document.getElementById('track-list').classList.toggle('open');
         }
 
+        function toggleShuffle(e) {
+            e.stopPropagation();
+            shuffleOn = !shuffleOn;
+            var btn = document.getElementById('shuffle-btn');
+            btn.classList.toggle('active', shuffleOn);
+            btn.setAttribute('aria-pressed', shuffleOn ? 'true' : 'false');
+        }
+
+        function playNextTrack() {
+            if (TRACKS.length === 0) return;
+            var nextIndex;
+            if (shuffleOn) {
+                do {
+                    nextIndex = Math.floor(Math.random() * TRACKS.length);
+                } while (TRACKS.length > 1 && nextIndex === currentTrackIndex);
+            } else {
+                nextIndex = (currentTrackIndex + 1) % TRACKS.length;
+            }
+            var items = document.querySelectorAll('.track-item');
+            if (items[nextIndex]) {
+                playTrack(items[nextIndex], nextIndex);
+            }
+        }
+
         function playTrack(el, index) {
             if (!TRACKS[index]) return;
+            currentTrackIndex = index;
             document.querySelectorAll('.track-item').forEach(function(item) { item.classList.remove('playing'); });
             el.classList.add('playing');
             var src = 'https://w.soundcloud.com/player/?url=' +
                 encodeURIComponent(TRACKS[index].permalink_url) +
                 '&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
-            document.getElementById('sc-player').src = src;
+            var playerIframe = document.getElementById('sc-player');
+            playerIframe.src = src;
             document.getElementById('player-bar').classList.add('visible');
+            playerIframe.onload = function() {
+                if (playerWidget) {
+                    try { playerWidget.unbind(SC.Widget.Events.FINISH); } catch(e) { /* ignore: widget may not be ready */ }
+                }
+                playerWidget = SC.Widget(playerIframe);
+                playerWidget.bind(SC.Widget.Events.FINISH, function() {
+                    playNextTrack();
+                });
+            };
         }
     </script>
 </body>
