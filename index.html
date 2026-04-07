@@ -427,7 +427,7 @@
         }
         body.dark .playlist-header .playlist-title { color: #e2e8f0; }
 
-        #shuffle-btn {
+        .shuffle-btn {
             margin-left: auto;
             background: none;
             border: 1px solid var(--border);
@@ -441,10 +441,10 @@
             transition: background 0.2s, color 0.2s, border-color 0.2s;
             letter-spacing: 0.5px;
         }
-        #shuffle-btn:hover { border-color: var(--accent); color: var(--accent); }
-        #shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-        body.dark #shuffle-btn { border-color: #334155; color: #64748b; }
-        body.dark #shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .shuffle-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        body.dark .shuffle-btn { border-color: #334155; color: #64748b; }
+        body.dark .shuffle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
         .track-list {
             display: none;
@@ -639,70 +639,6 @@
             .art-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* ── YouTube player card ── */
-        .yt-player-card {
-            display: flex;
-            gap: 0;
-            border: 2px solid var(--navy);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 4px 4px 0 var(--navy);
-            margin-bottom: 24px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .yt-player-card:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 var(--navy);
-        }
-        body.dark .yt-player-card {
-            border-color: #475569;
-            box-shadow: 4px 4px 0 #475569;
-        }
-        body.dark .yt-player-card:hover {
-            box-shadow: 2px 2px 0 #475569;
-        }
-        .yt-player-left {
-            flex: 1;
-            min-width: 0;
-        }
-        .yt-player-left iframe {
-            width: 100%;
-            height: 80px;
-            border: none;
-            display: block;
-        }
-        .yt-thumb {
-            width: 120px;
-            flex-shrink: 0;
-            position: relative;
-            display: block;
-            overflow: hidden;
-            border-left: 2px solid var(--navy);
-        }
-        body.dark .yt-thumb { border-left-color: #475569; }
-        .yt-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .yt-thumb-overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: #fff;
-            background: rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .yt-thumb:hover .yt-thumb-overlay { opacity: 1; }
-
-        @media (max-width: 480px) {
-            .yt-thumb { width: 80px; }
-        }
     </style>
 </head>
 <body>
@@ -944,45 +880,43 @@
             </ul>
 
             <h2 class="section-title">Playlist <span>(listen)</span></h2>
-            <div class="playlist-header" id="playlist-toggle" onclick="togglePlaylist()">
+            <div class="playlist-header" id="playlist-toggle-1" onclick="togglePlaylist(1)">
                 <span class="chevron">&#9654;</span>
                 <span class="playlist-title">Random rhymes for lovely minds</span>
-                <button id="shuffle-btn" onclick="toggleShuffle(event)" title="Shuffle" aria-label="Toggle shuffle" aria-pressed="false">⇄</button>
+                <button id="shuffle-btn-1" class="shuffle-btn" onclick="toggleShuffle(event, 1)" title="Shuffle" aria-label="Toggle shuffle for Random rhymes for lovely minds" aria-pressed="false">⇄</button>
             </div>
-            <div class="track-list" id="track-list">
-                <div class="track-loading" id="track-loading">Loading tracks…</div>
+            <div class="track-list" id="track-list-1">
+                <div class="track-loading" id="track-loading-1">Loading tracks…</div>
             </div>
-            <h2 class="section-title">YouTube <span>(playlist)</span></h2>
-            <div class="yt-player-card">
-                <div class="yt-player-left">
-                    <iframe
-                        id="yt-player"
-                        src="https://www.youtube.com/embed/videoseries?list=PLaOC4UNMWibIXKNTVNxUWyORvNycD6x48&autoplay=0&controls=1&modestbranding=1&rel=0&vq=tiny"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen
-                        title="YouTube playlist player">
-                    </iframe>
-                </div>
-                <a class="yt-thumb" href="https://youtube.com/playlist?list=PLaOC4UNMWibIXKNTVNxUWyORvNycD6x48" target="_blank" rel="noopener" title="Open playlist on YouTube">
-                    <img src="https://img.youtube.com/vi/86TUpxqNqGI/mqdefault.jpg" alt="YouTube playlist thumbnail">
-                    <span class="yt-thumb-overlay">▶</span>
-                </a>
+
+            <div class="playlist-header" id="playlist-toggle-2" onclick="togglePlaylist(2)" style="margin-top:18px;">
+                <span class="chevron">&#9654;</span>
+                <span class="playlist-title">Time dissolve here</span>
+                <button id="shuffle-btn-2" class="shuffle-btn" onclick="toggleShuffle(event, 2)" title="Shuffle" aria-label="Toggle shuffle for Time dissolve here" aria-pressed="false">⇄</button>
+            </div>
+            <div class="track-list" id="track-list-2">
+                <div class="track-loading" id="track-loading-2">Loading tracks…</div>
             </div>
         </div>
 
     </div><!-- /.container -->
 
-    <!-- Player bar — outside .container, never touched by navigation -->
     <div id="player-bar">
         <button id="player-close" onclick="closePlayer()" title="Close">&#x2715;</button>
         <iframe id="sc-player" allow="autoplay" src=""></iframe>
     </div>
 
-    <!-- Off-screen SC widget: must NOT be display:none or SC Widget API never fires READY -->
-    <iframe id="sc-widget-iframe"
+    <iframe id="sc-widget-iframe-1"
         src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/random-rhymes-for-lovely-minds&auto_play=false"
         style="position:absolute;left:-9999px;width:1px;height:1px;"
-        title="SoundCloud playlist widget"
+        title="SoundCloud playlist widget for Random rhymes for lovely minds"
+        allow="autoplay">
+    </iframe>
+
+    <iframe id="sc-widget-iframe-2"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/time-dissolve-here&auto_play=false"
+        style="position:absolute;left:-9999px;width:1px;height:1px;"
+        title="SoundCloud playlist widget for Time dissolve here"
         allow="autoplay">
     </iframe>
 
@@ -1080,94 +1014,145 @@
 
         /* ── Player bar ── */
         function closePlayer() {
-            document.getElementById('player-bar').classList.remove('visible');
-            document.getElementById('sc-player').src = '';
+            var playerBar = document.getElementById('player-bar');
+            var player = document.getElementById('sc-player');
+            if (playerBar) playerBar.classList.remove('visible');
+            if (player) player.src = '';
+            activePlaylistIndex = null;
             document.querySelectorAll('.track-item').forEach(function(item) {
                 item.classList.remove('playing');
             });
         }
 
         /* ── SoundCloud widget ── */
-        var TRACKS = [];
-        var shuffleOn = false;
-        var currentTrackIndex = -1;
+        var PLAYLISTS = {
+            1: {
+                iframeId: 'sc-widget-iframe-1',
+                listId: 'track-list-1',
+                loadingId: 'track-loading-1',
+                tracks: [],
+                shuffleOn: false,
+                currentTrackIndex: -1,
+                widget: null
+            },
+            2: {
+                iframeId: 'sc-widget-iframe-2',
+                listId: 'track-list-2',
+                loadingId: 'track-loading-2',
+                tracks: [],
+                shuffleOn: false,
+                currentTrackIndex: -1,
+                widget: null
+            }
+        };
+        var activePlaylistIndex = null;
         var playerWidget = null;
 
-        var widget = SC.Widget(document.getElementById('sc-widget-iframe'));
+        Object.keys(PLAYLISTS).forEach(function(key) {
+            initializePlaylist(Number(key));
+        });
 
-        widget.bind(SC.Widget.Events.READY, function() {
-            widget.getSounds(function(sounds) {
-                var list    = document.getElementById('track-list');
-                var loading = document.getElementById('track-loading');
-                if (loading) loading.remove();
+        function initializePlaylist(index) {
+            var playlist = PLAYLISTS[index];
+            if (!playlist) return;
 
-                if (!sounds || sounds.length === 0) {
-                    var err = document.createElement('div');
-                    err.className = 'track-loading';
-                    err.textContent = 'No tracks found.';
-                    list.appendChild(err);
-                    return;
-                }
-
-                TRACKS = sounds;
-                sounds.forEach(function(sound, i) {
-                    var item = document.createElement('div');
-                    item.className = 'track-item';
-                    item.setAttribute('onclick', 'playTrack(this,' + i + ')');
-                    item.innerHTML =
-                        '<div class="track-num">' +
-                            '<span class="track-num-text">' + (i + 1) + '</span>' +
-                            '<div class="track-wave"><span></span><span></span><span></span><span></span></div>' +
-                        '</div>' +
-                        '<div class="track-info">' +
-                            '<div class="track-name">'   + esc(sound.title)                  + '</div>' +
-                            '<div class="track-artist">' + esc((sound.user||{}).username||'') + '</div>' +
-                        '</div>';
-                    list.appendChild(item);
+            playlist.widget = SC.Widget(document.getElementById(playlist.iframeId));
+            playlist.widget.bind(SC.Widget.Events.READY, function() {
+                playlist.widget.getSounds(function(sounds) {
+                    renderPlaylist(index, sounds || []);
                 });
             });
-        });
+        }
+
+        function renderPlaylist(index, sounds) {
+            var playlist = PLAYLISTS[index];
+            var list = document.getElementById(playlist.listId);
+            var loading = document.getElementById(playlist.loadingId);
+            if (!list) return;
+
+            if (loading) loading.remove();
+            list.innerHTML = '';
+
+            if (!sounds || sounds.length === 0) {
+                var err = document.createElement('div');
+                err.className = 'track-loading';
+                err.textContent = 'No tracks found.';
+                list.appendChild(err);
+                return;
+            }
+
+            playlist.tracks = sounds;
+            sounds.forEach(function(sound, i) {
+                var item = document.createElement('div');
+                item.className = 'track-item';
+                item.onclick = function() {
+                    playTrack(item, index, i);
+                };
+                item.innerHTML =
+                    '<div class="track-num">' +
+                        '<span class="track-num-text">' + (i + 1) + '</span>' +
+                        '<div class="track-wave"><span></span><span></span><span></span><span></span></div>' +
+                    '</div>' +
+                    '<div class="track-info">' +
+                        '<div class="track-name">'   + esc(sound.title)                  + '</div>' +
+                        '<div class="track-artist">' + esc((sound.user || {}).username || '') + '</div>' +
+                    '</div>';
+                list.appendChild(item);
+            });
+        }
 
         function esc(s) {
             return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
         }
 
-        function togglePlaylist() {
-            document.getElementById('playlist-toggle').classList.toggle('open');
-            document.getElementById('track-list').classList.toggle('open');
+        function togglePlaylist(index) {
+            var toggle = document.getElementById('playlist-toggle-' + index);
+            var list = document.getElementById('track-list-' + index);
+            if (toggle) toggle.classList.toggle('open');
+            if (list) list.classList.toggle('open');
         }
 
-        function toggleShuffle(e) {
+        function toggleShuffle(e, index) {
             e.stopPropagation();
-            shuffleOn = !shuffleOn;
-            var btn = document.getElementById('shuffle-btn');
-            btn.classList.toggle('active', shuffleOn);
-            btn.setAttribute('aria-pressed', shuffleOn ? 'true' : 'false');
+            var playlist = PLAYLISTS[index];
+            var btn = document.getElementById('shuffle-btn-' + index);
+            if (!playlist || !btn) return;
+
+            playlist.shuffleOn = !playlist.shuffleOn;
+            btn.classList.toggle('active', playlist.shuffleOn);
+            btn.setAttribute('aria-pressed', playlist.shuffleOn ? 'true' : 'false');
         }
 
         function playNextTrack() {
-            if (TRACKS.length === 0) return;
+            var playlist = PLAYLISTS[activePlaylistIndex];
+            if (!playlist || playlist.tracks.length === 0) return;
+
             var nextIndex;
-            if (shuffleOn) {
+            if (playlist.shuffleOn) {
                 do {
-                    nextIndex = Math.floor(Math.random() * TRACKS.length);
-                } while (TRACKS.length > 1 && nextIndex === currentTrackIndex);
+                    nextIndex = Math.floor(Math.random() * playlist.tracks.length);
+                } while (playlist.tracks.length > 1 && nextIndex === playlist.currentTrackIndex);
             } else {
-                nextIndex = (currentTrackIndex + 1) % TRACKS.length;
+                nextIndex = (playlist.currentTrackIndex + 1) % playlist.tracks.length;
             }
-            var items = document.querySelectorAll('.track-item');
+
+            var items = document.querySelectorAll('#track-list-' + activePlaylistIndex + ' .track-item');
             if (items[nextIndex]) {
-                playTrack(items[nextIndex], nextIndex);
+                playTrack(items[nextIndex], activePlaylistIndex, nextIndex);
             }
         }
 
-        function playTrack(el, index) {
-            if (!TRACKS[index]) return;
-            currentTrackIndex = index;
+        function playTrack(el, playlistIndex, trackIndex) {
+            var playlist = PLAYLISTS[playlistIndex];
+            if (!playlist || !playlist.tracks[trackIndex]) return;
+
+            activePlaylistIndex = playlistIndex;
+            playlist.currentTrackIndex = trackIndex;
             document.querySelectorAll('.track-item').forEach(function(item) { item.classList.remove('playing'); });
             el.classList.add('playing');
+
             var src = 'https://w.soundcloud.com/player/?url=' +
-                encodeURIComponent(TRACKS[index].permalink_url) +
+                encodeURIComponent(playlist.tracks[trackIndex].permalink_url) +
                 '&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
             var playerIframe = document.getElementById('sc-player');
             playerIframe.src = src;
