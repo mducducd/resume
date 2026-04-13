@@ -1,4 +1,4 @@
-# Minh Duc Nguyen — Portfolio
+# Personal pages
 
 🌐 **[Visit my portfolio page](https://mducducd.github.io/resume/)**
 
