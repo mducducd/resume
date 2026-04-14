@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blogs — Duc Nguyen</title>
-    <meta name="description" content="Blogs by Duc Nguyen.">
+    <title>Arts — Duc Nguyen</title>
+    <meta name="description" content="Art by Duc Nguyen.">
     <style>
         :root {
             --bg: #ffffff;
@@ -252,59 +252,236 @@
         }
 
         .main-column {
-            padding: 24px 6px 22px 0;
-            min-height: calc(100vh - 90px);
+            padding-top: 66px;
+            min-width: 0;
         }
 
         .section-head {
-            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
         }
 
         .section-head h2 {
-            font-size: 1.16rem;
-            font-weight: 650;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
             color: var(--heading);
+            letter-spacing: -0.02em;
         }
 
-        .blog-stage {
-            min-height: 68vh;
+        .arts-stack {
+            display: grid;
+            gap: 34px;
+        }
+
+        .art-section {
+            display: grid;
+            gap: 16px;
+        }
+
+        .art-section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .art-section-head h3 {
+            margin: 0;
+            font-size: 1.22rem;
+            color: var(--ink);
+        }
+
+        .art-count {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .art-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .art-card {
+            display: grid;
+            grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+            align-items: start;
+            gap: 18px;
+        }
+
+        .art-image-link {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            cursor: zoom-in;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .art-image-link::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 14, 34, 0.08), rgba(10, 14, 34, 0.58));
+            opacity: 0;
+            transition: opacity 0.18s ease;
+            z-index: 1;
+        }
+
+        .art-image-link::after {
+            content: attr(data-overlay-label);
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            background: rgba(10, 12, 35, 0.74);
+            color: #ffffff;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 2;
+        }
+
+        .art-image {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 14px 30px var(--shadow);
+            transition: transform 0.22s ease;
+        }
+
+        .art-image-link:hover::before,
+        .art-image-link:hover::after,
+        .art-image-link:focus-visible::before,
+        .art-image-link:focus-visible::after {
+            opacity: 1;
+        }
+
+        .art-image-link:hover::after,
+        .art-image-link:focus-visible::after {
+            transform: translateY(0);
+        }
+
+        .art-image-link:hover .art-image,
+        .art-image-link:focus-visible .art-image {
+            transform: scale(1.02);
+        }
+
+        .art-copy {
+            display: grid;
+            gap: 10px;
+            padding-top: 2px;
+        }
+
+        .art-card h4 {
+            margin: 0;
+            font-size: 1.04rem;
+            color: var(--ink);
+        }
+
+        .art-card p {
+            margin: 0;
+            max-width: 70ch;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .art-empty {
+            padding: 10px 0 2px;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            background: rgba(8, 10, 31, 0.82);
+            backdrop-filter: blur(8px);
+            z-index: 1200;
+        }
+
+        .lightbox.is-open {
+            display: flex;
+        }
+
+        .lightbox-dialog {
+            position: relative;
+            max-width: min(1200px, calc(100vw - 56px));
+            max-height: calc(100vh - 56px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: calc(100vh - 56px);
+            display: block;
+            border-radius: 14px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            background: rgba(10, 12, 35, 0.82);
+            color: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
         }
 
         .site-footer {
-            margin-top: 22px;
-            padding-top: 14px;
-            border-top: 1px solid var(--line);
+            margin-top: 42px;
+            padding: 18px 0 8px;
             color: var(--muted);
-            font-size: 0.9rem;
+            font-size: 0.84rem;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 900px) {
             .page-shell {
-                width: min(100%, calc(100% - 18px));
-                padding-top: 10px;
-                min-height: auto;
+                width: min(760px, calc(100% - 28px));
                 grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .page-head {
-                top: 8px;
-                margin-bottom: 0;
+                gap: 18px;
+                padding-top: 74px;
             }
 
             .page-shell::before {
-                bottom: 12px;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: auto;
+                width: 100%;
+                height: 208px;
+                border-radius: 0;
+            }
+
+            .page-head {
+                position: static;
             }
 
             .sidebar-panel {
                 min-height: auto;
                 padding-bottom: 12px;
-            }
-
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                padding: 7px 10px;
             }
 
             .top-nav {
@@ -323,11 +500,45 @@
             }
 
             .main-column {
-                padding: 16px 16px 20px;
+                padding-top: 0;
             }
 
-            .blog-stage {
-                min-height: 56vh;
+            .theme-toggle {
+                top: 12px;
+                right: 12px;
+            }
+
+            .art-card {
+                grid-template-columns: 1fr;
+            }
+
+            .lightbox {
+                padding: 18px;
+            }
+
+            .lightbox-dialog {
+                max-width: calc(100vw - 36px);
+                max-height: calc(100vh - 36px);
+            }
+
+            .lightbox-image {
+                max-height: calc(100vh - 36px);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .page-shell {
+                width: calc(100% - 22px);
+                padding-top: 70px;
+            }
+
+            .sidebar-panel {
+                padding: 18px 14px 10px;
+            }
+
+            .art-section-head {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -362,28 +573,65 @@
                     <a href="index.html#works">Projects</a>
                     <a href="index.html#learning">Learning</a>
                     <a href="index.html#favorites">Offline</a>
-                    <a href="blogs.html" class="active" aria-current="page">Blogs</a>
-                    <a href="arts.html">Arts</a>
+                    <a href="blogs.html">Blogs</a>
+                    <a href="arts.html" class="active" aria-current="page">Arts</a>
                 </nav>
             </div>
         </header>
 
         <main class="main-column">
-            <section aria-labelledby="blogs-title">
+            <section aria-labelledby="arts-title">
                 <div class="section-head">
-                    <h2 id="blogs-title">Blogs</h2>
+                    <h2 id="arts-title">Arts</h2>
                 </div>
-                <div class="blog-stage" aria-label="Empty blogs section"></div>
+                <div class="arts-stack">
+                    <section class="art-section" aria-labelledby="figures-title">
+                        <div class="art-section-head">
+                            <h3 id="figures-title">Figures 📊</h3>
+                            <span class="art-count">01 post</span>
+                        </div>
+                        <div class="art-grid">
+                            <article class="art-card">
+                                <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open full image">
+                                    <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
+                                </a>
+                                <div class="art-copy">
+                                    <h4>ICIP25 ✨</h4>
+                                    <p>This figure reminds me of a small cosmetic imperfection in my scientific work. The paper is already published, but the first connector arrows are slightly misaligned and not perfectly straight 😅</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="art-section" aria-labelledby="drawing-title">
+                        <div class="art-section-head">
+                            <h3 id="drawing-title">Drawing ✏️</h3>
+                            <span class="art-count">00 posts</span>
+                        </div>
+                        <p class="art-empty">Drawings will appear here soon 🎨</p>
+                    </section>
+                </div>
             </section>
 
             <footer class="site-footer">© 2026 Duc Nguyen (Duke). Dresden, Germany.</footer>
         </main>
     </div>
 
+    <div class="lightbox" id="image-lightbox" aria-hidden="true">
+        <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded artwork">
+            <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image overlay" title="Close image overlay">&#10005;</button>
+            <img class="lightbox-image" id="lightbox-image" alt="">
+        </div>
+    </div>
+
     <script>
         (function() {
             var themeToggle = document.getElementById("theme-toggle");
             var THEME_STORAGE_KEY = "portfolio-theme";
+            var imageLinks = Array.prototype.slice.call(document.querySelectorAll(".art-image-link"));
+            var lightbox = document.getElementById("image-lightbox");
+            var lightboxImage = document.getElementById("lightbox-image");
+            var lightboxClose = document.getElementById("lightbox-close");
 
             function applyTheme(theme) {
                 document.body.setAttribute("data-theme", theme);
@@ -419,6 +667,49 @@
                         window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
                     } catch (error) {
                         /* ignore storage errors */
+                    }
+                });
+            }
+
+            function closeLightbox() {
+                if (!lightbox || !lightboxImage) {
+                    return;
+                }
+
+                lightbox.classList.remove("is-open");
+                lightbox.setAttribute("aria-hidden", "true");
+                lightboxImage.removeAttribute("src");
+                lightboxImage.setAttribute("alt", "");
+                document.body.style.overflow = "";
+            }
+
+            if (lightbox && lightboxImage) {
+                imageLinks.forEach(function(link) {
+                    link.addEventListener("click", function(event) {
+                        var image = link.querySelector("img");
+
+                        event.preventDefault();
+                        lightboxImage.setAttribute("src", link.getAttribute("href"));
+                        lightboxImage.setAttribute("alt", image ? image.getAttribute("alt") : "Expanded artwork");
+                        lightbox.classList.add("is-open");
+                        lightbox.setAttribute("aria-hidden", "false");
+                        document.body.style.overflow = "hidden";
+                    });
+                });
+
+                lightbox.addEventListener("click", function(event) {
+                    if (event.target === lightbox) {
+                        closeLightbox();
+                    }
+                });
+
+                if (lightboxClose) {
+                    lightboxClose.addEventListener("click", closeLightbox);
+                }
+
+                document.addEventListener("keydown", function(event) {
+                    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+                        closeLightbox();
                     }
                 });
             }

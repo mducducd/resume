@@ -93,13 +93,13 @@
 
         .page-shell {
             position: relative;
-            width: min(1080px, calc(100% - 40px));
+            width: min(1180px, calc(100% - 40px));
             margin: 0 auto;
             padding: 26px 0 52px;
             min-height: calc(100vh - 78px);
             display: grid;
-            grid-template-columns: 196px minmax(0, 1fr);
-            gap: 52px;
+            grid-template-columns: 24% minmax(0, 1fr);
+            gap: 46px;
             align-items: start;
         }
 
@@ -109,8 +109,8 @@
             left: -12px;
             top: 0;
             bottom: 0;
-            width: 220px;
-            border-radius: 0 0 34px 34px;
+            width: calc(24% + 18px);
+            border-radius: 0;
             background:
                 radial-gradient(circle at top left, var(--shell-glow), transparent 34%),
                 linear-gradient(180deg, var(--shell-panel-top), var(--shell-panel-bottom));
@@ -183,33 +183,36 @@
             align-items: center;
             gap: 10px;
             width: 100%;
-            padding: 18px 0 0;
-            font-size: 0.9rem;
-            color: var(--muted);
         }
 
         .top-nav::before {
             content: "";
-            width: 34px;
+            width: 36px;
             height: 1px;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, rgba(94, 124, 226, 0), rgba(94, 124, 226, 0.5), rgba(250, 166, 255, 0.45), rgba(94, 124, 226, 0));
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, transparent, var(--line), transparent);
         }
 
         .top-nav a {
-            color: var(--ink);
-            text-decoration: none;
-            line-height: 1.4;
+            width: 100%;
+            padding: 11px 10px;
+            border-radius: var(--radius-md);
             text-align: center;
+            font-size: 0.95rem;
+            text-decoration: none;
+            color: var(--muted);
+            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
         }
 
         .top-nav a.active {
-            color: var(--heading);
-            text-decoration: underline;
-            text-underline-offset: 0.18em;
+            background: var(--surface);
+            color: var(--ink);
+            box-shadow: 0 10px 22px rgba(94, 124, 226, 0.14);
         }
 
         .top-nav a:hover {
+            transform: translateY(-1px);
+            background: var(--surface-soft);
             color: var(--heading);
         }
 
@@ -634,14 +637,226 @@
             grid-column: 1 / -1;
         }
 
-        .art-placeholder {
-            margin-top: 8px;
-            padding: 14px;
-            border: 1px dashed var(--line);
-            border-radius: var(--radius-sm);
-            background: linear-gradient(145deg, var(--art-a), var(--art-b));
+        .main-column.view-mode > .hero,
+        .main-column.view-mode > .page-section,
+        .main-column.view-mode > .site-footer {
+            display: none;
+        }
+
+        .fullpage-view {
+            display: none;
+            min-height: calc(100vh - 140px);
+            padding-bottom: 32px;
+        }
+
+        .fullpage-view.active {
+            display: block;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 16px;
             color: var(--muted);
-            text-align: center;
+            text-decoration: none;
+            font-size: 0.88rem;
+        }
+
+        .back-button:hover {
+            color: var(--heading);
+        }
+
+        .fullpage-hero {
+            margin-bottom: 22px;
+        }
+
+        .fullpage-hero p {
+            margin: 8px 0 0;
+            max-width: 64ch;
+            color: var(--muted);
+        }
+
+        .empty-stage {
+            min-height: 52vh;
+        }
+
+        .arts-stack {
+            display: grid;
+            gap: 34px;
+        }
+
+        .art-section {
+            display: grid;
+            gap: 16px;
+        }
+
+        .art-section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .art-section-head h3 {
+            margin: 0;
+            font-size: 1.22rem;
+            color: var(--ink);
+        }
+
+        .art-count {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .art-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .art-card {
+            display: grid;
+            grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+            align-items: start;
+            gap: 18px;
+        }
+
+        .art-image-link {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            cursor: zoom-in;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .art-image-link::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 14, 34, 0.08), rgba(10, 14, 34, 0.58));
+            opacity: 0;
+            transition: opacity 0.18s ease;
+            z-index: 1;
+        }
+
+        .art-image-link::after {
+            content: attr(data-overlay-label);
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            background: rgba(10, 12, 35, 0.74);
+            color: #ffffff;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 2;
+        }
+
+        .art-image {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 14px 30px var(--shadow);
+            transition: transform 0.22s ease;
+        }
+
+        .art-image-link:hover::before,
+        .art-image-link:hover::after,
+        .art-image-link:focus-visible::before,
+        .art-image-link:focus-visible::after {
+            opacity: 1;
+        }
+
+        .art-image-link:hover::after,
+        .art-image-link:focus-visible::after {
+            transform: translateY(0);
+        }
+
+        .art-image-link:hover .art-image,
+        .art-image-link:focus-visible .art-image {
+            transform: scale(1.02);
+        }
+
+        .art-copy {
+            display: grid;
+            gap: 10px;
+            padding-top: 2px;
+        }
+
+        .art-card h4 {
+            margin: 0;
+            font-size: 1.04rem;
+            color: var(--ink);
+        }
+
+        .art-card p {
+            margin: 0;
+            max-width: 70ch;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .art-empty {
+            padding: 10px 0 2px;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            background: rgba(8, 10, 31, 0.82);
+            backdrop-filter: blur(8px);
+            z-index: 1200;
+        }
+
+        .lightbox.is-open {
+            display: flex;
+        }
+
+        .lightbox-dialog {
+            position: relative;
+            max-width: min(1200px, calc(100vw - 56px));
+            max-height: calc(100vh - 56px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: calc(100vh - 56px);
+            display: block;
+            border-radius: 14px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            background: rgba(10, 12, 35, 0.82);
+            color: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
         }
 
         #player-bar {
@@ -839,9 +1054,18 @@
             }
 
             .top-nav {
-                align-items: flex-start;
-                gap: 6px;
-                font-size: 0.9rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .top-nav::before {
+                display: none;
+            }
+
+            .top-nav a {
+                width: auto;
+                min-width: 120px;
             }
 
             .main-column {
@@ -855,7 +1079,8 @@
             .hero-grid,
             .project-item,
             .learning-layout,
-            .offline-layout {
+            .offline-layout,
+            .art-card {
                 grid-template-columns: 1fr;
             }
 
@@ -886,6 +1111,26 @@
 
             #player-bar iframe {
                 height: 86px;
+            }
+
+            .lightbox {
+                padding: 18px;
+            }
+
+            .lightbox-dialog {
+                max-width: calc(100vw - 36px);
+                max-height: calc(100vh - 36px);
+            }
+
+            .lightbox-image {
+                max-height: calc(100vh - 36px);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .art-section-head {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -918,9 +1163,10 @@
                 <nav class="top-nav" aria-label="Primary navigation">
                     <a href="#about">About</a>
                     <a href="#works">Projects</a>
-                    <a href="blogs.html">Blogs</a>
                     <a href="#learning">Learning</a>
                     <a href="#favorites">Offline</a>
+                    <a href="#blogs-view" data-view-target="blogs-view">Blogs</a>
+                    <a href="#arts-view" data-view-target="arts-view">Arts</a>
                 </nav>
             </div>
 
@@ -996,7 +1242,7 @@
                 <div class="project-list">
                     <article class="project-item">
                         <div class="project-thumb">
-                            <img src="assets/stamp_workbench.png" alt="STAMP-Workbench project thumbnail" loading="lazy">
+                            <img src="assets/thumbnails/stamp_workbench.png" alt="STAMP-Workbench project thumbnail" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1013,7 +1259,7 @@
 
                     <article class="project-item">
                         <div class="project-thumb">
-                            <img src="assets/pathplogy_agent.png" alt="Pathology Agent interface overview" loading="lazy">
+                            <img src="assets/thumbnails/pathplogy_agent.png" alt="Pathology Agent interface overview" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1030,7 +1276,7 @@
 
                     <article class="project-item">
                         <div class="project-thumb project-thumb--contain">
-                            <img src="assets/STAMP_logo.svg" alt="STAMP project logo" loading="lazy">
+                            <img src="assets/thumbnails/STAMP_logo.svg" alt="STAMP project logo" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1048,7 +1294,7 @@
 
                     <article class="project-item">
                         <div class="project-thumb project-thumb--crop-vertical">
-                            <img src="assets/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
+                            <img src="assets/thumbnails/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1066,7 +1312,7 @@
                                     <summary>See demo</summary>
                                     <div class="demo-panel">
                                         <video controls muted loop playsinline preload="metadata">
-                                            <source src="assets/face_synthesis.mp4" type="video/mp4">
+                                            <source src="assets/animations/face_synthesis.mp4" type="video/mp4">
                                         </video>
                                     </div>
                                 </details>
@@ -1076,7 +1322,7 @@
 
                     <article class="project-item">
                         <div class="project-thumb project-thumb--zoom">
-                            <img src="assets/nurse_sim.png" alt="Nursing Simulation interface preview" loading="lazy">
+                            <img src="assets/thumbnails/nurse_sim.png" alt="Nursing Simulation interface preview" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1092,7 +1338,7 @@
                                 <details class="inline-toggle">
                                     <summary>See demo</summary>
                                     <div class="demo-panel">
-                                        <img src="assets/Nursing Simulation.gif" alt="Nursing Simulation demo" loading="lazy">
+                                        <img src="assets/animations/Nursing Simulation.gif" alt="Nursing Simulation demo" loading="lazy">
                                     </div>
                                 </details>
                             </div>
@@ -1101,7 +1347,7 @@
 
                     <article class="project-item">
                         <div class="project-thumb">
-                            <img src="assets/talking_face.png" alt="TalkingChat mobile interface" loading="lazy">
+                            <img src="assets/thumbnails/talking_face.png" alt="TalkingChat mobile interface" loading="lazy">
                         </div>
                         <div class="project-body">
                             <div class="project-meta">
@@ -1180,14 +1426,6 @@
 
                     <article class="section-card">
                         <p class="mini-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#F28E2B;"><path d="M12 3c5 0 9 3.6 9 8 0 2.5-1.9 4-4 4h-1.3c-.7 0-1.2.6-1.2 1.2 0 .7.3 1.1.3 1.8 0 1.7-1.4 3-3.3 3C6.3 21 3 16.9 3 12 3 7 7 3 12 3Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="16.5" cy="11" r="1"/><circle cx="10" cy="15" r="1"/></svg>
-                            Art
-                        </p>
-                        <div class="art-placeholder">More art is coming soon.</div>
-                    </article>
-
-                    <article class="section-card">
-                        <p class="mini-label">
                             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#D84FB6;"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
                             Playlist
                         </p>
@@ -1222,8 +1460,62 @@
                 </div>
             </section>
 
+            <section id="blogs-view" class="fullpage-view" aria-labelledby="blogs-view-title">
+                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
+                <div class="fullpage-hero">
+                    <div class="section-head">
+                        <h2 id="blogs-view-title">Blogs</h2>
+                    </div>
+                    <p>A dedicated writing space for notes, essays, and in-progress thoughts.</p>
+                </div>
+                <div class="empty-stage"></div>
+            </section>
+
+            <section id="arts-view" class="fullpage-view" aria-labelledby="arts-view-title">
+                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
+                <div class="fullpage-hero">
+                    <div class="section-head">
+                        <h2 id="arts-view-title">Arts</h2>
+                    </div>
+                </div>
+                <div class="arts-stack">
+                    <section class="art-section" aria-labelledby="figures-title">
+                        <div class="art-section-head">
+                            <h3 id="figures-title">Figures 📊</h3>
+                            <span class="art-count">01 post</span>
+                        </div>
+                        <div class="art-grid">
+                            <article class="art-card">
+                                <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open full image">
+                                    <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
+                                </a>
+                                <div class="art-copy">
+                                    <h4>ICIP25 ✨</h4>
+                                    <p>This figure reminds me of a small cosmetic imperfection in my scientific work. The paper is already published, but the first connector arrows are slightly misaligned and not perfectly straight 😅</p>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="art-section" aria-labelledby="drawing-title">
+                        <div class="art-section-head">
+                            <h3 id="drawing-title">Drawing ✏️</h3>
+                            <span class="art-count">00 posts</span>
+                        </div>
+                        <p class="art-empty">Drawings will appear here soon 🎨</p>
+                    </section>
+                </div>
+            </section>
+
             <footer class="site-footer">© 2026 Duc Nguyen (Duke). Dresden, Germany.</footer>
         </main>
+    </div>
+
+    <div class="lightbox" id="image-lightbox" aria-hidden="true">
+        <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded artwork">
+            <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image overlay" title="Close image overlay">&#10005;</button>
+            <img class="lightbox-image" id="lightbox-image" alt="">
+        </div>
     </div>
 
     <div id="player-bar" aria-live="polite">
@@ -1257,15 +1549,24 @@
             };
 
             var playlistToggles = Array.prototype.slice.call(document.querySelectorAll("[data-playlist-toggle]"));
-            var navLinks = Array.prototype.slice.call(document.querySelectorAll(".top-nav a[href^=\"#\"]"));
-            var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+            var navLinks = Array.prototype.slice.call(document.querySelectorAll(".top-nav a"));
+            var viewLinks = Array.prototype.slice.call(document.querySelectorAll(".top-nav a[data-view-target]"));
+            var backLinks = Array.prototype.slice.call(document.querySelectorAll("[data-view-close]"));
+            var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id].hero, main > section[id].page-section"));
+            var fullpageViews = Array.prototype.slice.call(document.querySelectorAll(".fullpage-view"));
+            var mainColumn = document.querySelector(".main-column");
             var playerBar = document.getElementById("player-bar");
             var playerIframe = document.getElementById("sc-player");
             var playerClose = document.getElementById("player-close");
+            var lightbox = document.getElementById("image-lightbox");
+            var lightboxImage = document.getElementById("lightbox-image");
+            var lightboxClose = document.getElementById("lightbox-close");
+            var imageLinks = Array.prototype.slice.call(document.querySelectorAll(".art-image-link"));
             var themeToggle = document.getElementById("theme-toggle");
             var playerWidget = null;
             var activePlaylistIndex = null;
             var THEME_STORAGE_KEY = "portfolio-theme";
+            var previousSectionId = "about";
 
             function applyTheme(theme) {
                 document.body.setAttribute("data-theme", theme);
@@ -1289,16 +1590,21 @@
                     return savedTheme;
                 }
 
-                return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                return "light";
             }
 
             function setActiveNav(sectionId) {
                 navLinks.forEach(function(link) {
-                    link.classList.toggle("active", link.getAttribute("href") === "#" + sectionId);
+                    var target = link.getAttribute("data-view-target") || (link.getAttribute("href") || "").replace(/^#/, "");
+                    link.classList.toggle("active", target === sectionId);
                 });
             }
 
             function updateActiveNavFromScroll() {
+                if (mainColumn && mainColumn.classList.contains("view-mode")) {
+                    return;
+                }
+
                 var navOffset = 96;
                 var bestSection = null;
                 var bestDistance = Infinity;
@@ -1318,8 +1624,38 @@
                 }
 
                 if (bestSection) {
+                    previousSectionId = bestSection.id;
                     setActiveNav(bestSection.id);
                 }
+            }
+
+            function openView(viewId) {
+                var targetView = document.getElementById(viewId);
+
+                if (!mainColumn || !targetView) {
+                    return;
+                }
+
+                fullpageViews.forEach(function(view) {
+                    view.classList.toggle("active", view === targetView);
+                });
+
+                mainColumn.classList.add("view-mode");
+                setActiveNav(viewId);
+                window.scrollTo({ top: 0, behavior: "auto" });
+            }
+
+            function closeView() {
+                if (!mainColumn) {
+                    return;
+                }
+
+                fullpageViews.forEach(function(view) {
+                    view.classList.remove("active");
+                });
+
+                mainColumn.classList.remove("view-mode");
+                setActiveNav(previousSectionId || "about");
             }
 
             function setPlaylistOpen(index, open) {
@@ -1524,11 +1860,44 @@
             }
 
             navLinks.forEach(function(link) {
-                link.addEventListener("click", function() {
+                link.addEventListener("click", function(event) {
                     var targetId = (link.getAttribute("href") || "").replace(/^#/, "");
+
+                    if (link.hasAttribute("data-view-target")) {
+                        return;
+                    }
+
                     if (targetId) {
+                        event.preventDefault();
+                        if (mainColumn && mainColumn.classList.contains("view-mode")) {
+                            closeView();
+                        }
                         setActiveNav(targetId);
+                        previousSectionId = targetId;
+                        if (document.getElementById(targetId)) {
+                            document.getElementById(targetId).scrollIntoView({ block: "start", behavior: "auto" });
+                        }
                         link.blur();
+                    }
+                });
+            });
+
+            viewLinks.forEach(function(link) {
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    openView(link.getAttribute("data-view-target"));
+                    link.blur();
+                });
+            });
+
+            backLinks.forEach(function(link) {
+                link.addEventListener("click", function(event) {
+                    var previousSection = document.getElementById(previousSectionId || "about");
+
+                    event.preventDefault();
+                    closeView();
+                    if (previousSection) {
+                        previousSection.scrollIntoView({ block: "start", behavior: "auto" });
                     }
                 });
             });
@@ -1558,6 +1927,43 @@
                 playerClose.addEventListener("click", closePlayer);
             }
 
+            function closeLightbox() {
+                if (!lightbox || !lightboxImage) {
+                    return;
+                }
+
+                lightbox.classList.remove("is-open");
+                lightbox.setAttribute("aria-hidden", "true");
+                lightboxImage.removeAttribute("src");
+                lightboxImage.setAttribute("alt", "");
+                document.body.style.overflow = "";
+            }
+
+            if (lightbox && lightboxImage) {
+                imageLinks.forEach(function(link) {
+                    link.addEventListener("click", function(event) {
+                        var image = link.querySelector("img");
+
+                        event.preventDefault();
+                        lightboxImage.setAttribute("src", link.getAttribute("href"));
+                        lightboxImage.setAttribute("alt", image ? image.getAttribute("alt") : "Expanded artwork");
+                        lightbox.classList.add("is-open");
+                        lightbox.setAttribute("aria-hidden", "false");
+                        document.body.style.overflow = "hidden";
+                    });
+                });
+
+                lightbox.addEventListener("click", function(event) {
+                    if (event.target === lightbox) {
+                        closeLightbox();
+                    }
+                });
+
+                if (lightboxClose) {
+                    lightboxClose.addEventListener("click", closeLightbox);
+                }
+            }
+
             if (window.SC && SC.Widget) {
                 initializePlaylist(1);
                 initializePlaylist(2);
@@ -1579,6 +1985,16 @@
             }
 
             window.addEventListener("resize", updateActiveNavFromScroll);
+
+            document.addEventListener("keydown", function(event) {
+                if (event.key === "Escape") {
+                    if (lightbox && lightbox.classList.contains("is-open")) {
+                        closeLightbox();
+                    } else if (mainColumn && mainColumn.classList.contains("view-mode")) {
+                        closeView();
+                    }
+                }
+            });
 
             applyTheme(getInitialTheme());
             updateActiveNavFromScroll();
