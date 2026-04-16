@@ -5,332 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogs — Duc Nguyen</title>
     <meta name="description" content="Blogs by Duc Nguyen.">
-    <style>
-        :root {
-            --bg: #ffffff;
-            --bg-glow-a: rgba(94, 124, 226, 0.1);
-            --bg-glow-b: rgba(250, 166, 255, 0.12);
-            --shell-glow: rgba(94, 124, 226, 0.12);
-            --shell-panel-top: rgba(255, 255, 255, 0.82);
-            --shell-panel-bottom: rgba(255, 255, 255, 0.42);
-            --surface: rgba(255, 255, 255, 0.96);
-            --surface-soft: rgba(255, 255, 255, 0.9);
-            --surface-strong: rgba(255, 255, 255, 0.94);
-            --surface-muted: rgba(255, 255, 255, 0.76);
-            --line: rgba(94, 124, 226, 0.22);
-            --ink: #0a369d;
-            --heading: #593c8f;
-            --text: #0a369d;
-            --muted: #5e7ce2;
-            --accent: #5e7ce2;
-            --accent-soft: rgba(94, 124, 226, 0.08);
-            --art-a: rgba(94, 124, 226, 0.06);
-            --art-b: rgba(250, 166, 255, 0.08);
-            --shadow: rgba(57, 74, 121, 0.14);
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 10px;
-        }
-
-        body[data-theme="dark"] {
-            color-scheme: dark;
-            --bg: #1a1b49;
-            --bg-glow-a: rgba(78, 231, 224, 0.18);
-            --bg-glow-b: rgba(104, 125, 255, 0.14);
-            --shell-glow: rgba(78, 231, 224, 0.12);
-            --shell-panel-top: rgba(30, 33, 84, 0.9);
-            --shell-panel-bottom: rgba(21, 24, 61, 0.72);
-            --surface: rgba(27, 29, 74, 0.96);
-            --surface-soft: rgba(30, 33, 82, 0.92);
-            --surface-strong: rgba(36, 39, 94, 0.96);
-            --surface-muted: rgba(24, 26, 66, 0.86);
-            --line: rgba(78, 231, 224, 0.18);
-            --ink: #ecf7ff;
-            --heading: #4ee7e0;
-            --text: #d7e6f8;
-            --muted: #78e3ea;
-            --accent: #4ee7e0;
-            --accent-soft: rgba(78, 231, 224, 0.14);
-            --art-a: rgba(78, 231, 224, 0.1);
-            --art-b: rgba(104, 125, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.38);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            overflow-y: scroll;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top left, var(--bg-glow-a), transparent 34%),
-                radial-gradient(circle at top right, var(--bg-glow-b), transparent 30%),
-                var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            line-height: 1.62;
-            transition: background 0.25s ease, color 0.2s ease;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        button {
-            font: inherit;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 16px;
-            right: 18px;
-            z-index: 50;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: var(--surface);
-            color: var(--ink);
-            box-shadow: 0 10px 24px var(--shadow);
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-
-        .theme-toggle:hover {
-            color: var(--heading);
-        }
-
-        .theme-toggle svg {
-            width: 14px;
-            height: 14px;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .theme-toggle-label {
-            font-size: 0.82rem;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        .page-shell {
-            position: relative;
-            width: min(1180px, calc(100% - 40px));
-            margin: 0 auto;
-            padding: 26px 0 52px;
-            min-height: calc(100vh - 78px);
-            display: grid;
-            grid-template-columns: 24% minmax(0, 1fr);
-            gap: 46px;
-            align-items: start;
-        }
-
-        .page-shell::before {
-            content: "";
-            position: absolute;
-            left: -12px;
-            top: 0;
-            bottom: 0;
-            width: calc(24% + 18px);
-            border-radius: 0;
-            background:
-                radial-gradient(circle at top left, var(--shell-glow), transparent 34%),
-                linear-gradient(180deg, var(--shell-panel-top), var(--shell-panel-bottom));
-            box-shadow: 0 12px 34px var(--shadow);
-        }
-
-        .page-head {
-            position: sticky;
-            top: 42px;
-            align-self: start;
-            z-index: 20;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sidebar-panel {
-            padding: 22px 18px 24px;
-            min-height: calc(100vh - 78px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-brand {
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .portrait {
-            width: 84px;
-            height: 84px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid rgba(94, 124, 226, 0.28);
-            background:
-                radial-gradient(circle at 30% 30%, var(--accent-soft), var(--surface) 62%);
-        }
-
-        .sidebar-brand .portrait {
-            margin-bottom: 12px;
-        }
-
-        h1,
-        h2 {
-            margin: 0;
-        }
-
-        h1 {
-            margin-top: 4px;
-            font-size: 1.32rem;
-            line-height: 1.2;
-            color: var(--ink);
-            font-weight: 700;
-        }
-
-        h1 span {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--muted);
-        }
-
-        .sidebar-note {
-            margin-top: 8px;
-            font-size: 0.82rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .top-nav {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .top-nav::before {
-            content: "";
-            width: 36px;
-            height: 1px;
-            margin-bottom: 4px;
-            background: linear-gradient(90deg, transparent, var(--line), transparent);
-        }
-
-        .top-nav a {
-            width: 100%;
-            padding: 11px 10px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-size: 0.95rem;
-            text-decoration: none;
-            color: var(--muted);
-            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
-        }
-
-        .top-nav a.active {
-            background: var(--surface);
-            color: var(--ink);
-            box-shadow: 0 10px 22px rgba(94, 124, 226, 0.14);
-        }
-
-        .top-nav a:hover {
-            transform: translateY(-1px);
-            background: var(--surface-soft);
-            color: var(--heading);
-        }
-
-        .main-column {
-            padding: 24px 6px 22px 0;
-            min-height: calc(100vh - 90px);
-        }
-
-        .section-head {
-            margin-bottom: 12px;
-        }
-
-        .section-head h2 {
-            font-size: 1.16rem;
-            font-weight: 650;
-            color: var(--heading);
-        }
-
-        .blog-stage {
-            min-height: 68vh;
-        }
-
-        .site-footer {
-            margin-top: 22px;
-            padding-top: 14px;
-            border-top: 1px solid var(--line);
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 720px) {
-            .page-shell {
-                width: min(100%, calc(100% - 18px));
-                padding-top: 10px;
-                min-height: auto;
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .page-head {
-                top: 8px;
-                margin-bottom: 0;
-            }
-
-            .page-shell::before {
-                bottom: 12px;
-            }
-
-            .sidebar-panel {
-                min-height: auto;
-                padding-bottom: 12px;
-            }
-
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                padding: 7px 10px;
-            }
-
-            .top-nav {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .top-nav::before {
-                display: none;
-            }
-
-            .top-nav a {
-                width: auto;
-                min-width: 120px;
-            }
-
-            .main-column {
-                padding: 16px 16px 20px;
-            }
-
-            .blog-stage {
-                min-height: 56vh;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -352,9 +27,9 @@
         <header class="page-head">
             <div class="sidebar-panel">
                 <div class="sidebar-brand">
-                    <div class="portrait" aria-hidden="true"></div>
-                    <h1>Duc Nguyen <span>(Duke)</span></h1>
-                    <p class="sidebar-note">ML Research Engineer · EKFZ, TU Dresden</p>
+                    <p class="brand-mark" aria-hidden="true">DUC<br>NGUYEN</p>
+                    <p class="sidebar-name">Duc Nguyen <span>(Duke)</span></p>
+                    <p class="sidebar-note">Longer notes will live here once they earn the space: build logs, research friction, and slower essays.</p>
                 </div>
 
                 <nav class="top-nav" aria-label="Primary navigation">
@@ -365,15 +40,53 @@
                     <a href="blogs.html" class="active" aria-current="page">Blogs</a>
                     <a href="arts.html">Arts</a>
                 </nav>
+
+                <div class="sidebar-section">
+                    <p class="sidebar-label">Writing</p>
+                    <div class="sidebar-links" aria-label="Blog sections">
+                        <a href="#blog-stage">Status</a>
+                        <a href="#blog-stage">Planned themes</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-foot">
+                    <a href="index.html">Back to home</a>
+                    <a href="mailto:minhducddd@gmail.com">Email</a>
+                </div>
             </div>
         </header>
 
         <main class="main-column">
-            <section aria-labelledby="blogs-title">
+            <section id="blog-stage" class="page-section" aria-labelledby="blogs-title">
                 <div class="section-head">
                     <h2 id="blogs-title">Blogs</h2>
+                    <p class="section-summary">A clean placeholder for future essays, implementation notes, and research process writing.</p>
                 </div>
-                <div class="blog-stage" aria-label="Empty blogs section"></div>
+
+                <div class="blog-grid">
+                    <article class="blog-card blog-card--intro">
+                        <div>
+                            <p class="eyebrow">Writing</p>
+                            <h1>In<br>Progress</h1>
+                        </div>
+                    </article>
+
+                    <article class="blog-card blog-card--wide reveal-delay-2">
+                        <p class="mini-label">What will live here</p>
+                        <h3>Notes from clinical ML engineering, interface work, and the parts of research that rarely make it into a paper.</h3>
+                        <p>This section is meant for longer-form writing once I have something worth keeping on the shelf: implementation details, failure modes, process notes, and essays about building careful systems.</p>
+                    </article>
+
+                    <article class="blog-card blog-card--soft reveal-delay-3">
+                        <p class="mini-label">Likely topics</p>
+                        <ul class="blog-list">
+                            <li>Computational pathology tooling</li>
+                            <li>LLM agents for clinical workflows</li>
+                            <li>Model interpretability and inspection</li>
+                            <li>Designing interfaces for serious software</li>
+                        </ul>
+                    </article>
+                </div>
             </section>
 
             <footer class="site-footer">© 2026 Duc Nguyen (Duke). Dresden, Germany.</footer>

@@ -5,1135 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duc Nguyen</title>
     <meta name="description" content="Duc Nguyen is an AI medical research engineer building multimodal and explainable clinical machine learning systems.">
-    <style>
-        :root {
-            --bg: #ffffff;
-            --bg-glow-a: rgba(94, 124, 226, 0.1);
-            --bg-glow-b: rgba(250, 166, 255, 0.12);
-            --shell-glow: rgba(94, 124, 226, 0.12);
-            --shell-panel-top: rgba(255, 255, 255, 0.82);
-            --shell-panel-bottom: rgba(255, 255, 255, 0.42);
-            --surface: rgba(255, 255, 255, 0.96);
-            --surface-soft: rgba(255, 255, 255, 0.9);
-            --surface-strong: rgba(255, 255, 255, 0.94);
-            --surface-muted: rgba(255, 255, 255, 0.76);
-            --line: rgba(94, 124, 226, 0.22);
-            --ink: #0a369d;
-            --heading: #593c8f;
-            --text: #0a369d;
-            --muted: #5e7ce2;
-            --accent: #5e7ce2;
-            --accent-soft: rgba(94, 124, 226, 0.08);
-            --art-a: rgba(94, 124, 226, 0.06);
-            --art-b: rgba(250, 166, 255, 0.08);
-            --shadow: rgba(57, 74, 121, 0.14);
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 10px;
-        }
-
-        body[data-theme="dark"] {
-            color-scheme: dark;
-            --bg: #1a1b49;
-            --bg-glow-a: rgba(78, 231, 224, 0.18);
-            --bg-glow-b: rgba(104, 125, 255, 0.14);
-            --shell-glow: rgba(78, 231, 224, 0.12);
-            --shell-panel-top: rgba(30, 33, 84, 0.9);
-            --shell-panel-bottom: rgba(21, 24, 61, 0.72);
-            --surface: rgba(27, 29, 74, 0.96);
-            --surface-soft: rgba(30, 33, 82, 0.92);
-            --surface-strong: rgba(36, 39, 94, 0.96);
-            --surface-muted: rgba(24, 26, 66, 0.86);
-            --line: rgba(78, 231, 224, 0.18);
-            --ink: #ecf7ff;
-            --heading: #4ee7e0;
-            --text: #d7e6f8;
-            --muted: #78e3ea;
-            --accent: #4ee7e0;
-            --accent-soft: rgba(78, 231, 224, 0.14);
-            --art-a: rgba(78, 231, 224, 0.1);
-            --art-b: rgba(104, 125, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.38);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            overflow-y: scroll;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top left, var(--bg-glow-a), transparent 34%),
-                radial-gradient(circle at top right, var(--bg-glow-b), transparent 30%),
-                var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            line-height: 1.62;
-            transition: background 0.25s ease, color 0.2s ease;
-        }
-
-        body.player-open {
-            padding-bottom: 110px;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        button,
-        summary {
-            font: inherit;
-        }
-
-        .page-shell {
-            position: relative;
-            width: min(1180px, calc(100% - 40px));
-            margin: 0 auto;
-            padding: 26px 0 52px;
-            min-height: calc(100vh - 78px);
-            display: grid;
-            grid-template-columns: 24% minmax(0, 1fr);
-            gap: 46px;
-            align-items: start;
-        }
-
-        .page-shell::before {
-            content: "";
-            position: absolute;
-            left: -12px;
-            top: 0;
-            bottom: 0;
-            width: calc(24% + 18px);
-            border-radius: 0;
-            background:
-                radial-gradient(circle at top left, var(--shell-glow), transparent 34%),
-                linear-gradient(180deg, var(--shell-panel-top), var(--shell-panel-bottom));
-            box-shadow: 0 12px 34px var(--shadow);
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 16px;
-            right: 18px;
-            z-index: 50;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: var(--surface);
-            color: var(--ink);
-            box-shadow: 0 10px 24px var(--shadow);
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-
-        .theme-toggle:hover {
-            color: var(--heading);
-        }
-
-        .theme-toggle svg {
-            width: 14px;
-            height: 14px;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .theme-toggle-label {
-            font-size: 0.82rem;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        .page-head {
-            position: sticky;
-            top: 42px;
-            align-self: start;
-            z-index: 20;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sidebar-panel {
-            padding: 22px 18px 24px;
-            min-height: calc(100vh - 78px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-brand {
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .top-nav {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .top-nav::before {
-            content: "";
-            width: 36px;
-            height: 1px;
-            margin-bottom: 4px;
-            background: linear-gradient(90deg, transparent, var(--line), transparent);
-        }
-
-        .top-nav a {
-            width: 100%;
-            padding: 11px 10px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-size: 0.95rem;
-            text-decoration: none;
-            color: var(--muted);
-            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
-        }
-
-        .top-nav a.active {
-            background: var(--surface);
-            color: var(--ink);
-            box-shadow: 0 10px 22px rgba(94, 124, 226, 0.14);
-        }
-
-        .top-nav a:hover {
-            transform: translateY(-1px);
-            background: var(--surface-soft);
-            color: var(--heading);
-        }
-
-        .nav-divider {
-            display: none;
-        }
-
-        .main-column {
-            padding: 24px 6px 22px 0;
-        }
-
-        .hero {
-            padding: 0;
-            scroll-margin-top: 52px;
-        }
-
-        .hero-grid {
-            display: block;
-        }
-
-        .portrait {
-            width: 84px;
-            height: 84px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid rgba(94, 124, 226, 0.28);
-            background:
-                radial-gradient(circle at 30% 30%, var(--accent-soft), var(--surface) 62%);
-        }
-
-        .sidebar-brand .portrait {
-            margin-bottom: 12px;
-        }
-
-        .portrait img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .eyebrow,
-        .project-meta,
-        .mini-label,
-        .note-meta {
-            margin: 0;
-            font-size: 0.82rem;
-            letter-spacing: 0;
-            text-transform: none;
-            color: var(--muted);
-        }
-
-        h1,
-        h2,
-        h3,
-        h4 {
-            margin: 0;
-            color: var(--heading);
-        }
-
-        h1 {
-            margin-top: 4px;
-            font-size: clamp(1.55rem, 2.5vw, 1.85rem);
-            line-height: 1.2;
-            color: var(--ink);
-            font-weight: 700;
-        }
-
-        h1 span {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--muted);
-        }
-
-        .sidebar-brand h1 {
-            margin-top: 0;
-            font-size: 1.32rem;
-            line-height: 1.2;
-        }
-
-        .sidebar-note {
-            margin-top: 8px;
-            font-size: 0.82rem;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .hero-copy p {
-            margin: 10px 0 0;
-            font-size: 0.9rem;
-        }
-
-        .hero-copy p:first-of-type {
-            margin-top: 12px;
-        }
-
-        .contact-row {
-            margin-top: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 10px;
-        }
-
-        .contact-link,
-        .project-links a,
-        .inline-toggle summary,
-        .resume-link {
-            padding: 0;
-            border: 0;
-            background: none;
-            color: var(--ink);
-            text-decoration: underline;
-            text-underline-offset: 0.14em;
-        }
-
-        .contact-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.82rem;
-        }
-
-        .contact-link:hover,
-        .project-links a:hover,
-        .inline-toggle summary:hover,
-        .resume-link:hover {
-            color: var(--heading);
-        }
-
-        .contact-link svg {
-            width: 14px;
-            height: 14px;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .mini-stack {
-            margin-top: 18px;
-            display: grid;
-            gap: 14px;
-        }
-
-        .mini-card {
-            padding: 0;
-        }
-
-        .mini-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .mini-label svg {
-            width: 14px;
-            height: 14px;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .mini-card p,
-        .mini-card ul,
-        .mini-card li {
-            margin: 0;
-            font-size: 0.88rem;
-        }
-
-        .mini-card ul {
-            padding-left: 18px;
-            margin-top: 6px;
-            display: grid;
-            gap: 6px;
-        }
-
-        .skill-row {
-            margin-top: 6px;
-            line-height: 1.8;
-        }
-
-        .skill-row span {
-            color: var(--text);
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-
-        .skill-row span::after {
-            content: ", ";
-        }
-
-        .skill-row span:last-child::after {
-            content: "";
-        }
-
-        .skill-row img {
-            width: 14px;
-            height: 14px;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .page-section {
-            margin-top: 24px;
-            padding: 18px 0 0;
-            border-top: 1px solid var(--line);
-        }
-
-        .section-head {
-            margin-bottom: 10px;
-        }
-
-        .section-head h2 {
-            font-size: 1.16rem;
-            font-weight: 650;
-        }
-
-        .project-list {
-            display: grid;
-            gap: 14px;
-        }
-
-        .project-item {
-            display: grid;
-            grid-template-columns: 164px minmax(0, 1fr);
-            gap: 14px;
-            align-items: start;
-            padding: 12px 0;
-            border-top: 1px solid rgba(94, 124, 226, 0.12);
-        }
-
-        .project-item:first-child {
-            padding-top: 0;
-            border-top: none;
-        }
-
-        .project-thumb {
-            width: 164px;
-            height: 104px;
-            padding: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--line);
-            background: var(--surface-soft);
-        }
-
-        .project-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            display: block;
-        }
-
-        .project-thumb--contain {
-            padding: 0;
-        }
-
-        .project-thumb--contain img {
-            object-fit: contain;
-            object-position: center;
-        }
-
-        .project-thumb--zoom img {
-            object-fit: cover;
-            object-position: center;
-            transform: scale(1.3);
-            transform-origin: center;
-        }
-
-        .project-thumb--crop-vertical img {
-            object-fit: cover;
-            object-position: center;
-            transform: scaleY(1.2);
-            transform-origin: center;
-        }
-
-        .project-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
-        }
-
-        .project-body h3 {
-            font-size: 0.92rem;
-            line-height: 1.35;
-            color: var(--heading);
-            font-weight: 650;
-        }
-
-        .project-body p {
-            margin: 6px 0 0;
-            font-size: 0.88rem;
-        }
-
-        .project-links {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 12px;
-            font-size: 0.82rem;
-        }
-
-        .inline-toggle {
-            display: inline-block;
-        }
-
-        .inline-toggle summary {
-            list-style: none;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .inline-toggle summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .inline-toggle summary::after {
-            content: "+";
-            color: var(--muted);
-            display: inline-block;
-            width: 1ch;
-            text-align: center;
-            margin-left: 0.18em;
-        }
-
-        .project-links a,
-        .inline-toggle summary {
-            font-size: 0.82rem;
-        }
-
-        .inline-toggle[open] summary::after {
-            content: "-";
-        }
-
-        .demo-panel {
-            margin-top: 8px;
-            border: 1px solid var(--line);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            background: var(--surface-soft);
-        }
-
-        .demo-panel video,
-        .demo-panel img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .learning-layout,
-        .offline-layout {
-            display: grid;
-            gap: 12px;
-        }
-
-        .learning-layout {
-            grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-        }
-
-        .section-card {
-            padding: 0;
-        }
-
-        .section-card p,
-        .section-card ul {
-            margin: 0;
-            font-size: 0.88rem;
-        }
-
-        .section-card ul {
-            padding-left: 18px;
-            margin-top: 6px;
-            display: grid;
-            gap: 6px;
-        }
-
-        .resource-list {
-            margin: 10px 0 0;
-            padding: 0;
-            list-style: none;
-            display: grid;
-            gap: 10px;
-        }
-
-        .resource-list li {
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--line);
-        }
-
-        .resource-list li:last-child {
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .resource-list a {
-            color: var(--ink);
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 0.88rem;
-        }
-
-        .resource-list a:hover {
-            color: var(--heading);
-        }
-
-        .note-meta {
-            margin-top: 4px;
-            color: var(--muted);
-            letter-spacing: 0;
-            text-transform: none;
-            font-size: 0.8rem;
-        }
-
-        .offline-layout {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .offline-layout .section-card:last-child {
-            grid-column: 1 / -1;
-        }
-
-        .main-column.view-mode > .hero,
-        .main-column.view-mode > .page-section,
-        .main-column.view-mode > .site-footer {
-            display: none;
-        }
-
-        .fullpage-view {
-            display: none;
-            min-height: calc(100vh - 140px);
-            padding-bottom: 32px;
-        }
-
-        .fullpage-view.active {
-            display: block;
-        }
-
-        .back-button {
-            display: inline-block;
-            margin-bottom: 16px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 0.88rem;
-        }
-
-        .back-button:hover {
-            color: var(--heading);
-        }
-
-        .fullpage-hero {
-            margin-bottom: 22px;
-        }
-
-        .fullpage-hero p {
-            margin: 8px 0 0;
-            max-width: 64ch;
-            color: var(--muted);
-        }
-
-        .empty-stage {
-            min-height: 52vh;
-        }
-
-        .arts-stack {
-            display: grid;
-            gap: 34px;
-        }
-
-        .art-section {
-            display: grid;
-            gap: 16px;
-        }
-
-        .art-section-head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .art-section-head h3 {
-            margin: 0;
-            font-size: 1.22rem;
-            color: var(--ink);
-        }
-
-        .art-count {
-            font-size: 0.8rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .art-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .art-card {
-            display: grid;
-            grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-            align-items: start;
-            gap: 18px;
-        }
-
-        .art-image-link {
-            position: relative;
-            display: block;
-            text-decoration: none;
-            cursor: zoom-in;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-
-        .art-image-link::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(10, 14, 34, 0.08), rgba(10, 14, 34, 0.58));
-            opacity: 0;
-            transition: opacity 0.18s ease;
-            z-index: 1;
-        }
-
-        .art-image-link::after {
-            content: attr(data-overlay-label);
-            position: absolute;
-            left: 16px;
-            bottom: 14px;
-            padding: 6px 10px;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 999px;
-            background: rgba(10, 12, 35, 0.74);
-            color: #ffffff;
-            font-size: 0.78rem;
-            letter-spacing: 0.04em;
-            opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.18s ease, transform 0.18s ease;
-            z-index: 2;
-        }
-
-        .art-image {
-            width: 100%;
-            display: block;
-            border-radius: 12px;
-            box-shadow: 0 14px 30px var(--shadow);
-            transition: transform 0.22s ease;
-        }
-
-        .art-image-link:hover::before,
-        .art-image-link:hover::after,
-        .art-image-link:focus-visible::before,
-        .art-image-link:focus-visible::after {
-            opacity: 1;
-        }
-
-        .art-image-link:hover::after,
-        .art-image-link:focus-visible::after {
-            transform: translateY(0);
-        }
-
-        .art-image-link:hover .art-image,
-        .art-image-link:focus-visible .art-image {
-            transform: scale(1.02);
-        }
-
-        .art-copy {
-            display: grid;
-            gap: 10px;
-            padding-top: 2px;
-        }
-
-        .art-card h4 {
-            margin: 0;
-            font-size: 1.04rem;
-            color: var(--ink);
-        }
-
-        .art-card p {
-            margin: 0;
-            max-width: 70ch;
-            color: var(--muted);
-            font-size: 0.98rem;
-        }
-
-        .art-empty {
-            padding: 10px 0 2px;
-            color: var(--muted);
-            font-size: 0.98rem;
-        }
-
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 28px;
-            background: rgba(8, 10, 31, 0.82);
-            backdrop-filter: blur(8px);
-            z-index: 1200;
-        }
-
-        .lightbox.is-open {
-            display: flex;
-        }
-
-        .lightbox-dialog {
-            position: relative;
-            max-width: min(1200px, calc(100vw - 56px));
-            max-height: calc(100vh - 56px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .lightbox-image {
-            max-width: 100%;
-            max-height: calc(100vh - 56px);
-            display: block;
-            border-radius: 14px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            width: 38px;
-            height: 38px;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 999px;
-            background: rgba(10, 12, 35, 0.82);
-            color: #ffffff;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
-        }
-
-        #player-bar {
-            position: fixed;
-            left: 14px;
-            right: 14px;
-            bottom: 14px;
-            margin: 0 auto;
-            width: min(780px, calc(100% - 28px));
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--surface);
-            box-shadow: 0 14px 28px var(--shadow);
-            transform: translateY(calc(100% + 18px));
-            opacity: 0;
-            pointer-events: none;
-            z-index: 1000;
-            transition: transform 0.18s ease, opacity 0.14s ease;
-        }
-
-        #player-bar.visible {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        #player-bar iframe {
-            display: block;
-            width: 100%;
-            height: 92px;
-            border: 0;
-            background: var(--surface);
-        }
-
-        #player-close {
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: var(--surface-strong);
-            color: var(--muted);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            z-index: 2;
-        }
-
-        .playlist-stack {
-            margin-top: 8px;
-            display: grid;
-            gap: 10px;
-        }
-
-        .playlist-group {
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            background: var(--surface-muted);
-            overflow: hidden;
-        }
-
-        .playlist-open {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border: 0;
-            background: transparent;
-            color: var(--ink);
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .playlist-open strong {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .playlist-open .note-meta {
-            display: block;
-            margin-top: 2px;
-        }
-
-        .playlist-open .chevron {
-            width: 18px;
-            flex-shrink: 0;
-            color: var(--muted);
-            transition: transform 0.18s ease;
-        }
-
-        .playlist-open[aria-expanded="true"] .chevron {
-            transform: rotate(90deg);
-        }
-
-        .track-list {
-            display: grid;
-            gap: 0;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.18s ease, opacity 0.14s ease;
-        }
-
-        .track-list.open {
-            max-height: 520px;
-            opacity: 1;
-            padding-bottom: 8px;
-        }
-
-        .track-loading {
-            padding: 0 12px 10px;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .track-item {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 32px minmax(0, 1fr);
-            gap: 10px;
-            align-items: start;
-            padding: 8px 12px;
-            border: 0;
-            background: transparent;
-            text-align: left;
-            cursor: pointer;
-            color: var(--text);
-        }
-
-        .track-item:hover,
-        .track-item.playing {
-            background: var(--accent-soft);
-        }
-
-        .track-index {
-            color: var(--muted);
-            font-size: 0.84rem;
-            line-height: 1.5;
-        }
-
-        .track-title {
-            color: var(--ink);
-            font-size: 0.86rem;
-            line-height: 1.45;
-        }
-
-        .track-subtitle {
-            margin-top: 2px;
-            color: var(--muted);
-            font-size: 0.78rem;
-            line-height: 1.45;
-        }
-
-        .site-footer {
-            margin-top: 22px;
-            padding-top: 14px;
-            border-top: 1px solid var(--line);
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 720px) {
-            .page-shell {
-                width: min(100%, calc(100% - 18px));
-                padding-top: 10px;
-                min-height: auto;
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .page-head {
-                top: 8px;
-                margin-bottom: 0;
-            }
-
-            .page-shell::before {
-                bottom: 12px;
-            }
-
-            .sidebar-panel {
-                min-height: auto;
-            }
-
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                padding: 7px 10px;
-            }
-
-            .top-nav {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .top-nav::before {
-                display: none;
-            }
-
-            .top-nav a {
-                width: auto;
-                min-width: 120px;
-            }
-
-            .main-column {
-                padding: 16px 16px 20px;
-            }
-
-            .hero {
-                padding: 0;
-            }
-
-            .hero-grid,
-            .project-item,
-            .learning-layout,
-            .offline-layout,
-            .art-card {
-                grid-template-columns: 1fr;
-            }
-
-            .portrait {
-                width: 84px;
-                height: 84px;
-            }
-
-            .project-thumb {
-                width: 148px;
-                height: 92px;
-            }
-
-            .offline-layout .section-card:last-child {
-                grid-column: auto;
-            }
-
-            body.player-open {
-                padding-bottom: 98px;
-            }
-
-            #player-bar {
-                left: 8px;
-                right: 8px;
-                bottom: 8px;
-                width: calc(100% - 16px);
-            }
-
-            #player-bar iframe {
-                height: 86px;
-            }
-
-            .lightbox {
-                padding: 18px;
-            }
-
-            .lightbox-dialog {
-                max-width: calc(100vw - 36px);
-                max-height: calc(100vh - 36px);
-            }
-
-            .lightbox-image {
-                max-height: calc(100vh - 36px);
-            }
-        }
-
-        @media (max-width: 560px) {
-            .art-section-head {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -1155,80 +27,103 @@
         <header class="page-head">
             <div class="sidebar-panel">
                 <div class="sidebar-brand">
-                    <div class="portrait" aria-hidden="true"></div>
-                    <h1>Duc Nguyen <span>(Duke)</span></h1>
-                    <p class="sidebar-note">ML Research Engineer · EKFZ, TU Dresden</p>
+                    <p class="brand-mark" aria-hidden="true">DUC<br>NGUYEN</p>
+                    <p class="sidebar-note">ML research engineer building clinical AI systems, multimodal tools, and a quieter art shelf on the side.</p>
                 </div>
 
                 <nav class="top-nav" aria-label="Primary navigation">
                     <a href="#about">About</a>
                     <a href="#works">Projects</a>
                     <a href="#learning">Learning</a>
-                    <a href="#favorites">Offline</a>
-                    <a href="#blogs-view" data-view-target="blogs-view">Blogs</a>
-                    <a href="#arts-view" data-view-target="arts-view">Arts</a>
                 </nav>
-            </div>
 
+                <div class="sidebar-section">
+                    <p class="sidebar-label">Offline Mode</p>
+                    <div class="sidebar-links" aria-label="Page sections">
+                        <a href="#blogs-view" data-view-target="blogs-view">Blogs</a>
+                        <a href="#arts-view" data-view-target="arts-view">Gallery</a>
+                        <a href="#favorites-view" data-view-target="favorites-view">Photos &amp; Music</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-foot" aria-label="External links">
+                    <a class="sidebar-icon-link" href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
+                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0 0 9.5l5.242 4.269C6.452 11.249 9.023 9.5 12 9.5s5.548 1.748 6.758 4.269L24 9.5 12 0Zm0 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg>
+                    </a>
+                    <a class="sidebar-icon-link" href="mailto:minhducddd@gmail.com" aria-label="Email" title="Email">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                    </a>
+                    <a class="sidebar-icon-link" href="https://github.com/mducducd" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22 0 1.61-.02 2.9-.02 3.29 0 .31.21.68.82.57C20.57 22.09 24 17.59 24 12.3 24 5.67 18.63.3 12 .3Z"/></svg>
+                    </a>
+                    <a class="sidebar-icon-link" href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg>
+                    </a>
+                    <a class="sidebar-icon-link" href="data_science_resume.pdf" target="_blank" rel="noopener" aria-label="CV / Resume" title="CV / Resume">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
+                    </a>
+                </div>
+            </div>
         </header>
 
         <main class="main-column">
             <section id="about" class="hero">
-                <div class="hero-grid">
-                    <div class="hero-copy">
+                <div class="section-head">
+                    <h2>About</h2>
+                    <p class="section-summary">Clinical ML engineering, multimodal systems, and a quieter sense of place in Dresden.</p>
+                </div>
+
+                <div class="hero-grid hero-grid--about">
+                    <article class="tile hero-copy hero-copy--about reveal-delay-2">
                         <p class="eyebrow">ML Research Engineer · EKFZ, TU Dresden</p>
-                        <p>I'm currently a research engineer building clinical ML pipelines at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a> in <span style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap;"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;display:block;"><path fill="#fff4d6" d="M7 5.5h7.8a1.2 1.2 0 0 1 1.2 1.2v7.3a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V6.7A1.2 1.2 0 0 1 7 5.5Z"/><path fill="#f3c64d" d="M7 8h9v6a3 3 0 0 1-3 3h-3a3 3 0 0 1-3-3V8Z"/><path fill="none" stroke="#ba7b1b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M7 5.5h7.8a1.2 1.2 0 0 1 1.2 1.2v7.3a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V6.7A1.2 1.2 0 0 1 7 5.5Z"/><path fill="none" stroke="#ba7b1b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M16 8.5h1.1a2.9 2.9 0 0 1 0 5.8H16"/><path fill="#fff9ee" d="M7.4 4.7c.5-.8 1.5-1.2 2.3-.8.2-.8 1-1.4 1.9-1.4.8 0 1.5.4 1.9 1 .8-.4 1.8-.2 2.4.5.6.6.7 1.6.4 2.5H7.2c-.4-.6-.3-1.5.2-2.3Z"/><path fill="#fff9ee" d="M9.1 3.3c.1.7-.1 1.3-.7 1.8M12.1 2.8c.2.7 0 1.4-.5 2M14.8 3.6c.1.6-.1 1.2-.6 1.6"/><path fill="none" stroke="#e7d8b8" stroke-width="1.2" stroke-linecap="round" d="M9.1 3.3c.1.7-.1 1.3-.7 1.8M12.1 2.8c.2.7 0 1.4-.5 2M14.8 3.6c.1.6-.1 1.2-.6 1.6"/></svg>Germany</span>. I work at the intersection of deep learning, <span style="display:inline-flex;align-items:center;gap:4px;white-space:nowrap;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="width:15px;height:15px;display:block;" fill="none" stroke="#5E7CE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>multimodal AI</span>, and <span style="display:inline-flex;align-items:center;gap:4px;white-space:nowrap;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="width:15px;height:15px;display:block;" fill="none" stroke="#c58b31" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>clinical medicine</span>.</p>
-                        <p>My focus is building explainable pipelines for biomedical data analysis, LLM agents for clinical applications, and tools that make computational pathology accessible.</p>
+                        <p>I am Duc Nguyen, a ML research engineer at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a> in Germany <span aria-hidden="true" style="color:#b8742e;">🍺</span>.</p>
+                        <p>I work at the intersection of deep learning, <span style="white-space:nowrap;"><span aria-hidden="true" style="color:#5c7cfa;">🤖</span> multimodal AI</span>, and <span style="white-space:nowrap;"><span aria-hidden="true" style="color:#d94841;">💊</span> clinical medicine</span>. My current focus is clinical ML pipelines with clearer inspection layers, multimodal models for pathology workflows, and interfaces that make complex AI systems easier to reason through.</p>
 
                         <div class="contact-row">
                             <a class="contact-link" href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener" aria-label="Google Scholar">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true" style="color:#4285F4;"><path fill="currentColor" d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0 0 9.5l5.242 4.269C6.452 11.249 9.023 9.5 12 9.5s5.548 1.748 6.758 4.269L24 9.5 12 0Zm0 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg>
                                 Scholar
                             </a>
                             <a class="contact-link" href="https://github.com/mducducd" target="_blank" rel="noopener" aria-label="GitHub">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true" style="color:#181717;"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22 0 1.61-.02 2.9-.02 3.29 0 .31.21.68.82.57C20.57 22.09 24 17.59 24 12.3 24 5.67 18.63.3 12 .3Z"/></svg>
                                 GitHub
                             </a>
                             <a class="contact-link" href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener" aria-label="LinkedIn">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true" style="color:#0A66C2;"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg>
                                 LinkedIn
                             </a>
                             <a class="contact-link" href="mailto:minhducddd@gmail.com" aria-label="Email">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#5E7CE2;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
                                 Email
                             </a>
                             <a class="contact-link" href="data_science_resume.pdf" target="_blank" rel="noopener" aria-label="CV">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#5E7CE2;"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
+                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
                                 CV
                             </a>
                         </div>
-                    </div>
-                </div>
 
-                <div class="mini-stack">
-                    <article class="mini-card">
-                        <p class="mini-label">Current Focus</p>
-                        <ul>
-                            <li>Clinical ML pipelines with strong inspection and explanation tooling</li>
-                            <li>Multimodal AI for biomedical data and pathology workflows</li>
-                            <li>Research interfaces that help people reason through complex systems</li>
-                        </ul>
+                        <div class="about-skills">
+                            <p class="mini-label">Skills</p>
+                            <div class="skill-row skill-row--about" aria-label="Skills">
+                                <span><img src="https://cdn.simpleicons.org/python" alt="" aria-hidden="true">Python</span>
+                                <span><img src="https://cdn.simpleicons.org/pytorch" alt="" aria-hidden="true">PyTorch</span>
+                                <span>CUDA</span>
+                                <span><img src="https://cdn.simpleicons.org/cplusplus" alt="" aria-hidden="true">C++</span>
+                                <span><img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="" aria-hidden="true">Hugging Face</span>
+                                <span>Diffusion</span>
+                                <span>VLMs</span>
+                                <span>LLM Agents</span>
+                                <span>Docker</span>
+                                <span>Linux</span>
+                            </div>
+                        </div>
                     </article>
 
-                    <article class="mini-card">
-                        <p class="mini-label">Skills</p>
-                        <div class="skill-row" aria-label="Skills">
-                            <span><img src="https://cdn.simpleicons.org/python/3776AB" alt="" aria-hidden="true">Python</span>
-                            <span><img src="https://cdn.simpleicons.org/cplusplus/00599C" alt="" aria-hidden="true">C++</span>
-                            <span><img src="https://cdn.simpleicons.org/pytorch/EE4C2C" alt="" aria-hidden="true">PyTorch</span>
-                            <span><img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="" aria-hidden="true">HuggingFace</span>
-                            <span>CUDA</span>
-                            <span>Diffusion Models</span>
-                            <span>Multimodal Learning</span>
-                            <span>Vision-Language Models</span>
-                            <span>LLM Agents</span>
-                            <span>Docker</span>
-                            <span>Linux</span>
+                    <article class="tile tile--photo reveal-delay-3">
+                        <img class="tile-photo" id="dresden-photo" src="assets/thumbnails/avatar.webp" alt="Daily view from Dresden, Germany" loading="lazy">
+                        <div class="tile-caption">
+                            <p class="mini-label">Dresden</p>
+                            <p>I’m currently working in Dresden, where research work and a quieter visual life have started to settle into the same place.</p>
                         </div>
                     </article>
                 </div>
@@ -1237,8 +132,10 @@
             <section id="works" class="page-section">
                 <div class="section-head">
                     <h2>Projects</h2>
+                    <p class="section-summary">Clinical AI, pathology workflows, model research, and interface design.</p>
                 </div>
 
+                <div class="project-strip">
                 <div class="project-list">
                     <article class="project-item">
                         <div class="project-thumb">
@@ -1257,7 +154,7 @@
                         </div>
                     </article>
 
-                    <article class="project-item">
+                    <article class="project-item reveal-delay-2">
                         <div class="project-thumb">
                             <img src="assets/thumbnails/pathplogy_agent.png" alt="Pathology Agent interface overview" loading="lazy">
                         </div>
@@ -1274,7 +171,7 @@
                         </div>
                     </article>
 
-                    <article class="project-item">
+                    <article class="project-item reveal-delay-3">
                         <div class="project-thumb project-thumb--contain">
                             <img src="assets/thumbnails/STAMP_logo.svg" alt="STAMP project logo" loading="lazy">
                         </div>
@@ -1284,7 +181,7 @@
                                 <span>Python</span>
                                 <span>KatherLab Team</span>
                             </div>
-                            <h3>STAMP: A Protocol for Solid Tumor Associative Modeling in Pathology</h3>
+                            <h3>STAMP</h3>
                             <p>An open-source computational pathology pipeline from the KatherLab team for discovering and evaluating image-based biomarkers from gigapixel histopathology slides without pixel-level annotations. The peer-reviewed workflow helps clinical researchers and ML engineers run reproducible studies across multiple tumor types.</p>
                             <div class="project-links">
                                 <a href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">Code</a>
@@ -1292,7 +189,7 @@
                         </div>
                     </article>
 
-                    <article class="project-item">
+                    <article class="project-item reveal-delay-4">
                         <div class="project-thumb project-thumb--crop-vertical">
                             <img src="assets/thumbnails/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
                         </div>
@@ -1308,19 +205,12 @@
                                 <a href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">Code</a>
                                 <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener">ICPR 2024</a>
                                 <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener">IEEE FG 2024</a>
-                                <details class="inline-toggle" data-autoplay-demo>
-                                    <summary>See demo</summary>
-                                    <div class="demo-panel">
-                                        <video controls muted loop playsinline preload="metadata">
-                                            <source src="assets/animations/face_synthesis.mp4" type="video/mp4">
-                                        </video>
-                                    </div>
-                                </details>
+                                <button class="demo-trigger" type="button" data-demo-target="face-reaction" data-demo-kind="video" data-demo-src="assets/animations/face_synthesis.mp4">See demo</button>
                             </div>
                         </div>
                     </article>
 
-                    <article class="project-item">
+                    <article class="project-item reveal-delay-5">
                         <div class="project-thumb project-thumb--zoom">
                             <img src="assets/thumbnails/nurse_sim.png" alt="Nursing Simulation interface preview" loading="lazy">
                         </div>
@@ -1329,23 +219,16 @@
                                 <span>2024</span>
                                 <span>Python</span>
                                 <span>Web</span>
-                                <span>ChatGPT</span>
                             </div>
                             <h3>Nursing Simulation</h3>
                             <p>A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education, enhancing clinical learning through AI-driven interactive scenarios.</p>
-                            <p>Internship project at JLG Inc.</p>
                             <div class="project-links">
-                                <details class="inline-toggle">
-                                    <summary>See demo</summary>
-                                    <div class="demo-panel">
-                                        <img src="assets/animations/Nursing Simulation.gif" alt="Nursing Simulation demo" loading="lazy">
-                                    </div>
-                                </details>
+                                <button class="demo-trigger" type="button" data-demo-target="nursing-sim" data-demo-kind="image" data-demo-src="assets/animations/Nursing Simulation.gif">See demo</button>
                             </div>
                         </div>
                     </article>
 
-                    <article class="project-item">
+                    <article class="project-item reveal-delay-6">
                         <div class="project-thumb">
                             <img src="assets/thumbnails/talking_face.png" alt="TalkingChat mobile interface" loading="lazy">
                         </div>
@@ -1353,82 +236,90 @@
                             <div class="project-meta">
                                 <span>Nov 2023</span>
                                 <span>Python</span>
-                                <span>Hackathon Award</span>
+                                <span>Gold Prize (Regional) in Generative AI - Hackathon by CNU Innovation Talent Development Center</span>
                             </div>
                             <h3>TalkingChat</h3>
                             <p>A child-friendly web chatbot with a talking face and voice that can be changed or uploaded by each user, making the conversation feel personal, playful, and easy to engage with.</p>
                         </div>
                     </article>
                 </div>
+                </div>
+
+                <div class="project-demo-stage" id="project-demo-stage" aria-live="polite" hidden>
+                    <button class="project-demo-stage__close" id="project-demo-close" type="button" aria-label="Close expanded demo" title="Close expanded demo">&#10005;</button>
+                    <div class="project-demo-stage__body" id="project-demo-body"></div>
+                </div>
             </section>
 
             <section id="learning" class="page-section">
                 <div class="section-head">
                     <h2>Learning</h2>
+                    <p class="section-summary">What I’m studying now and the notes I keep returning to.</p>
                 </div>
 
                 <div class="learning-layout">
                     <article class="section-card">
-                        <p class="mini-label">Current Learning Goals</p>
+                        <p class="mini-label">📘 Current Learning Goals</p>
                         <ul>
-                            <li><span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;"><svg viewBox="0 0 24 16" aria-hidden="true" style="width:18px;height:12px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,0.08);"><rect width="24" height="16" fill="#ffce00"/><rect width="24" height="10.67" y="0" fill="#dd0000"/><rect width="24" height="5.33" y="0" fill="#000000"/></svg>German A1</span></li>
+                            <li><span aria-hidden="true">🇩🇪</span> German A1</li>
                             <li>Real and Complex Analysis</li>
                             <li>Ordinary Differential Equations</li>
                             <li>6.047/6.878 Machine Learning for Genomics</li>
                             <li><a href="https://canvas.mit.edu/courses/33939/pages/home-page-poster?module_item_id=1342767" target="_blank" rel="noopener">MLCB</a></li>
-                            <li><a href="https://www.vorlesungen.ethz.ch//Vorlesungsverzeichnis/lerneinheit.view?lerneinheitId=158019&amp;semkez=2022S&amp;ansicht=LEHRVERANSTALTUNGEN&amp;lang=en" target="_blank" rel="noopener">636-0702-00L Statistical Models in Computational Biology</a></li>
+                            <li><a href="https://www.vorlesungen.ethz.ch//Vorlesungsverzeichnis/lerneinheit.view?lerneinheitId=158019&amp;semkez=2022S&amp;ansicht=LEHRVERANSTALTUNGEN&amp;lang=en" target="_blank" rel="noopener">Statistical Models in Computational Biology</a></li>
                         </ul>
                     </article>
 
-                    <article class="section-card">
-                        <p class="mini-label">Study Notes</p>
-                        <p style="margin-top: 10px;">Selected study notes curated from <a href="https://phucnguyen.dev" target="_blank" rel="noopener">phucnguyen.dev</a>.</p>
+                    <article class="section-card reveal-delay-2">
+                        <p class="mini-label">📝 Study Notes</p>
+                        <p style="margin-top: 10px;">Selected notes and technical reading gathered from my broader learning archive.</p>
                         <ul class="resource-list">
                             <li>
-                                <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">A complete breakdown of the implementation details of Megatron-LM, torchgpipe, and OSLO codebases</a>
-                                <p class="note-meta">Distributed training notes focused on the engineering decisions behind large-model systems.</p>
+                                <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">Implementation details of Megatron-LM, torchgpipe, and OSLO</a>
+                                <p class="note-meta">Distributed training notes focused on engineering tradeoffs inside large-model systems.</p>
                             </li>
                             <li>
                                 <a href="https://phrygian-alarm-029.notion.site/Clean-FP8-LM-Training-FP8-Large-Language-Models-c1e88b30bbe64ed9b6d5df124aae267e" target="_blank" rel="noopener">FP8-LM: Training FP8 Large Language Models</a>
                                 <p class="note-meta">Low-precision training notes with a practical implementation lens.</p>
                             </li>
                             <li>
-                                <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod - Elastic Training and Fault-Tolerance</a>
-                                <p class="note-meta">Resilience-focused notes for distributed training when workers or hardware can fail.</p>
+                                <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod elastic training and fault tolerance</a>
+                                <p class="note-meta">Resilience-focused notes for distributed training under unreliable hardware or workers.</p>
                             </li>
                             <li>
                                 <a href="https://phrygian-alarm-029.notion.site/notes-reading-7b6946b8f4074771b9922654d61075d6" target="_blank" rel="noopener">All other unorganized notes</a>
-                                <p class="note-meta">An archive of broader reading notes and unfinished writeups.</p>
+                                <p class="note-meta">A larger archive of unfinished writeups, reading notes, and half-formed ideas.</p>
                             </li>
                         </ul>
                     </article>
                 </div>
             </section>
 
-            <section id="favorites" class="page-section">
+            <section id="favorites-view" class="fullpage-view" aria-labelledby="favorites-view-title">
+                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
                 <div class="section-head">
-                    <h2>Offline Mode</h2>
+                    <h2 id="favorites-view-title">Photos &amp; Music</h2>
+                    <p class="section-summary">Photography, playlists, and the slower things that keep the rest of the work balanced.</p>
                 </div>
 
                 <div class="offline-layout">
                     <article class="section-card">
                         <p class="mini-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#5E7CE2;"><path d="M4 7h4l2-2h4l2 2h4a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;display:inline-block;vertical-align:-2px;margin-right:6px;"><path d="M4 7h4l2-2h4l2 2h4a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg>
                             Photography
                         </p>
+                        <p style="margin-top: 12px;">A separate stream of observation and composition outside research work.</p>
                         <p style="margin-top: 12px;">
                             <a class="resume-link" href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><circle cx="8" cy="12" r="4.2" fill="#ff0084"/><circle cx="16" cy="12" r="4.2" fill="#0063dc"/></svg>
-                                My Flickr
+                                Visit Flickr
                             </a>
                         </p>
+                        <p style="margin-top: auto;" class="note-meta">Black-and-white studies, street fragments, and quiet architectural frames.</p>
                     </article>
 
-                    <article class="section-card">
-                        <p class="mini-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:#D84FB6;"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
-                            Playlist
-                        </p>
+                    <article class="section-card reveal-delay-2">
+                        <p class="mini-label">🎧 Playlists</p>
                         <div class="playlist-stack">
                             <div class="playlist-group">
                                 <button class="playlist-open" type="button" id="playlist-toggle-1" data-playlist-toggle="1" aria-expanded="true">
@@ -1462,48 +353,72 @@
 
             <section id="blogs-view" class="fullpage-view" aria-labelledby="blogs-view-title">
                 <a class="back-button" href="#about" data-view-close>&larr; Back</a>
-                <div class="fullpage-hero">
-                    <div class="section-head">
-                        <h2 id="blogs-view-title">Blogs</h2>
-                    </div>
-                    <p>A dedicated writing space for notes, essays, and in-progress thoughts.</p>
+                <div class="section-head">
+                    <h2 id="blogs-view-title">Blogs</h2>
+                    <p class="section-summary">A writing shelf for process notes, unfinished essays, and implementation stories.</p>
                 </div>
-                <div class="empty-stage"></div>
+
+                <div class="blog-grid">
+                    <article class="blog-card blog-card--intro">
+                        <div>
+                            <p class="eyebrow">Writing</p>
+                            <h1>In<br>Progress</h1>
+                        </div>
+                    </article>
+
+                    <article class="blog-card blog-card--wide reveal-delay-2">
+                        <p class="mini-label">What will live here</p>
+                        <h3>Notes from clinical ML engineering, interface design, and the slower parts of research work.</h3>
+                        <p>When I publish here, it will likely be implementation-heavy writing rather than polished hot takes: build logs, debugging notes, research friction, and essays on how to make serious systems more humane to use.</p>
+                    </article>
+
+                    <article class="blog-card blog-card--soft reveal-delay-3">
+                        <p class="mini-label">Status</p>
+                        <h3>No posts yet</h3>
+                        <p>The shelf is ready. The first entries are still being shaped.</p>
+                    </article>
+                </div>
             </section>
 
             <section id="arts-view" class="fullpage-view" aria-labelledby="arts-view-title">
                 <a class="back-button" href="#about" data-view-close>&larr; Back</a>
-                <div class="fullpage-hero">
-                    <div class="section-head">
-                        <h2 id="arts-view-title">Arts</h2>
-                    </div>
+                <div class="section-head">
+                    <h2 id="arts-view-title">Gallery</h2>
+                    <p class="section-summary">A small gallery for figures, drawings, and visual side paths.</p>
                 </div>
-                <div class="arts-stack">
-                    <section class="art-section" aria-labelledby="figures-title">
-                        <div class="art-section-head">
-                            <h3 id="figures-title">Figures 📊</h3>
-                            <span class="art-count">01 post</span>
-                        </div>
-                        <div class="art-grid">
-                            <article class="art-card">
-                                <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open full image">
-                                    <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
-                                </a>
-                                <div class="art-copy">
-                                    <h4>ICIP25 ✨</h4>
-                                    <p>This figure reminds me of a small cosmetic imperfection in my scientific work. The paper is already published, but the first connector arrows are slightly misaligned and not perfectly straight 😅</p>
-                                </div>
-                            </article>
-                        </div>
-                    </section>
 
-                    <section class="art-section" aria-labelledby="drawing-title">
-                        <div class="art-section-head">
-                            <h3 id="drawing-title">Drawing ✏️</h3>
-                            <span class="art-count">00 posts</span>
+                <div class="art-grid">
+                    <article class="art-card tile--live-art art-card--live" id="gallery-art-card">
+                        <a class="live-art-link" id="gallery-art-link" href="https://www.metmuseum.org/art/collection" target="_blank" rel="noopener" aria-label="Open gallery selected artwork">
+                            <img class="live-art-image" id="gallery-art-image" alt="" loading="lazy">
+                            <div class="live-art-overlay">
+                                <div class="live-art-meta">
+                                    <p class="eyebrow" id="gallery-art-label">Daily museum pick</p>
+                                    <h3 id="gallery-art-title">Loading artwork…</h3>
+                                    <p class="live-art-credit" id="gallery-art-credit">From a rotating set of paintings, drawings, and prints.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="art-card reveal-delay-2">
+                        <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open image">
+                            <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
+                        </a>
+                        <div class="art-copy">
+                            <p class="mini-label">Figure</p>
+                            <h4>ICIP25</h4>
+                            <p>This figure still reminds me of a small cosmetic imperfection in finished work: the first connector arrows are slightly misaligned and not perfectly straight.</p>
                         </div>
-                        <p class="art-empty">Drawings will appear here soon 🎨</p>
-                    </section>
+                    </article>
+
+                    <article class="art-card art-card--placeholder reveal-delay-3">
+                        <div class="art-copy">
+                            <p class="mini-label">Drawing</p>
+                            <h4>In progress</h4>
+                            <p>Sketches and photo studies will appear here once they feel finished enough to share.</p>
+                        </div>
+                    </article>
                 </div>
             </section>
 
@@ -1523,8 +438,8 @@
         <iframe id="sc-player" allow="autoplay" title="SoundCloud floating player"></iframe>
     </div>
 
-    <iframe id="sc-widget-iframe-1" title="SoundCloud widget playlist 1" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/random-rhymes-for-lovely-minds&auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
-    <iframe id="sc-widget-iframe-2" title="SoundCloud widget playlist 2" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/time-dissolve-here&auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
+    <iframe id="sc-widget-iframe-1" title="SoundCloud widget playlist 1" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/random-rhymes-for-lovely-minds&amp;auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
+    <iframe id="sc-widget-iframe-2" title="SoundCloud widget playlist 2" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/time-dissolve-here&amp;auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
@@ -1550,7 +465,7 @@
 
             var playlistToggles = Array.prototype.slice.call(document.querySelectorAll("[data-playlist-toggle]"));
             var navLinks = Array.prototype.slice.call(document.querySelectorAll(".top-nav a"));
-            var viewLinks = Array.prototype.slice.call(document.querySelectorAll(".top-nav a[data-view-target]"));
+            var viewLinks = Array.prototype.slice.call(document.querySelectorAll("[data-view-target]"));
             var backLinks = Array.prototype.slice.call(document.querySelectorAll("[data-view-close]"));
             var sections = Array.prototype.slice.call(document.querySelectorAll("main > section[id].hero, main > section[id].page-section"));
             var fullpageViews = Array.prototype.slice.call(document.querySelectorAll(".fullpage-view"));
@@ -1563,9 +478,21 @@
             var lightboxClose = document.getElementById("lightbox-close");
             var imageLinks = Array.prototype.slice.call(document.querySelectorAll(".art-image-link"));
             var themeToggle = document.getElementById("theme-toggle");
+            var dresdenPhoto = document.getElementById("dresden-photo");
+            var dailyArtLink = document.getElementById("daily-art-link");
+            var dailyArtImage = document.getElementById("daily-art-image");
+            var dailyArtLabel = document.getElementById("daily-art-label");
+            var dailyArtTitle = document.getElementById("daily-art-title");
+            var dailyArtCredit = document.getElementById("daily-art-credit");
+            var galleryArtLink = document.getElementById("gallery-art-link");
+            var galleryArtImage = document.getElementById("gallery-art-image");
+            var galleryArtLabel = document.getElementById("gallery-art-label");
+            var galleryArtTitle = document.getElementById("gallery-art-title");
+            var galleryArtCredit = document.getElementById("gallery-art-credit");
             var playerWidget = null;
             var activePlaylistIndex = null;
             var THEME_STORAGE_KEY = "portfolio-theme";
+            var DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v1";
             var previousSectionId = "about";
 
             function applyTheme(theme) {
@@ -1717,6 +644,239 @@
                     .replace(/'/g, "&#39;");
             }
 
+            function hashString(value) {
+                var hash = 0;
+                var index;
+
+                for (index = 0; index < value.length; index += 1) {
+                    hash = ((hash << 5) - hash) + value.charCodeAt(index);
+                    hash |= 0;
+                }
+
+                return Math.abs(hash);
+            }
+
+            function getLocalDateKey() {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = String(now.getMonth() + 1).padStart(2, "0");
+                var day = String(now.getDate()).padStart(2, "0");
+
+                return year + "-" + month + "-" + day;
+            }
+
+            function pickSeeded(list, seed) {
+                if (!list || list.length === 0) {
+                    return null;
+                }
+
+                return list[seed % list.length];
+            }
+
+            function applyArtworkToSlot(slot, artwork) {
+                if (!slot || !slot.link || !slot.image || !slot.label || !slot.title || !slot.credit || !artwork) {
+                    return;
+                }
+
+                slot.link.href = artwork.link;
+                slot.link.classList.add("is-ready");
+                slot.image.src = artwork.image;
+                slot.image.alt = artwork.title;
+                slot.label.textContent = artwork.label;
+                slot.title.textContent = artwork.title;
+                slot.credit.textContent = artwork.credit;
+            }
+
+            function applyDailyArtwork(artwork) {
+                applyArtworkToSlot({
+                    link: dailyArtLink,
+                    image: dailyArtImage,
+                    label: dailyArtLabel,
+                    title: dailyArtTitle,
+                    credit: dailyArtCredit
+                }, artwork);
+
+                applyArtworkToSlot({
+                    link: galleryArtLink,
+                    image: galleryArtImage,
+                    label: galleryArtLabel,
+                    title: galleryArtTitle,
+                    credit: galleryArtCredit
+                }, artwork);
+            }
+
+            function setDailyArtworkFallback() {
+                [
+                    {
+                        link: dailyArtLink,
+                        image: dailyArtImage,
+                        label: dailyArtLabel,
+                        title: dailyArtTitle,
+                        credit: dailyArtCredit
+                    },
+                    {
+                        link: galleryArtLink,
+                        image: galleryArtImage,
+                        label: galleryArtLabel,
+                        title: galleryArtTitle,
+                        credit: galleryArtCredit
+                    }
+                ].forEach(function(slot) {
+                    if (!slot.link || !slot.image || !slot.label || !slot.title || !slot.credit) {
+                        return;
+                    }
+
+                    slot.link.href = "https://www.metmuseum.org/art/collection";
+                    slot.link.classList.remove("is-ready");
+                    slot.image.removeAttribute("src");
+                    slot.image.alt = "";
+                    slot.label.textContent = "Daily museum pick";
+                    slot.title.textContent = "Selected Works";
+                    slot.credit.textContent = "A rotating daily artwork from paintings, drawings, and prints at The Met.";
+                });
+            }
+
+            function getDailyArtworkCache() {
+                try {
+                    return JSON.parse(window.localStorage.getItem(DAILY_ART_STORAGE_KEY) || "null");
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function saveDailyArtworkCache(payload) {
+                try {
+                    window.localStorage.setItem(DAILY_ART_STORAGE_KEY, JSON.stringify(payload));
+                } catch (error) {
+                    /* ignore storage failures */
+                }
+            }
+
+            function fetchJson(url) {
+                return window.fetch(url, { mode: "cors" }).then(function(response) {
+                    if (!response.ok) {
+                        throw new Error("Request failed");
+                    }
+
+                    return response.json();
+                });
+            }
+
+            function loadDailyArtwork() {
+                var todayKey = getLocalDateKey();
+                var cache = getDailyArtworkCache();
+                var presets = [
+                    {
+                        label: "Daily painting",
+                        searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&isHighlight=true&medium=Paintings&q=painting"
+                    },
+                    {
+                        label: "Daily drawing",
+                        searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Drawings&q=drawing"
+                    },
+                    {
+                        label: "Daily print",
+                        searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Prints&q=print"
+                    }
+                ];
+                var seed = hashString(todayKey);
+                var preset = pickSeeded(presets, seed);
+
+                if (cache && cache.date === todayKey && cache.artwork) {
+                    applyDailyArtwork(cache.artwork);
+                    return;
+                }
+
+                setDailyArtworkFallback();
+
+                fetchJson(preset.searchUrl)
+                    .then(function(searchData) {
+                        var objectIds = (searchData && searchData.objectIDs) || [];
+                        var objectId = pickSeeded(objectIds.slice(0, 120), seed);
+
+                        if (!objectId) {
+                            throw new Error("No objects found");
+                        }
+
+                        return fetchJson("https://collectionapi.metmuseum.org/public/collection/v1/objects/" + objectId);
+                    })
+                    .then(function(objectData) {
+                        var title = objectData.title || "Untitled";
+                        var artist = objectData.artistDisplayName || objectData.culture || "Unknown maker";
+                        var date = objectData.objectDate || "";
+                        var image = objectData.primaryImageSmall || objectData.primaryImage || "";
+                        var link = objectData.objectURL || "https://www.metmuseum.org/art/collection";
+                        var artwork;
+
+                        if (!image) {
+                            throw new Error("Missing artwork image");
+                        }
+
+                        artwork = {
+                            label: preset.label,
+                            title: title,
+                            credit: artist + (date ? ", " + date : ""),
+                            image: image,
+                            link: link
+                        };
+
+                        saveDailyArtworkCache({
+                            date: todayKey,
+                            artwork: artwork
+                        });
+
+                        applyDailyArtwork(artwork);
+                    })
+                    .catch(function() {
+                        setDailyArtworkFallback();
+                    });
+            }
+
+            function applyDresdenPhoto(photo) {
+                if (!dresdenPhoto || !photo || !photo.image) {
+                    return;
+                }
+
+                dresdenPhoto.src = photo.image;
+                dresdenPhoto.alt = photo.alt || "Daily view from Dresden, Germany";
+            }
+
+            function loadDailyDresdenPhoto() {
+                var searchUrl = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url&iiurlwidth=1600&format=json&origin=*";
+
+                fetchJson(searchUrl)
+                    .then(function(data) {
+                        var pages = data && data.query && data.query.pages ? Object.keys(data.query.pages).map(function(key) {
+                            return data.query.pages[key];
+                        }) : [];
+                        var candidates = pages.filter(function(page) {
+                            var imageInfo = page && page.imageinfo && page.imageinfo[0] ? page.imageinfo[0] : null;
+                            var width = imageInfo && imageInfo.thumbwidth ? imageInfo.thumbwidth : 0;
+                            var height = imageInfo && imageInfo.thumbheight ? imageInfo.thumbheight : 0;
+
+                            return imageInfo && (imageInfo.thumburl || imageInfo.url) && width > height;
+                        });
+                        var picked = candidates.length > 0 ? candidates[Math.floor(Math.random() * candidates.length)] : null;
+                        var imageInfo;
+                        var photo;
+
+                        if (!picked) {
+                            throw new Error("No Dresden photos found");
+                        }
+
+                        imageInfo = picked.imageinfo[0];
+                        photo = {
+                            image: imageInfo.thumburl || imageInfo.url,
+                            alt: picked.title ? picked.title.replace(/^File:/, "").replace(/[_-]+/g, " ") : "Daily view from Dresden, Germany"
+                        };
+
+                        applyDresdenPhoto(photo);
+                    })
+                    .catch(function() {
+                        /* keep the local fallback image */
+                    });
+            }
+
             function renderPlaylist(index, sounds) {
                 var playlist = PLAYLISTS[index];
                 var list = document.getElementById(playlist.listId);
@@ -1828,7 +988,7 @@
 
                 src = "https://w.soundcloud.com/player/?url=" +
                     encodeURIComponent(playlist.tracks[trackIndex].permalink_url) +
-                    "&color=%230A369D&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
+                    "&color=%2385906f&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
 
                 if (playerBar) {
                     playerBar.classList.add("visible");
@@ -1902,29 +1062,119 @@
                 });
             });
 
-            document.querySelectorAll("details[data-autoplay-demo]").forEach(function(details) {
-                details.addEventListener("toggle", function() {
-                    var video = details.querySelector("video");
-                    if (!video) {
-                        return;
-                    }
+            var demoTriggers = Array.prototype.slice.call(document.querySelectorAll(".demo-trigger"));
+            var projectStrip = document.querySelector(".project-list");
+            var projectDemoStage = document.getElementById("project-demo-stage");
+            var projectDemoBody = document.getElementById("project-demo-body");
+            var projectDemoClose = document.getElementById("project-demo-close");
+            var activeDemoTarget = null;
 
-                    if (details.open) {
-                        var playPromise = video.play();
-                        if (playPromise && typeof playPromise.catch === "function") {
-                            playPromise.catch(function() {
-                                /* autoplay can be blocked by the browser */
-                            });
-                        }
-                    } else {
-                        video.pause();
-                        video.currentTime = 0;
+            function closeProjectDemo() {
+                var activeMedia;
+
+                if (!projectDemoStage || !projectDemoBody) {
+                    return;
+                }
+
+                activeMedia = projectDemoBody.querySelector("video");
+                if (activeMedia) {
+                    activeMedia.pause();
+                    activeMedia.removeAttribute("src");
+                    activeMedia.load();
+                }
+
+                projectDemoBody.innerHTML = "";
+                projectDemoStage.classList.remove("is-open");
+                projectDemoStage.setAttribute("hidden", "");
+                activeDemoTarget = null;
+
+                demoTriggers.forEach(function(trigger) {
+                    trigger.classList.remove("is-active");
+                    trigger.setAttribute("aria-expanded", "false");
+                });
+            }
+
+            function openProjectDemo(trigger) {
+                var demoKind;
+                var demoSrc;
+                var media;
+                var playPromise;
+
+                if (!projectDemoStage || !projectDemoBody || !trigger) {
+                    return;
+                }
+
+                if (activeDemoTarget === trigger.getAttribute("data-demo-target")) {
+                    closeProjectDemo();
+                    return;
+                }
+
+                closeProjectDemo();
+
+                demoKind = trigger.getAttribute("data-demo-kind");
+                demoSrc = trigger.getAttribute("data-demo-src");
+
+                if (!demoSrc) {
+                    return;
+                }
+
+                if (demoKind === "video") {
+                    media = document.createElement("video");
+                    media.controls = true;
+                    media.muted = true;
+                    media.loop = true;
+                    media.playsInline = true;
+                    media.preload = "metadata";
+                    media.className = "project-demo-media";
+                    media.src = demoSrc;
+                    projectDemoBody.appendChild(media);
+                    playPromise = media.play();
+                    if (playPromise && typeof playPromise.catch === "function") {
+                        playPromise.catch(function() {
+                            /* autoplay can be blocked by the browser */
+                        });
                     }
+                } else {
+                    media = document.createElement("img");
+                    media.className = "project-demo-media";
+                    media.src = demoSrc;
+                    media.alt = "Project demo";
+                    media.loading = "lazy";
+                    projectDemoBody.appendChild(media);
+                }
+
+                projectDemoStage.hidden = false;
+                requestAnimationFrame(function() {
+                    projectDemoStage.classList.add("is-open");
+                });
+
+                trigger.classList.add("is-active");
+                trigger.setAttribute("aria-expanded", "true");
+                activeDemoTarget = trigger.getAttribute("data-demo-target");
+                projectDemoStage.scrollIntoView({ block: "center", behavior: "smooth" });
+
+                window.setTimeout(function() {
+                    var focusTarget = projectDemoBody.querySelector("video, img");
+                    if (focusTarget && typeof focusTarget.focus === "function") {
+                        focusTarget.setAttribute("tabindex", "-1");
+                        focusTarget.focus({ preventScroll: true });
+                    }
+                }, 220);
+            }
+
+            demoTriggers.forEach(function(trigger) {
+                trigger.setAttribute("aria-expanded", "false");
+                trigger.addEventListener("click", function() {
+                    openProjectDemo(trigger);
                 });
             });
 
             if (playerClose) {
                 playerClose.addEventListener("click", closePlayer);
+            }
+
+            if (projectDemoClose) {
+                projectDemoClose.addEventListener("click", closeProjectDemo);
             }
 
             function closeLightbox() {
@@ -1990,6 +1240,8 @@
                 if (event.key === "Escape") {
                     if (lightbox && lightbox.classList.contains("is-open")) {
                         closeLightbox();
+                    } else if (projectDemoStage && projectDemoStage.classList.contains("is-open")) {
+                        closeProjectDemo();
                     } else if (mainColumn && mainColumn.classList.contains("view-mode")) {
                         closeView();
                     }
@@ -1997,6 +1249,8 @@
             });
 
             applyTheme(getInitialTheme());
+            loadDailyDresdenPhoto();
+            loadDailyArtwork();
             updateActiveNavFromScroll();
             setPlaylistOpen(1, true);
             setPlaylistOpen(2, false);
