@@ -7,7 +7,7 @@
     <meta name="description" content="Blogs by Duc Nguyen.">
     <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body data-theme="light">
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v2.5"/>
@@ -93,51 +93,6 @@
         </main>
     </div>
 
-    <script>
-        (function() {
-            var themeToggle = document.getElementById("theme-toggle");
-            var THEME_STORAGE_KEY = "portfolio-theme";
-
-            function applyTheme(theme) {
-                document.body.setAttribute("data-theme", theme);
-                if (themeToggle) {
-                    themeToggle.querySelector(".theme-toggle-label").textContent = theme === "dark" ? "Light" : "Dark";
-                    themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-                    themeToggle.setAttribute("title", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-                }
-            }
-
-            function getInitialTheme() {
-                var savedTheme = null;
-
-                try {
-                    savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-                } catch (error) {
-                    savedTheme = null;
-                }
-
-                if (savedTheme === "light" || savedTheme === "dark") {
-                    return savedTheme;
-                }
-
-                return "light";
-            }
-
-            if (themeToggle) {
-                themeToggle.addEventListener("click", function() {
-                    var nextTheme = document.body.getAttribute("data-theme") === "dark" ? "light" : "dark";
-                    applyTheme(nextTheme);
-
-                    try {
-                        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-                    } catch (error) {
-                        /* ignore storage errors */
-                    }
-                });
-            }
-
-            applyTheme(getInitialTheme());
-        })();
-    </script>
+    <script src="assets/site.js"></script>
 </body>
 </html>
