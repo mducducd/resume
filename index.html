@@ -4,435 +4,359 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duc Nguyen</title>
-    <meta name="description" content="Duc Nguyen is an AI medical research engineer building multimodal and explainable clinical machine learning systems.">
+    <meta name="description" content="Duc Nguyen — AI medical research engineer building multimodal and explainable clinical machine learning systems.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/site.css">
 </head>
-<body data-theme="light">
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v2.5"/>
-            <path d="M12 18.5V21"/>
-            <path d="M4.9 4.9 6.7 6.7"/>
-            <path d="M17.3 17.3 19.1 19.1"/>
-            <path d="M3 12h2.5"/>
-            <path d="M18.5 12H21"/>
-            <path d="M4.9 19.1 6.7 17.3"/>
-            <path d="M17.3 6.7 19.1 4.9"/>
-            <circle cx="12" cy="12" r="4.2"/>
-        </svg>
-        <span class="theme-toggle-label">Dark</span>
-    </button>
+<body>
+    <header class="topbar">
+        <a class="brand" href="#home">Duc Nguyen<span class="brand-dot">.</span></a>
+        <nav class="nav" aria-label="Primary">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#work">Work</a>
+            <a href="#learning">Learning</a>
+            <a href="#music">Offline</a>
+            <a class="nav-gallery-link" href="arts.html">
+                <svg class="nav-gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m21 15-4.2-4.2a1.5 1.5 0 0 0-2.1 0L8 17"/></svg>
+                My Gallery
+            </a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
 
-    <div class="page-shell">
-        <header class="page-head">
-            <div class="sidebar-panel">
-                <div class="sidebar-brand">
-                    <img class="sidebar-avatar" src="assets/thumbnails/sidebar-avatar.jpg" alt="Portrait of Duc Nguyen" loading="eager">
-                    <p class="brand-mark" aria-hidden="true">DUC NGUYEN</p>
-                    <p class="sidebar-note">ML research engineer building clinical AI systems, multimodal tools, and a quieter art shelf on the side.</p>
-                </div>
-
-                <nav class="top-nav" aria-label="Primary navigation">
-                    <a href="#about">About</a>
-                    <a href="#works">Projects</a>
-                    <a href="#learning">Learning</a>
-                </nav>
-
-                <div class="sidebar-section">
-                    <p class="sidebar-label">Offline Mode</p>
-                    <div class="sidebar-links" aria-label="Page sections">
-                        <a href="#blogs-view" data-view-target="blogs-view">Blogs</a>
-                        <a href="#arts-view" data-view-target="arts-view">Gallery</a>
-                        <a href="#favorites-view" data-view-target="favorites-view">Photos &amp; Music</a>
+    <main>
+        <section id="home" class="hero">
+            <h1 class="hero-title">AI &amp; Clinical ML Researcher</h1>
+            <p class="hero-sub">
+                Building multimodal and explainable machine learning systems<br>
+                for medicine, with a quieter art shelf on the side.
+            </p>
+            <div class="divider" aria-hidden="true"></div>
+            <figure class="dresden-figure" id="dresden-figure">
+                <div class="dresden-frame">
+                    <div class="cat-loader" role="img" aria-label="Loading today's photo">
+                        <div class="cat-loader-scene" aria-hidden="true">
+                            <span class="cat-sun"></span>
+                            <span class="cat-cloud cat-cloud-one"></span>
+                            <span class="cat-cloud cat-cloud-two"></span>
+                            <span class="cat-hill cat-hill-back"></span>
+                            <span class="cat-hill cat-hill-front"></span>
+                            <span class="cat-ground"></span>
+                            <div class="cat-trail">
+                                <span class="paw-print paw-print-one"></span>
+                                <span class="paw-print paw-print-two"></span>
+                                <span class="paw-print paw-print-three"></span>
+                                <span class="paw-print paw-print-four"></span>
+                            </div>
+                            <div class="cat-runner">
+                                <span class="cat-shadow"></span>
+                                <div class="cat-runner-body">
+                                    <span class="cat-tail"></span>
+                                    <span class="cat-body"></span>
+                                    <span class="cat-head"></span>
+                                    <span class="cat-ear cat-ear-left"></span>
+                                    <span class="cat-ear cat-ear-right"></span>
+                                    <span class="cat-face"></span>
+                                    <span class="cat-leg cat-leg-front"></span>
+                                    <span class="cat-leg cat-leg-front-back"></span>
+                                    <span class="cat-leg cat-leg-rear"></span>
+                                    <span class="cat-leg cat-leg-rear-back"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cat-loader-copy">
+                            <div class="cat-loader-line">
+                                <span class="cat-loader-title">Chasing today's view</span>
+                                <span class="cat-loader-dots" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </span>
+                            </div>
+                            <span class="cat-loader-note">A tiny courier is bringing today's window light</span>
+                        </div>
                     </div>
+                    <img id="dresden-photo" alt="Daily landscape view from Germany" loading="eager">
+                </div>
+                <figcaption>Germany, today</figcaption>
+            </figure>
+        </section>
+
+        <section id="about" class="prose-section">
+            <h2 class="section-title">About</h2>
+            <div class="prose">
+                <p>I am Duc Nguyen (Duke), a machine learning research engineer at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a>, TU Dresden.</p>
+                <p>My work sits between deep learning, multimodal AI, and clinical medicine — building pipelines with clearer inspection layers, multimodal models for pathology workflows, and interfaces that make complex AI systems easier to reason through.</p>
+
+                <div class="contact-icons" aria-label="Contact and links">
+                    <a class="contact-icon" href="mailto:minhducddd@gmail.com" aria-label="Email" title="Email">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                        <span>Email</span>
+                    </a>
+                    <a class="contact-icon" href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0 0 9.5l5.242 4.269C6.452 11.249 9.023 9.5 12 9.5s5.548 1.748 6.758 4.269L24 9.5 12 0Zm0 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg>
+                        <span>Scholar</span>
+                    </a>
+                    <a class="contact-icon" href="https://github.com/mducducd" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22 0 1.61-.02 2.9-.02 3.29 0 .31.21.68.82.57C20.57 22.09 24 17.59 24 12.3 24 5.67 18.63.3 12 .3Z"/></svg>
+                        <span>GitHub</span>
+                    </a>
+                    <a class="contact-icon" href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a class="contact-icon" href="data_science_resume.pdf" target="_blank" rel="noopener" aria-label="CV" title="CV / Résumé">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
+                        <span>CV</span>
+                    </a>
                 </div>
 
-                <div class="sidebar-foot" aria-label="External links">
-                    <a class="sidebar-icon-link" href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
-                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0 0 9.5l5.242 4.269C6.452 11.249 9.023 9.5 12 9.5s5.548 1.748 6.758 4.269L24 9.5 12 0Zm0 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg>
-                    </a>
-                    <a class="sidebar-icon-link" href="mailto:minhducddd@gmail.com" aria-label="Email" title="Email">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
-                    </a>
-                    <a class="sidebar-icon-link" href="https://github.com/mducducd" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22 0 1.61-.02 2.9-.02 3.29 0 .31.21.68.82.57C20.57 22.09 24 17.59 24 12.3 24 5.67 18.63.3 12 .3Z"/></svg>
-                    </a>
-                    <a class="sidebar-icon-link" href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
-                        <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg>
-                    </a>
-                    <a class="sidebar-icon-link" href="data_science_resume.pdf" target="_blank" rel="noopener" aria-label="CV / Resume" title="CV / Resume">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
-                    </a>
+                <div class="skills-block">
+                    <p class="skills-label">Skills</p>
+                    <ul class="skill-tags">
+                        <li>Python</li>
+                        <li>PyTorch</li>
+                        <li>CUDA</li>
+                        <li>C++</li>
+                        <li>Hugging Face</li>
+                        <li>Diffusion</li>
+                        <li>VLMs</li>
+                        <li>LLM Agents</li>
+                        <li><span class="german-flag" aria-hidden="true"></span>German A1</li>
+                        <li>Docker</li>
+                        <li>Linux</li>
+                    </ul>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <main class="main-column">
-            <section id="about" class="hero">
-                <div class="section-head">
-                    <h2>About</h2>
-                    <p class="section-summary">Clinical ML engineering and a quieter sense of place in Dresden.</p>
-                </div>
+        <section id="work" class="work-section">
+            <div class="section-head">
+                <h2 class="section-title">Work</h2>
+                <p class="section-sub">Clinical AI, pathology workflows, model research, and interface design.</p>
+            </div>
 
-                <div class="hero-grid hero-grid--about" id="about-grid">
-                    <article class="tile hero-copy hero-copy--about reveal-delay-2" id="about-intro-card">
-                        <p class="eyebrow">ML Research Engineer · EKFZ, TU Dresden</p>
-                        <p>I am Duc Nguyen (Duke), a ML research engineer at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a> in Germany <span aria-hidden="true" style="color:#b8742e;">🍺</span>.</p>
-                        <p>I work at the intersection of deep learning, <span style="white-space:nowrap;"><span aria-hidden="true" style="color:#5c7cfa;">🤖</span> multimodal AI</span>, and <span style="white-space:nowrap;"><span aria-hidden="true" style="color:#d94841;">💊</span> clinical medicine</span>. My current focus is clinical ML pipelines with clearer inspection layers, multimodal models for pathology workflows, and interfaces that make complex AI systems easier to reason through.</p>
-
-                        <div class="contact-row">
-                            <a class="contact-link" href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener" aria-label="Google Scholar">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0 0 9.5l5.242 4.269C6.452 11.249 9.023 9.5 12 9.5s5.548 1.748 6.758 4.269L24 9.5 12 0Zm0 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"/></svg>
-                                Scholar
-                            </a>
-                            <a class="contact-link" href="https://github.com/mducducd" target="_blank" rel="noopener" aria-label="GitHub">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .3C5.37.3 0 5.67 0 12.3c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.28-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.82 1.1.82 2.22 0 1.61-.02 2.9-.02 3.29 0 .31.21.68.82.57C20.57 22.09 24 17.59 24 12.3 24 5.67 18.63.3 12 .3Z"/></svg>
-                                GitHub
-                            </a>
-                            <a class="contact-link" href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener" aria-label="LinkedIn">
-                                <svg role="img" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg>
-                                LinkedIn
-                            </a>
-                            <a class="contact-link" href="mailto:minhducddd@gmail.com" aria-label="Email">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
-                                Email
-                            </a>
-                            <a class="contact-link" href="data_science_resume.pdf" target="_blank" rel="noopener" aria-label="CV">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
-                                CV
-                            </a>
+            <ul class="project-list">
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/stamp-workbench" target="_blank" rel="noopener">
+                        <img src="assets/thumbnails/stamp_workbench.png" alt="STAMP-Workbench thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Mar 2026 · JavaScript</p>
+                        <h3 class="project-title">STAMP-Workbench</h3>
+                        <p class="project-desc">A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction, making computational pathology pipelines accessible without deep engineering overhead.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/stamp-workbench" target="_blank" rel="noopener">Code</a>
                         </div>
+                    </div>
+                </li>
 
-                        <div class="about-skills">
-                            <p class="mini-label">Skills</p>
-                            <div class="skill-row skill-row--about" aria-label="Skills">
-                                <span><img src="https://cdn.simpleicons.org/python" alt="" aria-hidden="true">Python</span>
-                                <span><img src="https://cdn.simpleicons.org/pytorch" alt="" aria-hidden="true">PyTorch</span>
-                                <span>CUDA</span>
-                                <span><img src="https://cdn.simpleicons.org/cplusplus" alt="" aria-hidden="true">C++</span>
-                                <span><img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="" aria-hidden="true">Hugging Face</span>
-                                <span>Diffusion</span>
-                                <span>VLMs</span>
-                                <span>LLM Agents</span>
-                                <span>Docker</span>
-                                <span>Linux</span>
-                            </div>
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">
+                        <img src="assets/thumbnails/pathplogy_agent.png" alt="Pathology Agent thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Mar 2026 · Python</p>
+                        <h3 class="project-title">Pathology Agent</h3>
+                        <p class="project-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Code</a>
                         </div>
-                    </article>
+                    </div>
+                </li>
 
-                    <article class="tile tile--photo tile--about-photo reveal-delay-3" id="about-photo-card" aria-hidden="true">
-                        <img class="tile-photo" id="dresden-photo" src="assets/thumbnails/avatar.webp" alt="Daily view from Dresden, Germany" loading="lazy">
-                        <div class="tile-caption">
-                            <p class="mini-label">Dresden</p>
+                <li class="project-row project-item">
+                    <a class="project-thumb project-thumb--contain" href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">
+                        <img src="assets/thumbnails/STAMP_logo.svg" alt="STAMP logo" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Sep 2024 · Python · KatherLab Team</p>
+                        <h3 class="project-title">STAMP</h3>
+                        <p class="project-desc">An open-source computational pathology pipeline from the KatherLab team for discovering and evaluating image-based biomarkers from gigapixel histopathology slides without pixel-level annotations. The peer-reviewed workflow helps clinical researchers and ML engineers run reproducible studies across multiple tumor types.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">Code</a>
                         </div>
-                    </article>
-                </div>
-            </section>
+                    </div>
+                </li>
 
-            <section id="works" class="page-section">
-                <div class="section-head">
-                    <h2>Projects</h2>
-                    <p class="section-summary">Clinical AI, pathology workflows, model research, and interface design.</p>
-                </div>
-
-                <div class="project-strip">
-                <div class="project-list">
-                    <article class="project-item">
-                        <div class="project-thumb">
-                            <img src="assets/thumbnails/stamp_workbench.png" alt="STAMP-Workbench project thumbnail" loading="lazy">
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">
+                        <img src="assets/thumbnails/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">2024 · Python · Published</p>
+                        <h3 class="project-title">Multiple Appropriate Facial Reaction Generation</h3>
+                        <p class="project-desc">Research on generating multiple appropriate and diverse facial reactions in dyadic interactions using latent diffusion models. Work published at two international venues.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">Code</a>
+                            <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener">ICPR 2024</a>
+                            <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener">IEEE FG 2024</a>
+                            <button class="demo-trigger" type="button" data-demo-target="face-reaction" data-demo-kind="video" data-demo-src="assets/animations/face_synthesis.mp4">Demo</button>
                         </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>Mar 2026</span>
-                                <span>JavaScript</span>
-                            </div>
-                            <h3>STAMP-Workbench</h3>
-                            <p>A friendly notebook-style web UI for constructing end-to-end workflows from whole-slide pathology images to biomarker prediction, making computational pathology pipelines accessible without deep engineering overhead.</p>
-                            <div class="project-links">
-                                <a href="https://github.com/mducducd/stamp-workbench" target="_blank" rel="noopener">Code</a>
-                            </div>
-                        </div>
-                    </article>
+                    </div>
+                </li>
 
-                    <article class="project-item reveal-delay-2">
-                        <div class="project-thumb">
-                            <img src="assets/thumbnails/pathplogy_agent.png" alt="Pathology Agent interface overview" loading="lazy">
+                <li class="project-row project-item">
+                    <div class="project-thumb">
+                        <img src="assets/thumbnails/nurse_sim.png" alt="Nursing Simulation thumbnail" loading="lazy">
+                    </div>
+                    <div class="project-body">
+                        <p class="project-meta">2024 · Python · Web</p>
+                        <h3 class="project-title">Nursing Simulation</h3>
+                        <p class="project-desc">A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education, enhancing clinical learning through AI-driven interactive scenarios.</p>
+                        <div class="project-links">
+                            <button class="demo-trigger" type="button" data-demo-target="nursing-sim" data-demo-kind="image" data-demo-src="assets/animations/Nursing Simulation.gif">Demo</button>
                         </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>Mar 2026</span>
-                                <span>Python</span>
-                            </div>
-                            <h3>Pathology Agent</h3>
-                            <p>An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
-                            <div class="project-links">
-                                <a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Code</a>
-                            </div>
-                        </div>
-                    </article>
+                    </div>
+                </li>
 
-                    <article class="project-item reveal-delay-3">
-                        <div class="project-thumb project-thumb--contain">
-                            <img src="assets/thumbnails/STAMP_logo.svg" alt="STAMP project logo" loading="lazy">
-                        </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>Sep 2024</span>
-                                <span>Python</span>
-                                <span>KatherLab Team</span>
-                            </div>
-                            <h3>STAMP</h3>
-                            <p>An open-source computational pathology pipeline from the KatherLab team for discovering and evaluating image-based biomarkers from gigapixel histopathology slides without pixel-level annotations. The peer-reviewed workflow helps clinical researchers and ML engineers run reproducible studies across multiple tumor types.</p>
-                            <div class="project-links">
-                                <a href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">Code</a>
-                            </div>
-                        </div>
-                    </article>
+                <li class="project-row project-item">
+                    <div class="project-thumb">
+                        <img src="assets/thumbnails/talking_face.png" alt="TalkingChat thumbnail" loading="lazy">
+                    </div>
+                    <div class="project-body">
+                        <p class="project-meta">Nov 2023 · Python · Gold Prize (Regional) — Generative AI Hackathon, CNU</p>
+                        <h3 class="project-title">TalkingChat</h3>
+                        <p class="project-desc">A child-friendly web chatbot with a talking face and voice that can be changed or uploaded by each user, making the conversation feel personal, playful, and easy to engage with.</p>
+                    </div>
+                </li>
+            </ul>
 
-                    <article class="project-item reveal-delay-4">
-                        <div class="project-thumb project-thumb--crop-vertical">
-                            <img src="assets/thumbnails/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
-                        </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>2024</span>
-                                <span>Python</span>
-                                <span>Published</span>
-                            </div>
-                            <h3>Multiple Appropriate Facial Reaction Generation</h3>
-                            <p>Research on generating multiple appropriate and diverse facial reactions in dyadic interactions using latent diffusion models. Work published at two international venues.</p>
-                            <div class="project-links">
-                                <a href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">Code</a>
-                                <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener">ICPR 2024</a>
-                                <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener">IEEE FG 2024</a>
-                                <button class="demo-trigger" type="button" data-demo-target="face-reaction" data-demo-kind="video" data-demo-src="assets/animations/face_synthesis.mp4">See demo</button>
-                            </div>
-                        </div>
-                    </article>
+            <div class="project-demo-stage" id="project-demo-stage" aria-live="polite" hidden>
+                <button class="project-demo-stage__close" id="project-demo-close" type="button" aria-label="Close demo">&#10005;</button>
+                <div class="project-demo-stage__body" id="project-demo-body"></div>
+            </div>
+        </section>
 
-                    <article class="project-item reveal-delay-5">
-                        <div class="project-thumb project-thumb--zoom">
-                            <img src="assets/thumbnails/nurse_sim.png" alt="Nursing Simulation interface preview" loading="lazy">
-                        </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>2024</span>
-                                <span>Python</span>
-                                <span>Web</span>
-                            </div>
-                            <h3>Nursing Simulation</h3>
-                            <p>A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education, enhancing clinical learning through AI-driven interactive scenarios.</p>
-                            <div class="project-links">
-                                <button class="demo-trigger" type="button" data-demo-target="nursing-sim" data-demo-kind="image" data-demo-src="assets/animations/Nursing Simulation.gif">See demo</button>
-                            </div>
-                        </div>
-                    </article>
+        <section id="learning" class="learning-section">
+            <div class="section-head">
+                <h2 class="section-title">Learning</h2>
+                <p class="section-sub">What I'm studying now and the notes I keep returning to.</p>
+            </div>
 
-                    <article class="project-item reveal-delay-6">
-                        <div class="project-thumb">
-                            <img src="assets/thumbnails/talking_face.png" alt="TalkingChat mobile interface" loading="lazy">
-                        </div>
-                        <div class="project-body">
-                            <div class="project-meta">
-                                <span>Nov 2023</span>
-                                <span>Python</span>
-                                <span>Gold Prize (Regional) in Generative AI - Hackathon by CNU Innovation Talent Development Center</span>
-                            </div>
-                            <h3>TalkingChat</h3>
-                            <p>A child-friendly web chatbot with a talking face and voice that can be changed or uploaded by each user, making the conversation feel personal, playful, and easy to engage with.</p>
-                        </div>
-                    </article>
-                </div>
-                </div>
+            <div class="learning-grid">
+                <article class="quiet-card">
+                    <p class="card-label">Current Learning Goals</p>
+                    <ul class="bare-list">
+                        <li><span class="german-flag" aria-hidden="true"></span>German A1</li>
+                        <li>Real and Complex Analysis</li>
+                        <li>Commutative Algebra</li>
+                        <li>Ordinary Differential Equations</li>
+                        <li>6.047 / 6.878 — Machine Learning for Genomics</li>
+                        <li><a href="https://canvas.mit.edu/courses/33939/pages/home-page-poster?module_item_id=1342767" target="_blank" rel="noopener">MLCB</a></li>
+                        <li><a href="https://www.vorlesungen.ethz.ch//Vorlesungsverzeichnis/lerneinheit.view?lerneinheitId=158019&amp;semkez=2022S&amp;ansicht=LEHRVERANSTALTUNGEN&amp;lang=en" target="_blank" rel="noopener">Statistical Models in Computational Biology</a></li>
+                    </ul>
+                </article>
 
-                <div class="project-demo-stage" id="project-demo-stage" aria-live="polite" hidden>
-                    <button class="project-demo-stage__close" id="project-demo-close" type="button" aria-label="Close expanded demo" title="Close expanded demo">&#10005;</button>
-                    <div class="project-demo-stage__body" id="project-demo-body"></div>
-                </div>
-            </section>
+                <article class="quiet-card">
+                    <p class="card-label">Study Notes</p>
+                    <ul class="note-list">
+                        <li>
+                            <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">Implementation details of Megatron-LM, torchgpipe, and OSLO</a>
+                            <p>Distributed training notes focused on engineering tradeoffs inside large-model systems.</p>
+                        </li>
+                        <li>
+                            <a href="https://phrygian-alarm-029.notion.site/Clean-FP8-LM-Training-FP8-Large-Language-Models-c1e88b30bbe64ed9b6d5df124aae267e" target="_blank" rel="noopener">FP8-LM: Training FP8 Large Language Models</a>
+                            <p>Low-precision training notes with a practical implementation lens.</p>
+                        </li>
+                        <li>
+                            <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod elastic training and fault tolerance</a>
+                            <p>Resilience-focused notes for distributed training under unreliable hardware or workers.</p>
+                        </li>
+                        <li>
+                            <a href="https://phrygian-alarm-029.notion.site/notes-reading-7b6946b8f4074771b9922654d61075d6" target="_blank" rel="noopener">All other unorganized notes</a>
+                            <p>A larger archive of unfinished writeups, reading notes, and half-formed ideas.</p>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+        </section>
 
-            <section id="learning" class="page-section">
-                <div class="section-head">
-                    <h2>Learning</h2>
-                    <p class="section-summary">What I’m studying now and the notes I keep returning to.</p>
-                </div>
+        <section id="music" class="music-section">
+            <div class="section-head">
+                <h2 class="section-title">Offline</h2>
+                <p class="section-sub">Photography, art, playlists, and the slower things that keep the rest of the work balanced.</p>
+            </div>
 
-                <div class="learning-layout">
-                    <article class="section-card">
-                        <p class="mini-label">📘 Current Learning Goals</p>
-                        <ul>
-                            <li><span aria-hidden="true">🇩🇪</span> German A1</li>
-                            <li>Real and Complex Analysis</li>
-                            <li>Commutative Algebra</li>
-                            <li>Ordinary Differential Equations</li>
-                            <li>6.047/6.878 Machine Learning for Genomics</li>
-                            <li><a href="https://canvas.mit.edu/courses/33939/pages/home-page-poster?module_item_id=1342767" target="_blank" rel="noopener">MLCB</a></li>
-                            <li><a href="https://www.vorlesungen.ethz.ch//Vorlesungsverzeichnis/lerneinheit.view?lerneinheitId=158019&amp;semkez=2022S&amp;ansicht=LEHRVERANSTALTUNGEN&amp;lang=en" target="_blank" rel="noopener">Statistical Models in Computational Biology</a></li>
-                        </ul>
-                    </article>
-
-                    <article class="section-card reveal-delay-2">
-                        <p class="mini-label">📝 Study Notes</p>
-                        <p style="margin-top: 10px;">Selected notes and technical reading gathered from my broader learning archive.</p>
-                        <ul class="resource-list">
-                            <li>
-                                <a href="https://projectfoundation.notion.site/Megatron-LM-OSLO-DeepSped-and-FSDP-s-implementation-details-dbfb2bacc65d42cda0a0633ab1bdc994" target="_blank" rel="noopener">Implementation details of Megatron-LM, torchgpipe, and OSLO</a>
-                                <p class="note-meta">Distributed training notes focused on engineering tradeoffs inside large-model systems.</p>
-                            </li>
-                            <li>
-                                <a href="https://phrygian-alarm-029.notion.site/Clean-FP8-LM-Training-FP8-Large-Language-Models-c1e88b30bbe64ed9b6d5df124aae267e" target="_blank" rel="noopener">FP8-LM: Training FP8 Large Language Models</a>
-                                <p class="note-meta">Low-precision training notes with a practical implementation lens.</p>
-                            </li>
-                            <li>
-                                <a href="https://projectfoundation.notion.site/Horovod-Elastic-Training-and-Fault-Tolerance-ee1d5738f4d64961b689662229b5c76d" target="_blank" rel="noopener">Horovod elastic training and fault tolerance</a>
-                                <p class="note-meta">Resilience-focused notes for distributed training under unreliable hardware or workers.</p>
-                            </li>
-                            <li>
-                                <a href="https://phrygian-alarm-029.notion.site/notes-reading-7b6946b8f4074771b9922654d61075d6" target="_blank" rel="noopener">All other unorganized notes</a>
-                                <p class="note-meta">A larger archive of unfinished writeups, reading notes, and half-formed ideas.</p>
-                            </li>
-                        </ul>
-                    </article>
-                </div>
-            </section>
-
-            <section id="favorites-view" class="fullpage-view" aria-labelledby="favorites-view-title">
-                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
-                <div class="section-head">
-                    <h2 id="favorites-view-title">Photos &amp; Music</h2>
-                    <p class="section-summary">Photography, playlists, and the slower things that keep the rest of the work balanced.</p>
-                </div>
-
-                <div class="offline-layout">
-                    <article class="section-card">
-                        <p class="mini-label">
-                            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;display:inline-block;vertical-align:-2px;margin-right:6px;"><path d="M4 7h4l2-2h4l2 2h4a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/></svg>
-                            Photography
-                        </p>
-                        <p style="margin-top: 12px;">A separate stream of observation and composition outside research work.</p>
-                        <p style="margin-top: 12px;">
-                            <a class="resume-link" href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><circle cx="8" cy="12" r="4.2" fill="#ff0084"/><circle cx="16" cy="12" r="4.2" fill="#0063dc"/></svg>
-                                Visit Flickr
+            <div class="music-grid">
+                <div class="music-col">
+                    <article class="quiet-card">
+                        <p class="card-label">Photography</p>
+                        <p>A separate stream of observation and composition outside research work — black-and-white studies, street fragments, and quiet architectural frames.</p>
+                        <p class="card-cta">
+                            <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">
+                                <svg class="flickr-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><circle cx="8" cy="12" r="4.2" fill="#ff0084"/><circle cx="16" cy="12" r="4.2" fill="#0063dc"/></svg>
+                                Visit Flickr →
                             </a>
                         </p>
-                        <p style="margin-top: auto;" class="note-meta">Black-and-white studies, street fragments, and quiet architectural frames.</p>
                     </article>
 
-                    <article class="section-card reveal-delay-2">
-                        <p class="mini-label">🎧 Playlists</p>
-                        <div class="playlist-stack">
-                            <div class="playlist-group">
-                                <button class="playlist-open" type="button" id="playlist-toggle-1" data-playlist-toggle="1" aria-expanded="true">
-                                    <span class="chevron">&#9654;</span>
-                                    <span>
-                                        <strong>Random Rhymes for Lovely Minds</strong>
-                                        <span class="note-meta">SoundCloud playlist</span>
-                                    </span>
-                                </button>
-                                <div class="track-list open" id="track-list-1">
-                                    <div class="track-loading" id="track-loading-1">Loading tracks...</div>
-                                </div>
-                            </div>
+                    <article class="quiet-card">
+                        <p class="card-label">Art</p>
+                        <p>Sketches, studies, and visual notes kept loosely as a digital sketchbook.</p>
+                        <p class="card-cta">
+                            <a href="https://shell-gram-46d.notion.site/Digital-Sketchbook-964764ce424b83be89f601e1eea4583d?source=copy_link" target="_blank" rel="noopener">
+                                <svg class="gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m21 15-4.2-4.2a1.5 1.5 0 0 0-2.1 0L8 17"/></svg>
+                                My Gallery →
+                            </a>
+                        </p>
+                    </article>
+                </div>
 
-                            <div class="playlist-group">
-                                <button class="playlist-open" type="button" id="playlist-toggle-2" data-playlist-toggle="2" aria-expanded="false">
-                                    <span class="chevron">&#9654;</span>
-                                    <span>
-                                        <strong>Time Dissolve Here</strong>
-                                        <span class="note-meta">SoundCloud playlist</span>
-                                    </span>
-                                </button>
-                                <div class="track-list" id="track-list-2">
-                                    <div class="track-loading" id="track-loading-2">Loading tracks...</div>
-                                </div>
+                <article class="quiet-card">
+                    <p class="card-label">Playlists</p>
+                    <div class="playlist-stack">
+                        <div class="playlist-group">
+                            <button class="playlist-open" type="button" id="playlist-toggle-1" data-playlist-toggle="1" aria-expanded="true">
+                                <span class="chevron" aria-hidden="true">▸</span>
+                                <span>
+                                    <strong>Random Rhymes for Lovely Minds</strong>
+                                    <span class="track-meta">SoundCloud playlist</span>
+                                </span>
+                            </button>
+                            <div class="track-list open" id="track-list-1">
+                                <div class="track-loading" id="track-loading-1">Loading tracks…</div>
                             </div>
                         </div>
-                    </article>
-                </div>
-            </section>
 
-            <section id="blogs-view" class="fullpage-view" aria-labelledby="blogs-view-title">
-                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
-                <div class="section-head">
-                    <h2 id="blogs-view-title">Blogs</h2>
-                    <p class="section-summary">A writing shelf for process notes, unfinished essays, and implementation stories.</p>
-                </div>
-
-                <div class="blog-grid">
-                    <article class="blog-card blog-card--intro">
-                        <div>
-                            <p class="eyebrow">Writing</p>
-                            <h1>In<br>Progress</h1>
-                        </div>
-                    </article>
-
-                    <article class="blog-card blog-card--wide reveal-delay-2">
-                        <p class="mini-label">What will live here</p>
-                        <h3>Notes from clinical ML engineering, interface design, and the slower parts of research work.</h3>
-                        <p>When I publish here, it will likely be implementation-heavy writing rather than polished hot takes: build logs, debugging notes, research friction, and essays on how to make serious systems more humane to use.</p>
-                    </article>
-
-                    <article class="blog-card blog-card--soft reveal-delay-3">
-                        <p class="mini-label">Status</p>
-                        <h3>No posts yet</h3>
-                        <p>The shelf is ready. The first entries are still being shaped.</p>
-                    </article>
-                </div>
-            </section>
-
-            <section id="arts-view" class="fullpage-view" aria-labelledby="arts-view-title">
-                <a class="back-button" href="#about" data-view-close>&larr; Back</a>
-                <div class="section-head">
-                    <h2 id="arts-view-title">Gallery</h2>
-                    <p class="section-summary">A small gallery for figures, drawings, and visual side paths.</p>
-                </div>
-
-                <div class="art-grid">
-                    <article class="art-card tile--live-art art-card--live" id="gallery-art-card">
-                        <a class="live-art-link" id="gallery-art-link" href="https://www.metmuseum.org/art/collection" target="_blank" rel="noopener" aria-label="Open gallery selected artwork">
-                            <img class="live-art-image" id="gallery-art-image" alt="" loading="lazy">
-                            <div class="live-art-overlay">
-                                <div class="live-art-meta">
-                                    <p class="eyebrow" id="gallery-art-label">Daily museum pick</p>
-                                    <h3 id="gallery-art-title">Loading artwork…</h3>
-                                    <p class="live-art-credit" id="gallery-art-credit">From a rotating set of paintings, drawings, and prints.</p>
-                                </div>
+                        <div class="playlist-group">
+                            <button class="playlist-open" type="button" id="playlist-toggle-2" data-playlist-toggle="2" aria-expanded="false">
+                                <span class="chevron" aria-hidden="true">▸</span>
+                                <span>
+                                    <strong>Time Dissolve Here</strong>
+                                    <span class="track-meta">SoundCloud playlist</span>
+                                </span>
+                            </button>
+                            <div class="track-list" id="track-list-2">
+                                <div class="track-loading" id="track-loading-2">Loading tracks…</div>
                             </div>
-                        </a>
-                    </article>
-
-                    <article class="art-card reveal-delay-2">
-                        <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open image">
-                            <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
-                        </a>
-                        <div class="art-copy">
-                            <p class="mini-label">Figure</p>
-                            <h4>ICIP25</h4>
-                            <p>This figure still reminds me of a small cosmetic imperfection in finished work: the first connector arrows are slightly misaligned and not perfectly straight.</p>
                         </div>
-                    </article>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-                    <article class="art-card art-card--placeholder reveal-delay-3">
-                        <div class="art-copy">
-                            <p class="mini-label">Drawing</p>
-                            <h4>In progress</h4>
-                            <p>Sketches and photo studies will appear here once they feel finished enough to share.</p>
-                        </div>
-                    </article>
-                </div>
-            </section>
+        <section id="contact" class="prose-section">
+            <h2 class="section-title">Contact</h2>
+            <div class="prose">
+                <p>Reach me by email or find me on the usual places.</p>
+                <ul class="link-list">
+                    <li><a href="mailto:minhducddd@gmail.com">minhducddd@gmail.com</a></li>
+                    <li><a href="https://scholar.google.com/citations?user=mducducd" target="_blank" rel="noopener">Google Scholar</a></li>
+                    <li><a href="https://github.com/mducducd" target="_blank" rel="noopener">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/mducducd" target="_blank" rel="noopener">LinkedIn</a></li>
+                    <li><a href="data_science_resume.pdf" target="_blank" rel="noopener">CV / Résumé</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
 
-            <footer class="site-footer">© 2026 Duc Nguyen (Duke). Dresden, Germany.</footer>
-        </main>
-    </div>
-
-    <div class="lightbox" id="image-lightbox" aria-hidden="true">
-        <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Expanded artwork">
-            <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image overlay" title="Close image overlay">&#10005;</button>
-            <img class="lightbox-image" id="lightbox-image" alt="">
-        </div>
-    </div>
+    <footer class="foot">
+        <p>&copy; <span id="year">2026</span> Duc Nguyen — Dresden, Germany</p>
+    </footer>
 
     <div id="player-bar" aria-live="polite">
         <button id="player-close" type="button" aria-label="Close SoundCloud player" title="Close player">&#10005;</button>
@@ -444,5 +368,8 @@
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script src="assets/site.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>

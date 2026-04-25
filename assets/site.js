@@ -457,6 +457,51 @@
             return width / height;
         }
 
+        const dresdenFigure = document.getElementById("dresden-figure") || (dresdenPhoto.closest ? dresdenPhoto.closest(".dresden-figure") : null);
+        const dresdenCaption = dresdenFigure ? dresdenFigure.querySelector("figcaption") : null;
+
+        function cleanCommonsText(value) {
+            if (!value) {
+                return "";
+            }
+
+            const scratch = document.createElement("div");
+            scratch.innerHTML = String(value);
+
+            return scratch.textContent
+                .replace(/\s+/g, " ")
+                .replace(/^description\s*/i, "")
+                .replace(/^file:/i, "")
+                .replace(/\.(jpg|jpeg|png|webp|gif|tif|tiff|svg)$/i, "")
+                .replace(/[_-]+/g, " ")
+                .trim();
+        }
+
+        function shortenCaption(text) {
+            const cleanText = cleanCommonsText(text);
+
+            if (cleanText.length <= 86) {
+                return cleanText;
+            }
+
+            return cleanText.slice(0, 83).replace(/\s+\S*$/, "") + "...";
+        }
+
+        function getDresdenPhotoCaption(page) {
+            const metadata = page && page.imageinfo && page.imageinfo[0] && page.imageinfo[0].extmetadata ? page.imageinfo[0].extmetadata : {};
+            const objectName = metadata.ObjectName && metadata.ObjectName.value ? metadata.ObjectName.value : "";
+            const imageDescription = metadata.ImageDescription && metadata.ImageDescription.value ? metadata.ImageDescription.value : "";
+            const pageTitle = page && page.title ? page.title : "";
+
+            return shortenCaption(objectName) || shortenCaption(imageDescription) || shortenCaption(pageTitle) || "Daily view from Germany";
+        }
+
+        function markFigureLoaded() {
+            if (dresdenFigure) {
+                dresdenFigure.classList.add("is-loaded");
+            }
+        }
+
         function applyDresdenPhoto(photo) {
             if (!photo || !photo.image) {
                 return Promise.reject(new Error("Missing Dresden photo"));
@@ -470,8 +515,12 @@
                 }
 
                 dresdenPhoto.src = photo.image;
-                dresdenPhoto.alt = photo.alt || "Daily view from Dresden, Germany";
+                dresdenPhoto.alt = photo.alt || "Daily landscape view from Germany";
+                if (dresdenCaption && photo.caption) {
+                    dresdenCaption.textContent = "Germany, today · " + photo.caption;
+                }
                 setAboutPhotoReady(true);
+                markFigureLoaded();
             });
         }
 
@@ -484,7 +533,8 @@
 
             const photo = {
                 image: candidate.imageInfo.thumburl || candidate.imageInfo.url,
-                alt: candidate.page && candidate.page.title ? candidate.page.title.replace(/^File:/, "").replace(/[_-]+/g, " ") : "Daily view from Dresden, Germany"
+                alt: getDresdenPhotoCaption(candidate.page),
+                caption: getDresdenPhotoCaption(candidate.page)
             };
 
             return applyDresdenPhoto(photo).catch(() => {
@@ -492,17 +542,25 @@
             });
         }
 
-        const searchUrl = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize&iiurlwidth=1600&format=json&origin=*";
+        const searchUrls = [
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Berlin%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
+        ];
         const fallbackPhoto = {
             image: dresdenPhoto.getAttribute("src"),
-            alt: dresdenPhoto.getAttribute("alt") || "Daily view from Dresden, Germany"
+            alt: dresdenPhoto.getAttribute("alt") || "Daily landscape view from Germany"
         };
 
-        fetchJson(searchUrl)
-            .then((data) => {
-                const pages = data && data.query && data.query.pages
-                    ? Object.keys(data.query.pages).map((key) => data.query.pages[key])
-                    : [];
+        Promise.all(searchUrls.map((url) => fetchJson(url).catch(() => null)))
+            .then((results) => {
+                const pages = results.reduce((acc, data) => {
+                    if (data && data.query && data.query.pages) {
+                        Object.keys(data.query.pages).forEach((key) => {
+                            acc.push(data.query.pages[key]);
+                        });
+                    }
+                    return acc;
+                }, []);
                 const candidates = pages
                     .map((page) => {
                         const imageInfo = page && page.imageinfo && page.imageinfo[0] ? page.imageinfo[0] : null;
@@ -535,13 +593,7 @@
                 return tryDresdenCandidates(orderedCandidates, 0);
             })
             .catch(() => {
-                if (!fallbackPhoto.image) {
-                    return;
-                }
-
-                applyDresdenPhoto(fallbackPhoto).catch(() => {
-                    /* keep the local fallback image hidden if it cannot load */
-                });
+                /* keep the running-cat loader visible if the photo fetch fails */
             });
     }
 
@@ -788,11 +840,15 @@
                 return;
             }
 
-            projectDemoStage.scrollIntoView({
-                block: "center",
-                inline: "nearest",
-                behavior: "smooth"
-            });
+            const media = projectDemoBody.querySelector("video, img") || projectDemoStage;
+
+            window.setTimeout(() => {
+                media.scrollIntoView({
+                    block: "center",
+                    inline: "nearest",
+                    behavior: "smooth"
+                });
+            }, 460);
         }
 
         function openProjectDemo(trigger) {
