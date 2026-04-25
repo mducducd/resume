@@ -517,7 +517,7 @@
                 dresdenPhoto.src = photo.image;
                 dresdenPhoto.alt = photo.alt || "Daily landscape view from Germany";
                 if (dresdenCaption && photo.caption) {
-                    dresdenCaption.textContent = "Germany, today · " + photo.caption;
+                    dresdenCaption.textContent = photo.caption;
                 }
                 setAboutPhotoReady(true);
                 markFigureLoaded();
