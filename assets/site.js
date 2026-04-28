@@ -853,12 +853,78 @@
         };
     }
 
-    function initProjectDemos() {
+    function initProjectMasonry() {
+        const projectList = document.querySelector(".project-list");
+        const projectItems = projectList ? toArray(projectList.querySelectorAll(".project-item")) : [];
+        const MasonryConstructor = window.Masonry;
+        let masonry = null;
+        let layoutFrame = null;
+
+        function refreshMasonry() {
+            if (!masonry) {
+                return;
+            }
+
+            if (layoutFrame) {
+                window.cancelAnimationFrame(layoutFrame);
+            }
+
+            layoutFrame = window.requestAnimationFrame(() => {
+                masonry.layout();
+                layoutFrame = null;
+            });
+        }
+
+        if (projectList && projectItems.length > 0 && typeof MasonryConstructor === "function") {
+            projectList.classList.add("is-masonry-ready");
+            masonry = new MasonryConstructor(projectList, {
+                itemSelector: ".project-item",
+                columnWidth: ".project-grid-sizer",
+                gutter: ".project-gutter-sizer",
+                percentPosition: true,
+                horizontalOrder: true,
+                transitionDuration: "0.22s"
+            });
+
+            if ("ResizeObserver" in window) {
+                const observer = new ResizeObserver(refreshMasonry);
+
+                projectItems.forEach((item) => {
+                    observer.observe(item);
+                });
+            }
+
+            toArray(projectList.querySelectorAll("img")).forEach((image) => {
+                if (!image.complete) {
+                    image.addEventListener("load", refreshMasonry, { once: true });
+                }
+            });
+
+            window.addEventListener("resize", refreshMasonry);
+            window.addEventListener("load", refreshMasonry, { once: true });
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(refreshMasonry).catch(() => {});
+            }
+            refreshMasonry();
+        }
+
+        return {
+            refresh: refreshMasonry
+        };
+    }
+
+    function initProjectDemos(projectMasonry) {
         const demoTriggers = toArray(document.querySelectorAll(".demo-trigger"));
         const projectDemoStage = document.getElementById("project-demo-stage");
         const projectDemoBody = document.getElementById("project-demo-body");
         const projectDemoClose = document.getElementById("project-demo-close");
         let activeDemoTarget = null;
+
+        function refreshProjectMasonry() {
+            if (projectMasonry && typeof projectMasonry.refresh === "function") {
+                projectMasonry.refresh();
+            }
+        }
 
         if (!projectDemoStage || !projectDemoBody || demoTriggers.length === 0) {
             return {
@@ -879,6 +945,7 @@
             projectDemoBody.innerHTML = "";
             projectDemoStage.classList.remove("is-open");
             projectDemoStage.hidden = true;
+            refreshProjectMasonry();
             activeDemoTarget = null;
 
             demoTriggers.forEach((trigger) => {
@@ -919,7 +986,12 @@
                 return;
             }
 
-            hostProject.appendChild(projectDemoStage);
+            const projectList = hostProject.closest(".project-list");
+            if (projectList && projectList.parentNode) {
+                projectList.parentNode.insertBefore(projectDemoStage, projectList.nextSibling);
+            } else {
+                hostProject.appendChild(projectDemoStage);
+            }
 
             if (demoKind === "video") {
                 const media = document.createElement("video");
@@ -931,7 +1003,10 @@
                     media.preload = "metadata";
                     media.className = "project-demo-media";
                     media.src = demoSrc;
-                    media.addEventListener("loadedmetadata", centerProjectDemo, { once: true });
+                    media.addEventListener("loadedmetadata", () => {
+                        refreshProjectMasonry();
+                        centerProjectDemo();
+                    }, { once: true });
                     projectDemoBody.appendChild(media);
                     return media.play();
                 })();
@@ -949,9 +1024,15 @@
                 media.loading = "lazy";
 
                 if (media.complete) {
-                    window.requestAnimationFrame(centerProjectDemo);
+                    window.requestAnimationFrame(() => {
+                        refreshProjectMasonry();
+                        centerProjectDemo();
+                    });
                 } else {
-                    media.addEventListener("load", centerProjectDemo, { once: true });
+                    media.addEventListener("load", () => {
+                        refreshProjectMasonry();
+                        centerProjectDemo();
+                    }, { once: true });
                 }
 
                 projectDemoBody.appendChild(media);
@@ -960,6 +1041,7 @@
             projectDemoStage.hidden = false;
             window.requestAnimationFrame(() => {
                 projectDemoStage.classList.add("is-open");
+                refreshProjectMasonry();
                 window.requestAnimationFrame(centerProjectDemo);
             });
 
@@ -987,6 +1069,12 @@
         if (projectDemoClose) {
             projectDemoClose.addEventListener("click", closeProjectDemo);
         }
+
+        projectDemoStage.addEventListener("transitionend", (event) => {
+            if (event.propertyName === "max-height" || event.propertyName === "padding-bottom") {
+                refreshProjectMasonry();
+            }
+        });
 
         return {
             closeProjectDemo: closeProjectDemo,
@@ -1070,7 +1158,8 @@
         initTheme();
 
         const navigation = initNavigation();
-        const projectDemos = initProjectDemos();
+        const projectMasonry = initProjectMasonry();
+        const projectDemos = initProjectDemos(projectMasonry);
         const lightbox = initLightbox();
 
         initDresdenPhoto();

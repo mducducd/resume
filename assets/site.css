@@ -19,6 +19,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 body {
@@ -385,25 +386,62 @@ img {
     list-style: none;
     margin: 0;
     padding: 0;
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 18px;
+    flex-wrap: wrap;
+    gap: 22px;
+    align-items: start;
+}
+
+.project-list.is-masonry-ready {
+    display: block;
+}
+
+.project-grid-sizer,
+.project-gutter-sizer {
+    position: absolute;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.project-grid-sizer,
+.project-row {
+    width: calc((100% - 44px) / 3);
+}
+
+.project-gutter-sizer {
+    width: 22px;
 }
 
 .project-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 26px;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
     background: var(--surface);
-    padding: 18px;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(26, 26, 26, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 14px 34px rgba(26, 26, 26, 0.06);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transition: box-shadow 0.24s ease, transform 0.24s ease;
+}
+
+.project-list.is-masonry-ready .project-row {
+    margin-bottom: 22px;
+}
+
+.project-row:hover {
+    box-shadow: 0 18px 42px rgba(26, 26, 26, 0.1);
+    transform: translateY(-2px);
 }
 
 .project-row .project-thumb {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     background: #efefee;
 }
@@ -417,7 +455,87 @@ img {
 
 .project-row .project-thumb--contain img {
     object-fit: contain;
-    padding: 14%;
+    padding: 16%;
+}
+
+/* full-image cards: white background */
+.project-item:nth-child(3) .project-thumb,
+.project-item:nth-child(4) .project-thumb,
+.project-item:nth-child(5) .project-thumb,
+.project-item:nth-child(6) .project-thumb,
+.project-item:nth-child(7) .project-thumb,
+.project-item:nth-child(8) .project-thumb {
+    background: #fff;
+}
+
+/* STAMP-Workbench (nth-child 3): show full image */
+.project-item:nth-child(3) .project-thumb {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+.project-item:nth-child(3) .project-thumb img {
+    object-fit: contain;
+    height: auto;
+    padding: 6%;
+}
+
+/* Pathology Agent (nth-child 4): show full image */
+.project-item:nth-child(4) .project-thumb {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+.project-item:nth-child(4) .project-thumb img {
+    object-fit: contain;
+    height: auto;
+    padding: 6%;
+}
+
+/* STAMP (nth-child 5): logo covers more area */
+.project-item:nth-child(5) .project-thumb {
+    aspect-ratio: 4 / 3;
+}
+
+.project-item:nth-child(5) .project-thumb img {
+    object-fit: contain;
+    padding: 6%;
+}
+
+/* Multiple Appropriate (nth-child 6): show full image */
+.project-item:nth-child(6) .project-thumb {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+.project-item:nth-child(6) .project-thumb img {
+    object-fit: contain;
+    height: auto;
+    padding: 6%;
+}
+
+/* Nursing Simulation (nth-child 7): show full image */
+.project-item:nth-child(7) .project-thumb {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+.project-item:nth-child(7) .project-thumb img {
+    object-fit: contain;
+    height: auto;
+    padding: 6%;
+}
+
+/* TalkingChat (nth-child 8): show full image */
+.project-item:nth-child(8) .project-thumb {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+.project-item:nth-child(8) .project-thumb img {
+    object-fit: contain;
+    height: auto;
+    padding: 6%;
 }
 
 .project-row a.project-thumb:hover img {
@@ -426,15 +544,27 @@ img {
 }
 
 .project-body {
-    padding-top: 2px;
+    padding: 18px 18px 20px;
 }
 
 .project-meta {
+    font-family: ui-monospace, "SF Mono", "Fira Code", monospace;
     font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
     color: var(--muted);
-    margin: 0 0 6px;
+    margin: 0 0 8px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-item:nth-child(8) .project-meta {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 .project-title {
@@ -447,25 +577,24 @@ img {
 
 .project-desc {
     color: var(--soft-ink);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     line-height: 1.75;
-    margin: 0 0 12px;
-    max-width: 60ch;
+    margin: 0 0 16px;
 }
 
 .project-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 8px 12px;
     align-items: center;
 }
 
 .project-links a,
 .project-links .demo-trigger {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink);
     border: none;
@@ -474,7 +603,7 @@ img {
     font-family: inherit;
     cursor: pointer;
     border-bottom: 1px solid var(--ink);
-    padding-bottom: 2px;
+    padding-bottom: 1px;
 }
 
 .project-links a:hover,
@@ -482,17 +611,19 @@ img {
     opacity: 0.55;
 }
 
-/* Demo stage — inline dropdown inside the project row */
+/* Demo stage: inline expansion inside the selected masonry card. */
 .project-demo-stage {
-    grid-column: 1 / -1;
     position: relative;
-    margin-top: 22px;
+    margin: 0 0 18px;
     background: #fafaf8;
     border: 1px solid var(--line);
+    border-radius: 8px;
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    padding: 0 22px;
+    padding: 0 14px;
+    width: 100%;
+    box-sizing: border-box;
     transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
@@ -501,9 +632,9 @@ img {
 }
 
 .project-demo-stage.is-open {
-    max-height: 90vh;
+    max-height: 80vh;
     opacity: 1;
-    padding: 28px 22px;
+    padding: 18px 14px;
 }
 
 .project-demo-stage__close {
@@ -526,13 +657,16 @@ img {
 .project-demo-stage__body {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .project-demo-media {
     max-width: 100%;
-    max-height: 70vh;
+    max-height: 62vh;
     display: block;
     background: #000;
+    border-radius: 6px;
+    object-fit: contain;
 }
 
 .demo-trigger.is-active {
@@ -879,16 +1013,31 @@ body.player-open {
         padding: 56px 24px;
     }
 
+    .project-grid-sizer,
     .project-row {
-        grid-template-columns: 1fr;
-        gap: 16px;
+        width: calc((100% - 22px) / 2);
+    }
+
+    .project-row {
+        border-radius: 8px;
     }
 
     .project-row .project-thumb {
         width: 100%;
         max-width: 100%;
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 4 / 5;
         margin: 0;
+        overflow: hidden;
+    }
+
+    /* cards with full-image display keep auto height at all breakpoints */
+    .project-item:nth-child(3) .project-thumb,
+    .project-item:nth-child(4) .project-thumb,
+    .project-item:nth-child(6) .project-thumb,
+    .project-item:nth-child(7) .project-thumb,
+    .project-item:nth-child(8) .project-thumb {
+        aspect-ratio: unset;
+        height: auto;
     }
 
     .project-desc {
@@ -929,9 +1078,17 @@ body.player-open {
         padding: 48px 16px;
     }
 
+    .project-grid-sizer,
     .project-row {
-        padding: 16px;
-        gap: 14px;
+        width: 100%;
+    }
+
+    .project-gutter-sizer {
+        width: 0;
+    }
+
+    .project-row {
+        border-radius: 8px;
     }
 
     .project-title {
@@ -940,13 +1097,15 @@ body.player-open {
 
     .project-meta {
         font-size: 11px;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.04em;
         white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
         word-break: break-word;
     }
 
     .project-links {
-        gap: 14px;
+        gap: 8px 12px;
         flex-wrap: wrap;
     }
 
