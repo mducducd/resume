@@ -120,13 +120,64 @@
     }
 
     function initNavigation() {
-        const trackedNavLinks = toArray(document.querySelectorAll(".top-nav a, .sidebar-links a"));
+        const trackedNavLinks = toArray(document.querySelectorAll(".top-nav a, .sidebar-links a, .nav a[href^='#']"));
         const viewLinks = toArray(document.querySelectorAll("[data-view-target]"));
         const backLinks = toArray(document.querySelectorAll("[data-view-close]"));
-        const sections = toArray(document.querySelectorAll("main > section[id].hero, main > section[id].page-section"));
+        const sections = toArray(document.querySelectorAll("main > section[id]"));
         const fullpageViews = toArray(document.querySelectorAll(".fullpage-view"));
         const mainColumn = document.querySelector(".main-column");
         let previousSectionId = "about";
+        let scrollAnimationFrame = null;
+        let scrollAnimationToken = 0;
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function smoothScrollToSection(targetSection, duration) {
+            if (!targetSection) {
+                return;
+            }
+
+            const startY = window.scrollY || window.pageYOffset || 0;
+            const sectionTop = targetSection.getBoundingClientRect().top + startY;
+            const sectionMarginTop = parseFloat(window.getComputedStyle(targetSection).scrollMarginTop) || 0;
+            const destinationY = Math.max(0, sectionTop - sectionMarginTop);
+            const travel = destinationY - startY;
+
+            if (Math.abs(travel) < 2) {
+                window.scrollTo({ top: destinationY, behavior: "auto" });
+                return;
+            }
+
+            if (scrollAnimationFrame) {
+                window.cancelAnimationFrame(scrollAnimationFrame);
+            }
+
+            scrollAnimationToken += 1;
+            const token = scrollAnimationToken;
+            const startedAt = performance.now();
+            const animationDuration = duration || 280;
+
+            function step(now) {
+                if (token !== scrollAnimationToken) {
+                    return;
+                }
+
+                const elapsed = now - startedAt;
+                const progress = Math.min(1, elapsed / animationDuration);
+                const eased = easeOutCubic(progress);
+                window.scrollTo({ top: startY + (travel * eased), behavior: "auto" });
+
+                if (progress < 1) {
+                    scrollAnimationFrame = window.requestAnimationFrame(step);
+                } else {
+                    scrollAnimationFrame = null;
+                }
+            }
+
+            scrollAnimationFrame = window.requestAnimationFrame(step);
+        }
 
         function getLinkTarget(link) {
             return link.getAttribute("data-view-target") || getHashTarget(link.getAttribute("href") || "");
@@ -230,7 +281,7 @@
 
                 setActiveNav(targetId);
                 previousSectionId = targetId;
-                targetSection.scrollIntoView({ block: "start", behavior: "auto" });
+                smoothScrollToSection(targetSection, 260);
                 link.blur();
             });
         });
@@ -251,7 +302,7 @@
                 closeView();
 
                 if (previousSection) {
-                    previousSection.scrollIntoView({ block: "start", behavior: "auto" });
+                    smoothScrollToSection(previousSection, 240);
                 }
             });
         });
@@ -509,6 +560,7 @@
 
             return preloadImage(photo.image).then((image) => {
                 const aspectRatio = image && image.naturalWidth && image.naturalHeight ? image.naturalWidth / image.naturalHeight : 0;
+                const captionText = photo.caption || photo.alt || "Daily view from Germany";
 
                 if (!isAcceptedDresdenAspectRatio(aspectRatio)) {
                     throw new Error("Rejected wide Dresden photo");
@@ -516,8 +568,8 @@
 
                 dresdenPhoto.src = photo.image;
                 dresdenPhoto.alt = photo.alt || "Daily landscape view from Germany";
-                if (dresdenCaption && photo.caption) {
-                    dresdenCaption.textContent = photo.caption;
+                if (dresdenCaption) {
+                    dresdenCaption.textContent = captionText;
                 }
                 setAboutPhotoReady(true);
                 markFigureLoaded();
