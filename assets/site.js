@@ -1,6 +1,6 @@
 (() => {
     const DEFAULT_THEME = "light";
-    const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v2";
+    const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v1";
     const PLAYLISTS = {
         1: {
             iframeId: "sc-widget-iframe-1",
@@ -447,7 +447,7 @@
                 const title = objectData.title || "Untitled";
                 const artist = objectData.artistDisplayName || objectData.culture || "Unknown maker";
                 const date = objectData.objectDate || "";
-                const image = (objectData.primaryImageSmall || objectData.primaryImage || "").replace(/^http:\/\//, "https://");
+                const image = objectData.primaryImageSmall || objectData.primaryImage || "";
                 const link = objectData.objectURL || "https://www.metmuseum.org/art/collection";
 
                 if (!image) {
@@ -584,7 +584,7 @@
             }
 
             const photo = {
-                image: (candidate.imageInfo.thumburl || candidate.imageInfo.url || "").replace(/^http:\/\//, "https://"),
+                image: candidate.imageInfo.thumburl || candidate.imageInfo.url,
                 alt: getDresdenPhotoCaption(candidate.page),
                 caption: getDresdenPhotoCaption(candidate.page)
             };
@@ -594,16 +594,9 @@
             });
         }
 
-        const germanCities = [
-            "Dresden", "Berlin"
-        ];
-        const todayKey = getLocalDateKey();
-        const seed = hashString(todayKey);
-        const cityA = germanCities[seed % germanCities.length];
-        const cityB = germanCities[(seed + 7) % germanCities.length];
         const searchUrls = [
-            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodeURIComponent(cityA + " Germany") + "&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
-            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodeURIComponent(cityB + " Germany") + "&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Berlin%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
         ];
         const fallbackPhoto = {
             image: dresdenPhoto.getAttribute("src"),
@@ -1007,7 +1000,7 @@
                     media.muted = true;
                     media.loop = true;
                     media.playsInline = true;
-                    media.preload = "auto";
+                    media.preload = "metadata";
                     media.className = "project-demo-media";
                     media.src = demoSrc;
                     media.addEventListener("loadedmetadata", () => {
