@@ -595,11 +595,10 @@
         }
 
         const germanCities = [
-            "Dresden", "Berlin", "Munich", "Hamburg", "Cologne", "Frankfurt",
-            "Stuttgart", "Nuremberg", "Heidelberg", "Rothenburg ob der Tauber",
-            "Freiburg", "Leipzig", "Potsdam", "Regensburg", "Bamberg",
-            "Lübeck", "Weimar", "Erfurt", "Tübingen", "Mainz"
+            "Dresden", "Berlin"
         ];
+        const todayKey = getLocalDateKey();
+        const seed = hashString(todayKey);
         const cityA = germanCities[seed % germanCities.length];
         const cityB = germanCities[(seed + 7) % germanCities.length];
         const searchUrls = [
