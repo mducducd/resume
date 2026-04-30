@@ -459,6 +459,10 @@ img {
     padding: 16%;
 }
 
+.project-item:nth-child(2) .project-thumb--contain img {
+    border-radius: 12%;
+}
+
 /* full-image cards: white background */
 .project-item:nth-child(3) .project-thumb,
 .project-item:nth-child(4) .project-thumb,
