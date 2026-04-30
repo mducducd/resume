@@ -594,9 +594,17 @@
             });
         }
 
+        const germanCities = [
+            "Dresden", "Berlin", "Munich", "Hamburg", "Cologne", "Frankfurt",
+            "Stuttgart", "Nuremberg", "Heidelberg", "Rothenburg ob der Tauber",
+            "Freiburg", "Leipzig", "Potsdam", "Regensburg", "Bamberg",
+            "Lübeck", "Weimar", "Erfurt", "Tübingen", "Mainz"
+        ];
+        const cityA = germanCities[seed % germanCities.length];
+        const cityB = germanCities[(seed + 7) % germanCities.length];
         const searchUrls = [
-            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
-            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Berlin%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodeURIComponent(cityA + " Germany") + "&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
+            "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodeURIComponent(cityB + " Germany") + "&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
         ];
         const fallbackPhoto = {
             image: dresdenPhoto.getAttribute("src"),
@@ -1000,7 +1008,7 @@
                     media.muted = true;
                     media.loop = true;
                     media.playsInline = true;
-                    media.preload = "metadata";
+                    media.preload = "auto";
                     media.className = "project-demo-media";
                     media.src = demoSrc;
                     media.addEventListener("loadedmetadata", () => {

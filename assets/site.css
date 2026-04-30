@@ -177,15 +177,16 @@ img {
 
 .dresden-figure {
     margin: 0 auto;
-    width: min(100%, 600px);
+    width: min(100%, 700px);
 }
 
 .dresden-frame {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     background: transparent;
     overflow: hidden;
+    border-radius: 8px;
 }
 
 .dresden-figure #dresden-photo {
