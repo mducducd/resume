@@ -1,6 +1,6 @@
 (() => {
     const DEFAULT_THEME = "light";
-    const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v1";
+    const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v2";
     const PLAYLISTS = {
         1: {
             iframeId: "sc-widget-iframe-1",
@@ -447,7 +447,7 @@
                 const title = objectData.title || "Untitled";
                 const artist = objectData.artistDisplayName || objectData.culture || "Unknown maker";
                 const date = objectData.objectDate || "";
-                const image = objectData.primaryImageSmall || objectData.primaryImage || "";
+                const image = (objectData.primaryImageSmall || objectData.primaryImage || "").replace(/^http:\/\//, "https://");
                 const link = objectData.objectURL || "https://www.metmuseum.org/art/collection";
 
                 if (!image) {
@@ -584,7 +584,7 @@
             }
 
             const photo = {
-                image: candidate.imageInfo.thumburl || candidate.imageInfo.url,
+                image: (candidate.imageInfo.thumburl || candidate.imageInfo.url || "").replace(/^http:\/\//, "https://"),
                 alt: getDresdenPhotoCaption(candidate.page),
                 caption: getDresdenPhotoCaption(candidate.page)
             };
