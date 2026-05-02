@@ -1,4 +1,30 @@
 (() => {
+    const topbar = document.querySelector(".topbar");
+    if (topbar) {
+        const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 40);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+
+        const navToggle = topbar.querySelector(".nav-toggle");
+        const nav = topbar.querySelector(".nav");
+        if (navToggle && nav) {
+            const closeNav = () => {
+                topbar.classList.remove("nav-open");
+                navToggle.setAttribute("aria-expanded", "false");
+            };
+            navToggle.addEventListener("click", () => {
+                const open = topbar.classList.toggle("nav-open");
+                navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+            });
+            nav.addEventListener("click", (event) => {
+                if (event.target.tagName === "A") closeNav();
+            });
+            document.addEventListener("click", (event) => {
+                if (!topbar.contains(event.target)) closeNav();
+            });
+        }
+    }
+
     const DEFAULT_THEME = "light";
     const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v1";
     const PLAYLISTS = {
@@ -909,7 +935,8 @@
         }
 
         return {
-            refresh: refreshMasonry
+            refresh: refreshMasonry,
+            getMasonry: () => masonry
         };
     }
 
@@ -933,7 +960,71 @@
             };
         }
 
+        const demoStageOriginalParent = projectDemoStage.parentNode;
+        const demoStageOriginalNext = projectDemoStage.nextSibling;
+        let demoResizeObserver = null;
+
+        function placeDemoStageAfterRow(projectList, hostProject) {
+            const items = toArray(projectList.querySelectorAll(".project-item"));
+            const cardTop = hostProject.offsetTop;
+            let lastInRow = hostProject;
+
+            items.forEach((it) => {
+                if (Math.abs(it.offsetTop - cardTop) < 6) {
+                    lastInRow = it;
+                }
+            });
+
+            projectDemoStage.classList.add("project-item");
+            projectDemoStage.style.width = "100%";
+
+            if (lastInRow.nextSibling) {
+                projectList.insertBefore(projectDemoStage, lastInRow.nextSibling);
+            } else {
+                projectList.appendChild(projectDemoStage);
+            }
+
+            const masonry = projectMasonry && projectMasonry.getMasonry && projectMasonry.getMasonry();
+            if (masonry) {
+                masonry.reloadItems();
+                masonry.layout();
+            }
+
+            if (typeof ResizeObserver === "function" && masonry) {
+                demoResizeObserver = new ResizeObserver(() => {
+                    masonry.layout();
+                });
+                demoResizeObserver.observe(projectDemoStage);
+            }
+        }
+
+        function returnDemoStageHome() {
+            if (demoResizeObserver) {
+                demoResizeObserver.disconnect();
+                demoResizeObserver = null;
+            }
+
+            const wasInProjectList = projectDemoStage.classList.contains("project-item");
+            projectDemoStage.classList.remove("project-item");
+            projectDemoStage.style.width = "";
+
+            if (demoStageOriginalParent && projectDemoStage.parentNode !== demoStageOriginalParent) {
+                demoStageOriginalParent.insertBefore(projectDemoStage, demoStageOriginalNext);
+            }
+
+            const masonry = projectMasonry && projectMasonry.getMasonry && projectMasonry.getMasonry();
+            if (wasInProjectList && masonry) {
+                masonry.reloadItems();
+                masonry.layout();
+            }
+        }
+
         function closeProjectDemo() {
+            if (demoResizeObserver) {
+                demoResizeObserver.disconnect();
+                demoResizeObserver = null;
+            }
+
             const activeMedia = projectDemoBody.querySelector("video");
 
             if (activeMedia) {
@@ -945,7 +1036,7 @@
             projectDemoBody.innerHTML = "";
             projectDemoStage.classList.remove("is-open");
             projectDemoStage.hidden = true;
-            refreshProjectMasonry();
+            returnDemoStageHome();
             activeDemoTarget = null;
 
             demoTriggers.forEach((trigger) => {
@@ -987,8 +1078,8 @@
             }
 
             const projectList = hostProject.closest(".project-list");
-            if (projectList && projectList.parentNode) {
-                projectList.parentNode.insertBefore(projectDemoStage, projectList.nextSibling);
+            if (projectList) {
+                placeDemoStageAfterRow(projectList, hostProject);
             } else {
                 hostProject.appendChild(projectDemoStage);
             }
