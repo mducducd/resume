@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/site.css?v=8">
+    <link rel="stylesheet" href="assets/site.css?v=12">
 </head>
 <body>
     <header class="topbar">
@@ -21,14 +21,14 @@
             <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#work">Work</a>
-            <a href="#learning">Learning</a>
+            <a href="#learning">Study</a>
             <a href="#music">Offline</a>
         </nav>
     </header>
 
     <main>
         <section id="home" class="hero">
-            <h1 class="hero-title">AI &amp; Clinical ML Researcher</h1>
+            <h1 class="hero-title">Clinical ML Researcher</h1>
             <p class="hero-sub">
                 Building multimodal and explainable machine learning systems<br>
                 for medicine, with a quieter art shelf on the side.
@@ -48,9 +48,9 @@
         <section id="about" class="prose-section">
             <h2 class="section-title">About</h2>
             <div class="prose">
-                <p>I am Duc Nguyen (Duke), a machine learning research engineer at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a>, TU Dresden.</p>
+                <p>I am Duc Nguyen (Duke), a machine learning research engineer at <a href="https://digitalhealth.tu-dresden.de" target="_blank" rel="noopener">EKFZ</a>, Germany.</p>
                 <p>My work sits between deep learning, multimodal AI, and clinical medicine — building pipelines with clearer inspection layers, multimodal models for pathology workflows, and interfaces that make complex AI systems easier to reason through.</p>
-
+                <p>Before joining EKFZ, I worked as a research MSc student at <a href="https://global.jnu.ac.kr/jnumain_en.aspx" target="_blank" rel="noopener">Chonnam National University</a>, South Korea, working on machine learning for computational empathy.</p>
                 <div class="contact-icons" aria-label="Contact and links">
                     <a class="contact-icon" href="mailto:minhducddd@gmail.com" aria-label="Email" title="Email">
                         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
@@ -77,17 +77,11 @@
                 <div class="skills-block">
                     <p class="skills-label">Skills</p>
                     <ul class="skill-tags">
-                        <li>Python</li>
-                        <li>PyTorch</li>
-                        <li>CUDA</li>
-                        <li>C++</li>
-                        <li>Hugging Face</li>
-                        <li>Diffusion</li>
-                        <li>VLMs</li>
-                        <li>LLM Agents</li>
-    
-                        <li>Docker</li>
-                        <li>Linux</li>
+                        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="18" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="2" fill="currentColor" stroke="none"/><circle cx="18" cy="18" r="2" fill="currentColor" stroke="none"/><path d="M6 6h12v12H6z"/></svg>Deep Learning</li>
+                        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="12"/><path d="M8 20h8"/></svg>LLMs / VLMs</li>
+                        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg>Diffusion Models</li>
+                        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="8" height="6"/><circle cx="17" cy="8" r="3"/><path d="M11 8h3"/></svg>Multimodal Learning</li>
+                        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="6"/><rect x="15" y="4" width="6" height="6"/><rect x="9" y="14" width="6" height="6"/><path d="M9 7h6m-3 3v4"/></svg>Cluster ML</li>
                     </ul>
                 </div>
             </div>
@@ -117,7 +111,7 @@
                 </li>
 
                 <li class="project-row project-item">
-                    <a class="project-thumb project-thumb--contain" href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">
+                    <a class="project-thumb" href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">
                         <img src="assets/thumbnails/aml_agent_logo.png" alt="Pathology Agent thumbnail" loading="lazy">
                     </a>
                     <div class="project-body">
@@ -132,7 +126,7 @@
                 </li>
 
                 <li class="project-row project-item">
-                    <a class="project-thumb project-thumb--contain" href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">
+                    <a class="project-thumb project-thumb--logo" href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">
                         <img src="assets/thumbnails/STAMP_logo.svg" alt="STAMP logo" loading="lazy">
                     </a>
                     <div class="project-body">
@@ -177,13 +171,28 @@
                 </li>
 
                 <li class="project-row project-item">
-                    <div class="project-thumb">
+                    <a class="project-thumb" href="https://github.com/mducducd/Multimodal_Pain" target="_blank" rel="noopener">
+                        <img src="assets/thumbnails/pain_assessment.png" alt="Multimodal Pain Assessment thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Dec 2024 · Python · Published</p>
+                        <h3 class="project-title">Multimodal Pain Assessment</h3>
+                        <p class="project-desc">A multimodal transformer framework for automated pain assessment from facial and physiological signals. This work moves toward a foundation model for pain by leveraging masked auto-encoder to build generalizable representations across modalities.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/Multimodal_Pain" target="_blank" rel="noopener">Code</a>
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/40989383/" target="_blank" rel="noopener">Paper</a>                           
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <div class="project-thumb project-thumb--compact">
                         <img src="assets/thumbnails/talking_face.png" alt="TalkingChat thumbnail" loading="lazy">
                     </div>
                     <div class="project-body">
                         <p class="project-meta">Nov 2023 · Python · Gold Prize (Regional) — Generative AI Hackathon, CNU</p>
                         <h3 class="project-title">TalkingChat</h3>
-                        <p class="project-desc">A child-friendly web chatbot with a talking face and voice that can be changed or uploaded by each user, making the conversation feel personal, playful, and easy to engage with.</p>
+                        <p class="project-desc">A child-friendly chatbot with a changable talking face and voice, making the conversation feel personal, playful, and easy to engage with.</p>
                     </div>
                 </li>
             </ul>
@@ -196,7 +205,7 @@
 
         <section id="learning" class="learning-section">
             <div class="section-head">
-                <h2 class="section-title">Learning</h2>
+                <h2 class="section-title">Study</h2>
                 <p class="section-sub">What I'm studying now and the notes I keep returning to.</p>
             </div>
 
@@ -241,7 +250,7 @@
         <section id="music" class="music-section">
             <div class="section-head">
                 <h2 class="section-title">Offline</h2>
-                <p class="section-sub">Photography, art, playlists, and the slower things that keep the rest of the work balanced.</p>
+                <p class="section-sub">Slower things that keep the rest of the work balanced.</p>
             </div>
 
             <div class="music-grid">
@@ -262,7 +271,7 @@
                         <p>Sketches, studies, and visual notes kept loosely as a digital sketchbook.</p>
                         <p class="card-cta">
                             <a href="https://shell-gram-46d.notion.site/Digital-Sketchbook-964764ce424b83be89f601e1eea4583d?source=copy_link" target="_blank" rel="noopener">
-                                <svg class="gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m21 15-4.2-4.2a1.5 1.5 0 0 0-2.1 0L8 17"/></svg>
+                                <svg class="gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14" r="1.2" fill="currentColor" stroke="none"/><path d="M12 22c0 0-2-2-2-5a2 2 0 0 1 4 0c0 1-.5 2-2 2z" fill="currentColor" stroke="none"/></svg>
                                 My Gallery →
                             </a>
                         </p>
@@ -318,7 +327,7 @@
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    <script src="assets/site.js?v=8"></script>
+    <script src="assets/site.js?v=11"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>

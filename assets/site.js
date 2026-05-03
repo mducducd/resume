@@ -1,6 +1,36 @@
 (() => {
-    const topbar = document.querySelector(".topbar");
-    if (topbar) {
+    const DEFAULT_THEME = "light";
+    const THEME_STORAGE_KEY = "portfolio-theme";
+    const HASH_ALIASES = {
+        works: "work",
+        favorites: "music"
+    };
+    const PLAYLISTS = {
+        1: {
+            iframeId: "sc-widget-iframe-1",
+            listId: "track-list-1",
+            loadingId: "track-loading-1",
+            tracks: [],
+            currentTrackIndex: -1,
+            widget: null
+        },
+        2: {
+            iframeId: "sc-widget-iframe-2",
+            listId: "track-list-2",
+            loadingId: "track-loading-2",
+            tracks: [],
+            currentTrackIndex: -1,
+            widget: null
+        }
+    };
+
+    function initTopbar() {
+        const topbar = document.querySelector(".topbar");
+
+        if (!topbar) {
+            return;
+        }
+
         const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 40);
         window.addEventListener("scroll", onScroll, { passive: true });
         onScroll();
@@ -25,27 +55,6 @@
         }
     }
 
-    const DEFAULT_THEME = "light";
-    const DAILY_ART_STORAGE_KEY = "daily-museum-artwork-v1";
-    const PLAYLISTS = {
-        1: {
-            iframeId: "sc-widget-iframe-1",
-            listId: "track-list-1",
-            loadingId: "track-loading-1",
-            tracks: [],
-            currentTrackIndex: -1,
-            widget: null
-        },
-        2: {
-            iframeId: "sc-widget-iframe-2",
-            listId: "track-list-2",
-            loadingId: "track-loading-2",
-            tracks: [],
-            currentTrackIndex: -1,
-            widget: null
-        }
-    };
-
     function toArray(value) {
         return Array.from(value || []);
     }
@@ -58,6 +67,19 @@
         return href.replace(/^#/, "");
     }
 
+    function normalizeHashTarget(target) {
+        return HASH_ALIASES[target] || target;
+    }
+
+    function normalizeCurrentHash() {
+        const currentTarget = getHashTarget(window.location.hash || "");
+        const normalizedTarget = currentTarget ? normalizeHashTarget(currentTarget) : null;
+
+        if (currentTarget && normalizedTarget !== currentTarget) {
+            window.history.replaceState(null, "", "#" + normalizedTarget);
+        }
+    }
+
     function escapeHtml(value) {
         return String(value)
             .replace(/&/g, "&amp;")
@@ -65,34 +87,6 @@
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;");
-    }
-
-    function hashString(value) {
-        let hash = 0;
-
-        for (let index = 0; index < value.length; index += 1) {
-            hash = ((hash << 5) - hash) + value.charCodeAt(index);
-            hash |= 0;
-        }
-
-        return Math.abs(hash);
-    }
-
-    function getLocalDateKey() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-
-        return year + "-" + month + "-" + day;
-    }
-
-    function pickSeeded(list, seed) {
-        if (!list || list.length === 0) {
-            return null;
-        }
-
-        return list[seed % list.length];
     }
 
     function fetchJson(url) {
@@ -129,9 +123,28 @@
                 return;
             }
 
-            themeToggle.querySelector(".theme-toggle-label").textContent = theme === "dark" ? "Light" : "Dark";
+            const themeToggleLabel = themeToggle.querySelector(".theme-toggle-label");
+
+            if (themeToggleLabel) {
+                themeToggleLabel.textContent = theme === "dark" ? "Light" : "Dark";
+            }
+
             themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
             themeToggle.setAttribute("title", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        }
+
+        function getInitialTheme() {
+            try {
+                const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+                if (savedTheme === "light" || savedTheme === "dark") {
+                    return savedTheme;
+                }
+            } catch (error) {
+                /* ignore storage failures */
+            }
+
+            return document.body.getAttribute("data-theme") || DEFAULT_THEME;
         }
 
         if (themeToggle) {
@@ -139,20 +152,23 @@
                 const currentTheme = document.body.getAttribute("data-theme");
                 const nextTheme = currentTheme === "dark" ? "light" : "dark";
                 applyTheme(nextTheme);
+
+                try {
+                    window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+                } catch (error) {
+                    /* ignore storage failures */
+                }
             });
         }
 
-        applyTheme(DEFAULT_THEME);
+        applyTheme(getInitialTheme());
     }
 
     function initNavigation() {
-        const trackedNavLinks = toArray(document.querySelectorAll(".top-nav a, .sidebar-links a, .nav a[href^='#']"));
-        const viewLinks = toArray(document.querySelectorAll("[data-view-target]"));
-        const backLinks = toArray(document.querySelectorAll("[data-view-close]"));
+        normalizeCurrentHash();
+
+        const trackedNavLinks = toArray(document.querySelectorAll(".top-nav a, .sidebar-links a, .nav a[href^='#'], .brand[href^='#']"));
         const sections = toArray(document.querySelectorAll("main > section[id]"));
-        const fullpageViews = toArray(document.querySelectorAll(".fullpage-view"));
-        const mainColumn = document.querySelector(".main-column");
-        let previousSectionId = "about";
         let scrollAnimationFrame = null;
         let scrollAnimationToken = 0;
 
@@ -206,7 +222,9 @@
         }
 
         function getLinkTarget(link) {
-            return link.getAttribute("data-view-target") || getHashTarget(link.getAttribute("href") || "");
+            const target = getHashTarget(link.getAttribute("href") || "");
+
+            return target ? normalizeHashTarget(target) : target;
         }
 
         function setActiveNav(sectionId) {
@@ -228,7 +246,7 @@
         }
 
         function updateActiveNavFromScroll() {
-            if (!mainColumn || mainColumn.classList.contains("view-mode") || sections.length === 0) {
+            if (sections.length === 0) {
                 return;
             }
 
@@ -251,44 +269,14 @@
             }
 
             if (bestSection) {
-                previousSectionId = bestSection.id;
                 setActiveNav(bestSection.id);
             }
         }
 
-        function openView(viewId) {
-            const targetView = document.getElementById(viewId);
-
-            if (!mainColumn || !targetView) {
-                return;
-            }
-
-            fullpageViews.forEach((view) => {
-                view.classList.toggle("active", view === targetView);
-            });
-
-            mainColumn.classList.add("view-mode");
-            setActiveNav(viewId);
-            window.scrollTo({ top: 0, behavior: "auto" });
-        }
-
-        function closeView() {
-            if (!mainColumn) {
-                return;
-            }
-
-            fullpageViews.forEach((view) => {
-                view.classList.remove("active");
-            });
-
-            mainColumn.classList.remove("view-mode");
-            setActiveNav(previousSectionId || "about");
-        }
-
         trackedNavLinks.forEach((link) => {
-            const targetId = getHashTarget(link.getAttribute("href") || "");
+            const targetId = normalizeHashTarget(getHashTarget(link.getAttribute("href") || ""));
 
-            if (link.hasAttribute("data-view-target") || !targetId) {
+            if (!targetId) {
                 return;
             }
 
@@ -300,36 +288,9 @@
                 }
 
                 event.preventDefault();
-
-                if (mainColumn && mainColumn.classList.contains("view-mode")) {
-                    closeView();
-                }
-
                 setActiveNav(targetId);
-                previousSectionId = targetId;
                 smoothScrollToSection(targetSection, 260);
                 link.blur();
-            });
-        });
-
-        viewLinks.forEach((link) => {
-            link.addEventListener("click", (event) => {
-                event.preventDefault();
-                openView(link.getAttribute("data-view-target"));
-                link.blur();
-            });
-        });
-
-        backLinks.forEach((link) => {
-            link.addEventListener("click", (event) => {
-                const previousSection = document.getElementById(previousSectionId || "about");
-
-                event.preventDefault();
-                closeView();
-
-                if (previousSection) {
-                    smoothScrollToSection(previousSection, 240);
-                }
             });
         });
 
@@ -353,170 +314,13 @@
             updateActiveNavFromScroll();
         }
 
-        return {
-            closeView: closeView,
-            isViewMode: () => Boolean(mainColumn && mainColumn.classList.contains("view-mode"))
-        };
-    }
-
-    function initDailyArtwork() {
-        const dailySlot = {
-            link: document.getElementById("daily-art-link"),
-            image: document.getElementById("daily-art-image"),
-            label: document.getElementById("daily-art-label"),
-            title: document.getElementById("daily-art-title"),
-            credit: document.getElementById("daily-art-credit")
-        };
-        const gallerySlot = {
-            link: document.getElementById("gallery-art-link"),
-            image: document.getElementById("gallery-art-image"),
-            label: document.getElementById("gallery-art-label"),
-            title: document.getElementById("gallery-art-title"),
-            credit: document.getElementById("gallery-art-credit")
-        };
-        const slots = [dailySlot, gallerySlot];
-
-        function applyArtworkToSlot(slot, artwork) {
-            if (!slot.link || !slot.image || !slot.label || !slot.title || !slot.credit || !artwork) {
-                return;
-            }
-
-            slot.link.href = artwork.link;
-            slot.link.classList.add("is-ready");
-            slot.image.src = artwork.image;
-            slot.image.alt = artwork.title;
-            slot.label.textContent = artwork.label;
-            slot.title.textContent = artwork.title;
-            slot.credit.textContent = artwork.credit;
-        }
-
-        function applyDailyArtwork(artwork) {
-            slots.forEach((slot) => {
-                applyArtworkToSlot(slot, artwork);
-            });
-        }
-
-        function setDailyArtworkFallback() {
-            slots.forEach((slot) => {
-                if (!slot.link || !slot.image || !slot.label || !slot.title || !slot.credit) {
-                    return;
-                }
-
-                slot.link.href = "https://www.metmuseum.org/art/collection";
-                slot.link.classList.remove("is-ready");
-                slot.image.removeAttribute("src");
-                slot.image.alt = "";
-                slot.label.textContent = "Daily museum pick";
-                slot.title.textContent = "Selected Works";
-                slot.credit.textContent = "A rotating daily artwork from paintings, drawings, and prints at The Met.";
-            });
-        }
-
-        function getDailyArtworkCache() {
-            try {
-                return JSON.parse(window.localStorage.getItem(DAILY_ART_STORAGE_KEY) || "null");
-            } catch (error) {
-                return null;
-            }
-        }
-
-        function saveDailyArtworkCache(payload) {
-            try {
-                window.localStorage.setItem(DAILY_ART_STORAGE_KEY, JSON.stringify(payload));
-            } catch (error) {
-                /* ignore storage failures */
-            }
-        }
-
-        if (!slots.some((slot) => slot.link && slot.image && slot.label && slot.title && slot.credit)) {
-            return;
-        }
-
-        const todayKey = getLocalDateKey();
-        const cache = getDailyArtworkCache();
-        const presets = [
-            {
-                label: "Daily painting",
-                searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&isHighlight=true&medium=Paintings&q=painting"
-            },
-            {
-                label: "Daily drawing",
-                searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Drawings&q=drawing"
-            },
-            {
-                label: "Daily print",
-                searchUrl: "https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&medium=Prints&q=print"
-            }
-        ];
-        const seed = hashString(todayKey);
-        const preset = pickSeeded(presets, seed);
-
-        if (cache && cache.date === todayKey && cache.artwork) {
-            applyDailyArtwork(cache.artwork);
-            return;
-        }
-
-        setDailyArtworkFallback();
-
-        fetchJson(preset.searchUrl)
-            .then((searchData) => {
-                const objectIds = (searchData && searchData.objectIDs) || [];
-                const objectId = pickSeeded(objectIds.slice(0, 120), seed);
-
-                if (!objectId) {
-                    throw new Error("No objects found");
-                }
-
-                return fetchJson("https://collectionapi.metmuseum.org/public/collection/v1/objects/" + objectId);
-            })
-            .then((objectData) => {
-                const title = objectData.title || "Untitled";
-                const artist = objectData.artistDisplayName || objectData.culture || "Unknown maker";
-                const date = objectData.objectDate || "";
-                const image = objectData.primaryImageSmall || objectData.primaryImage || "";
-                const link = objectData.objectURL || "https://www.metmuseum.org/art/collection";
-
-                if (!image) {
-                    throw new Error("Missing artwork image");
-                }
-
-                const artwork = {
-                    label: preset.label,
-                    title: title,
-                    credit: artist + (date ? ", " + date : ""),
-                    image: image,
-                    link: link
-                };
-
-                saveDailyArtworkCache({
-                    date: todayKey,
-                    artwork: artwork
-                });
-
-                applyDailyArtwork(artwork);
-            })
-            .catch(() => {
-                setDailyArtworkFallback();
-            });
     }
 
     function initDresdenPhoto() {
-        const aboutGrid = document.getElementById("about-grid");
-        const aboutPhotoCard = document.getElementById("about-photo-card");
         const dresdenPhoto = document.getElementById("dresden-photo");
 
         if (!dresdenPhoto) {
             return;
-        }
-
-        function setAboutPhotoReady(isReady) {
-            if (aboutGrid) {
-                aboutGrid.classList.toggle("is-photo-ready", Boolean(isReady));
-            }
-
-            if (aboutPhotoCard) {
-                aboutPhotoCard.setAttribute("aria-hidden", isReady ? "false" : "true");
-            }
         }
 
         function isAcceptedDresdenAspectRatio(aspectRatio) {
@@ -597,7 +401,6 @@
                 if (dresdenCaption) {
                     dresdenCaption.textContent = captionText;
                 }
-                setAboutPhotoReady(true);
                 markFigureLoaded();
             });
         }
@@ -624,10 +427,6 @@
             "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Dresden%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*",
             "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Berlin%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
         ];
-        const fallbackPhoto = {
-            image: dresdenPhoto.getAttribute("src"),
-            alt: dresdenPhoto.getAttribute("alt") || "Daily landscape view from Germany"
-        };
 
         Promise.all(searchUrls.map((url) => fetchJson(url).catch(() => null)))
             .then((results) => {
@@ -908,7 +707,6 @@
                 columnWidth: ".project-grid-sizer",
                 gutter: ".project-gutter-sizer",
                 percentPosition: true,
-                horizontalOrder: true,
                 transitionDuration: "0.22s"
             });
 
@@ -1236,28 +1034,21 @@
 
             if (features.projectDemos.isOpen()) {
                 features.projectDemos.closeProjectDemo();
-                return;
-            }
-
-            if (features.navigation.isViewMode()) {
-                features.navigation.closeView();
             }
         });
     }
 
     function initSite() {
+        initTopbar();
         initTheme();
-
-        const navigation = initNavigation();
+        initNavigation();
         const projectMasonry = initProjectMasonry();
         const projectDemos = initProjectDemos(projectMasonry);
         const lightbox = initLightbox();
 
         initDresdenPhoto();
-        initDailyArtwork();
         initPlaylists();
         initEscapeHandling({
-            navigation: navigation,
             projectDemos: projectDemos,
             lightbox: lightbox
         });

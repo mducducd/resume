@@ -7,12 +7,16 @@
     <script>
         var path = window.location.pathname.replace(/\/+$/, '') || '/';
         var map = {
-            '/works': '/#works',
+            '/works': '/#work',
+            '/work': '/#work',
             '/learning': '/#learning',
-            '/favorites': '/#favorites',
-            '/works.html': '/#works',
+            '/favorites': '/#music',
+            '/music': '/#music',
+            '/works.html': '/#work',
+            '/work.html': '/#work',
             '/learning.html': '/#learning',
-            '/favorites.html': '/#favorites'
+            '/favorites.html': '/#music',
+            '/music.html': '/#music'
         };
         window.location.replace(map[path] || '/');
     </script>

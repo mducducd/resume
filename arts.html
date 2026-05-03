@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arts — Duc Nguyen</title>
     <meta name="description" content="Art by Duc Nguyen.">
-    <link rel="stylesheet" href="assets/site.css?v=8">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/site.css?v=12">
 </head>
 <body>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -34,9 +38,9 @@
 
                 <nav class="top-nav" aria-label="Primary navigation">
                     <a href="index.html#about">About</a>
-                    <a href="index.html#works">Projects</a>
-                    <a href="index.html#learning">Learning</a>
-                    <a href="index.html#favorites">Offline</a>
+                    <a href="index.html#work">Work</a>
+                    <a href="index.html#learning">Study</a>
+                    <a href="index.html#music">Offline</a>
                     <a href="blogs.html">Blogs</a>
                     <a class="nav-gallery-link active" href="arts.html" aria-current="page">
                         <svg class="nav-gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m21 15-4.2-4.2a1.5 1.5 0 0 0-2.1 0L8 17"/></svg>
@@ -75,7 +79,7 @@
                         </div>
                     </article>
 
-                    <article class="art-card reveal-delay-2" id="featured-figure">
+                    <article class="art-card" id="featured-figure">
                         <a class="art-image-link" href="assets/figures/ICIP25.png" data-overlay-label="Open image">
                             <img class="art-image" src="assets/figures/ICIP25.png" alt="ICIP25 paper figure" loading="lazy">
                         </a>
@@ -86,7 +90,7 @@
                         </div>
                     </article>
 
-                    <article class="art-card art-card--placeholder reveal-delay-3" id="drawing-note">
+                    <article class="art-card art-card--placeholder" id="drawing-note">
                         <div class="art-copy">
                             <p class="mini-label">Drawing</p>
                             <h4>In progress</h4>
@@ -107,98 +111,6 @@
         </div>
     </div>
 
-    <script>
-        (function() {
-            var themeToggle = document.getElementById("theme-toggle");
-            var THEME_STORAGE_KEY = "portfolio-theme";
-            var imageLinks = Array.prototype.slice.call(document.querySelectorAll(".art-image-link"));
-            var lightbox = document.getElementById("image-lightbox");
-            var lightboxImage = document.getElementById("lightbox-image");
-            var lightboxClose = document.getElementById("lightbox-close");
-
-            function applyTheme(theme) {
-                document.body.setAttribute("data-theme", theme);
-                if (themeToggle) {
-                    themeToggle.querySelector(".theme-toggle-label").textContent = theme === "dark" ? "Light" : "Dark";
-                    themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-                    themeToggle.setAttribute("title", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-                }
-            }
-
-            function getInitialTheme() {
-                var savedTheme = null;
-
-                try {
-                    savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-                } catch (error) {
-                    savedTheme = null;
-                }
-
-                if (savedTheme === "light" || savedTheme === "dark") {
-                    return savedTheme;
-                }
-
-                return "light";
-            }
-
-            if (themeToggle) {
-                themeToggle.addEventListener("click", function() {
-                    var nextTheme = document.body.getAttribute("data-theme") === "dark" ? "light" : "dark";
-                    applyTheme(nextTheme);
-
-                    try {
-                        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-                    } catch (error) {
-                        /* ignore storage errors */
-                    }
-                });
-            }
-
-            function closeLightbox() {
-                if (!lightbox || !lightboxImage) {
-                    return;
-                }
-
-                lightbox.classList.remove("is-open");
-                lightbox.setAttribute("aria-hidden", "true");
-                lightboxImage.removeAttribute("src");
-                lightboxImage.setAttribute("alt", "");
-                document.body.style.overflow = "";
-            }
-
-            if (lightbox && lightboxImage) {
-                imageLinks.forEach(function(link) {
-                    link.addEventListener("click", function(event) {
-                        var image = link.querySelector("img");
-
-                        event.preventDefault();
-                        lightboxImage.setAttribute("src", link.getAttribute("href"));
-                        lightboxImage.setAttribute("alt", image ? image.getAttribute("alt") : "Expanded artwork");
-                        lightbox.classList.add("is-open");
-                        lightbox.setAttribute("aria-hidden", "false");
-                        document.body.style.overflow = "hidden";
-                    });
-                });
-
-                lightbox.addEventListener("click", function(event) {
-                    if (event.target === lightbox) {
-                        closeLightbox();
-                    }
-                });
-
-                if (lightboxClose) {
-                    lightboxClose.addEventListener("click", closeLightbox);
-                }
-
-                document.addEventListener("keydown", function(event) {
-                    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
-                        closeLightbox();
-                    }
-                });
-            }
-
-            applyTheme(getInitialTheme());
-        })();
-    </script>
+    <script src="assets/site.js?v=11"></script>
 </body>
 </html>
