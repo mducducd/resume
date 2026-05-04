@@ -157,10 +157,10 @@ img {
 
 /* Cat ears: organic silhouette — outer edges subtly convex, inner edges straight (anatomical) */
 .brand::before {
-    left: -22px;
-    top: -16px;
+    left: 4px;
+    top: -8px;
     width: 32px;
-    height: 19px;
+    height: 17px;
     mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 19'><path d='M1.5 18 C 1 12 3 5 7 1 C 7.6 0.4 8.6 0.4 9.2 1 L 14.5 18 Z M17.5 18 L 22.8 1 C 23.4 0.4 24.4 0.4 25 1 C 29 5 31 12 30.5 18 Z' fill='black'/></svg>");
     -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 19'><path d='M1.5 18 C 1 12 3 5 7 1 C 7.6 0.4 8.6 0.4 9.2 1 L 14.5 18 Z M17.5 18 L 22.8 1 C 23.4 0.4 24.4 0.4 25 1 C 29 5 31 12 30.5 18 Z' fill='black'/></svg>");
     opacity: 0.82;
@@ -168,7 +168,7 @@ img {
 
 /* Cat tail: graceful S-curve sweep with a curl at the tip */
 .brand::after {
-    right: -26px;
+    right: -36px;
     top: -10px;
     width: 24px;
     height: 32px;
@@ -193,6 +193,45 @@ img {
 
 .brand-dot {
     color: var(--ink);
+}
+
+/* Whiskers — both sides, short */
+.brand-w {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.brand-w::before,
+.brand-w::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 14px;
+    background-color: var(--ink);
+    opacity: 0.36;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+.brand-w::before {
+    right: 100%;
+    mask-position: right center;
+    -webkit-mask-position: right center;
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round'><line x1='16' y1='2.5' x2='1' y2='1'/><line x1='16' y1='7' x2='0' y2='7'/><line x1='16' y1='11.5' x2='1' y2='13'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round'><line x1='16' y1='2.5' x2='1' y2='1'/><line x1='16' y1='7' x2='0' y2='7'/><line x1='16' y1='11.5' x2='1' y2='13'/></svg>");
+}
+
+.brand-w::after {
+    left: 100%;
+    mask-position: left center;
+    -webkit-mask-position: left center;
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round'><line x1='0' y1='2.5' x2='15' y2='1'/><line x1='0' y1='7' x2='16' y2='7'/><line x1='0' y1='11.5' x2='15' y2='13'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round'><line x1='0' y1='2.5' x2='15' y2='1'/><line x1='0' y1='7' x2='16' y2='7'/><line x1='0' y1='11.5' x2='15' y2='13'/></svg>");
 }
 
 .nav {
