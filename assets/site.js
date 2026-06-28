@@ -491,6 +491,7 @@
             }
 
             toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            list.setAttribute("aria-hidden", open ? "false" : "true");
             list.classList.toggle("open", open);
         }
 
@@ -1038,6 +1039,64 @@
         });
     }
 
+    function initReveals() {
+        const selectors = [
+            ".hero-title",
+            ".hero-sub",
+            ".hero .divider",
+            ".prose-section .section-title",
+            ".prose > *",
+            ".section-head",
+            ".project-item",
+            ".learning-grid > *",
+            ".music-col > *",
+            ".music-grid > .quiet-card",
+            ".page-head",
+            ".page-section .section-head",
+            ".blog-card",
+            ".art-card",
+            ".site-footer",
+            ".foot"
+        ];
+        const elements = toArray(document.querySelectorAll(selectors.join(",")))
+            .filter((element) => !element.classList.contains("reveal-item"));
+        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (elements.length === 0) {
+            return;
+        }
+
+        elements.forEach((element, index) => {
+            element.classList.add("reveal-item");
+            element.style.setProperty("--reveal-delay", Math.min(index % 6, 5) * 45 + "ms");
+        });
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            elements.forEach((element) => {
+                element.classList.add("is-visible");
+            });
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+            });
+        }, {
+            rootMargin: "0px 0px -10% 0px",
+            threshold: 0.12
+        });
+
+        elements.forEach((element) => {
+            observer.observe(element);
+        });
+    }
+
     function initSite() {
         initTopbar();
         initTheme();
@@ -1048,6 +1107,7 @@
 
         initDresdenPhoto();
         initPlaylists();
+        initReveals();
         initEscapeHandling({
             projectDemos: projectDemos,
             lightbox: lightbox

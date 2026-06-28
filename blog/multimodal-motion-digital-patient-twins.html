@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Multimodal Motion Generation to Digital Patient Twins - Duc Nguyen</title>
+    <meta name="description" content="Essay on transferring ideas from multimodal motion generation to temporal digital patient twins.">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css?v=18">
+</head>
+<body data-theme="light">
+    <main class="blog-post-page">
+        <a class="blog-back" href="../index.html#learning">Back</a>
+
+        <article class="blog-post blog-post--wide">
+            <header class="blog-post-header">
+                <p class="mini-label">Essay</p>
+                <h1>From Multimodal Motion Generation to Digital Patient Twins</h1>
+                <time datetime="2026-06-27">June 27, 2026</time>
+            </header>
+
+            <div class="learning-blog-content">
+                <section class="learning-blog-section" id="introduction">
+                    <h4>Introduction</h4>
+                    <p>This essay is inspired by two papers on human motion generation <a class="citation" href="#ref-chen2025">[1]</a> <a class="citation" href="#ref-bian2024">[2]</a> and proposes transferable approaches to patient representation and digital twins. These two papers fascinated me because they address complementary aspects of complex temporal modeling. Briefly, human motion can be treated not only as physical movement but also as a form of communication. Body gestures, facial expressions, speech rhythm, and actions all carry semantic meaning. Recent motion-generation studies increasingly connect motion with language models and multimodal learning, suggesting several transferable principles for health digital twins:</p>
+                    <ul>
+                        <li>They support multimodal temporal representation by connecting heterogeneous signals, such as text, speech, music, and motion, for motion understanding or generation. In a clinical setting, this idea could be translated to notes, imaging, pathology, genomics, laboratory values, treatment events, and longitudinal outcomes.</li>
+                        <li>They treat human motion as temporal data rather than static data, which suggests a new form of patient representation modeled as an evolving sequence of clinical states over time, rather than as a single fixed embedding.</li>
+                        <li>The current state can be modified by new evidence or control signals, and future trajectories should be generated from this modified state. In this setting, text mainly provides semantic guidance, while speech or music provides stronger temporal cues such as rhythm, timing, pauses, and beat alignment. Analogously, in a digital patient twin, clinical concepts such as diagnosis, staging, and treatment line could provide the semantic backbone, while imaging changes, laboratory trends, molecular results, and treatment events could provide fine-grained temporal control.</li>
+                    </ul>
+                </section>
+
+                <section class="learning-blog-section" id="multimodal-language-model">
+                    <h4>Multimodal Language Model</h4>
+                    <p>In <em>The Language of Motion</em> <a class="citation" href="#ref-chen2025">[1]</a>, the framework uses a common approach, employing a VAE model for representation learning and an autoregressive transformer as the motion generator. To expose prior human motion representation, four separate VQ-VAEs were trained to convert continuous motion into discrete motion codes: face, hands, upper body, and lower body. Audio is converted into discrete tokens using HuBERT, and text is tokenized with SentencePiece/T5 WordPiece vocabulary.</p>
+                    <p>The pretraining stage is for the paper's novel modality alignment; the model does not see paired audio-to-motion data. It uses large-scale unpaired or indirectly paired data, including spatial learning of relationships between body parts, temporal learning of motion dynamics over time, and audio-text alignment that learns translation between audio and text modalities. Post-training is closer to instruction tuning or supervised fine-tuning. Both pretraining and post-training use a pretrained 220M Flan-T5-Base encoder-decoder language model.</p>
+
+                    <div class="learning-blog-table" role="region" aria-label="Pretraining and post-training objectives from The Language of Motion">
+                        <table>
+                            <caption>Pretraining and post-training objectives from <em>The Language of Motion</em> <a class="citation" href="#ref-chen2025">[1]</a></caption>
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th>Pretraining</th>
+                                    <th>Post-training</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Main goal</th>
+                                    <td>Align modalities and learn motion priors</td>
+                                    <td>Make the model follow downstream task instructions</td>
+                                </tr>
+                                <tr>
+                                    <th>Data</th>
+                                    <td>Mostly unpaired or self-supervised motion plus audio-text data</td>
+                                    <td>Paired task data</td>
+                                </tr>
+                                <tr>
+                                    <th>Audio-motion pairs?</th>
+                                    <td>No</td>
+                                    <td>Yes, for audio-to-motion tasks</td>
+                                </tr>
+                                <tr>
+                                    <th>Input style</th>
+                                    <td>Template-like translation tasks</td>
+                                    <td>Natural instruction prompts</td>
+                                </tr>
+                                <tr>
+                                    <th>Output</th>
+                                    <td>Target modality tokens</td>
+                                    <td>Task-specific target tokens</td>
+                                </tr>
+                                <tr>
+                                    <th>Learns</th>
+                                    <td>Motion grammar, body-part correlation, temporal continuity, audio-text semantics</td>
+                                    <td>Co-speech gesture generation, text-to-motion, emotion prediction, editable generation</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>I empirically believe that vector quantization can handle limited, low-variance data better than one-dimensional continuous space or a Gaussian distribution, which often benefits from richer datasets, and VQ may enhance diversity in non-deterministic targets <a class="citation" href="#ref-nguyen2024">[4]</a>. This may partly explain why the authors of <em>The Language of Motion</em> choose VQ-VAEs to represent motion.</p>
+                    <p>Recently, APOLLO chose a continuous latent space for patient representation; the model was trained with a curated dataset of 7.15 million patients and became a state-of-the-art multimodal foundation model for computable medicine <a class="citation" href="#ref-zhang2026">[3]</a>. The choice of representation can affect the model's ability to capture the underlying structure and variability of the data, as well as its generalization performance on downstream tasks. However, <em>The Language of Motion</em> opens an effective modality alignment for multimodal clinical settings, where modality-specific clinical tokens can be designed for closely corresponding sources with the help of prior statistics and clinicians' decisions.</p>
+                    <p>Autoregressive transformers are natural for this setting because they can model these aligned tokens as a shared temporal clinical language. For TWIN-X, the structure would make the current patient state updateable by new evidence, while preserving consistency with the previous clinical history. This could support downstream tasks that require both prediction and traceability, such as prognosis, treatment-response estimation, toxicity assessment, and source-grounded explanation.</p>
+                </section>
+
+                <section class="learning-blog-section" id="motioncraft">
+                    <h4>MotionCraft</h4>
+                    <p><em>MotionCraft</em>, based on a diffusion transformer, complements this idea by showing how a complex temporal trajectory can be generated under heterogeneous multimodal controls <a class="citation" href="#ref-bian2024">[2]</a>. What I find particularly interesting is its coarse-to-fine principle: high-level semantic information defines the main structure of the motion, while lower-level signals refine the temporal details. For TWIN-X, I would translate this into a coarse-to-fine patient twin: a high-level disease-state backbone, diagnosis, stage, treatment line, response, toxicity, progression, or recurrence refined by fine-grained controls from clinical reports, imaging, pathology, genomics, laboratory values, and treatment events.</p>
+                    <p>This paper is a very good instance of the diffusion approach, where pretraining focuses on the most important and generation-targeted modalities, semantic information and motion, while other information can be injected as conditions for the denoising network through high-level fine-grained text and lower-level adaptation with music and speech. Existing studies on brain translation, longitudinal imaging, and regulatory DNA generation also use latent diffusion. In a longitudinal patient-twin setting, the main generated target should be the temporal trajectory of the subject, while image features or other modalities act as auxiliary evidence for estimating and predicting the next state.</p>
+                    <p>However, we have to redesign around the attention structure of clinical events and longitudinal patient records because the core of <em>MotionCraft</em> is complex MC-Attn, which optimizes the representation of motion token sequences and learning temporal relationships in parallel <a class="citation" href="#ref-bian2024">[2]</a>.</p>
+
+                    <div class="learning-blog-table" role="region" aria-label="Analogy between MotionCraft generation and longitudinal patient modeling">
+                        <table>
+                            <caption>Analogy between MotionCraft generation and longitudinal patient modeling</caption>
+                            <thead>
+                                <tr>
+                                    <th>Setting</th>
+                                    <th>Main generated feature</th>
+                                    <th>Auxiliary or conditioning cues</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>MotionCraft</th>
+                                    <td>SMPL-X motion sequence</td>
+                                    <td>Text, speech, music</td>
+                                </tr>
+                                <tr>
+                                    <th>Longitudinal digital twin</th>
+                                    <td>Future patient or subject state trajectory</td>
+                                    <td>Images, EHR, lab values, reports, prior visits</td>
+                                </tr>
+                                <tr>
+                                    <th>Longitudinal imaging</th>
+                                    <td>Future image-derived state or future images</td>
+                                    <td>Previous image tokens, clinical data, time gap</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>I would recommend the diffusion approach for that because it is well suited for continuous, uncertain, multimodal trajectory generation. However, <em>MotionCraft</em> is interpretable at the control-modality level but not very interpretable at the feature-token level; it does not clearly explain how each individual speech, music, or text feature token affects each generated body movement. One additional point is that we can leverage features from unified virtual patient representations from APOLLO, which can be a strong backbone in a clinical context <a class="citation" href="#ref-zhang2026">[3]</a>.</p>
+                </section>
+
+                <section class="learning-blog-section">
+                    <h4>Conclusion</h4>
+                    <p>Overall, these two papers suggest that digital patient twins should be modeled as multimodal and temporal systems rather than static representations. <em>The Language of Motion</em> motivates an autoregressive, token-based view for aligning heterogeneous clinical modalities into a shared clinical language <a class="citation" href="#ref-chen2025">[1]</a>, while <em>MotionCraft</em> motivates a diffusion-based view for generating uncertain future trajectories under multimodal control <a class="citation" href="#ref-bian2024">[2]</a>. For TWIN-X, a promising direction is to combine updateable patient-state representations with clinically meaningful attention design, so that different data sources can jointly support prediction, trajectory generation, and source-grounded explanation.</p>
+                </section>
+
+                <section class="learning-blog-section learning-blog-references" id="references">
+                    <h4>References</h4>
+                    <ol>
+                        <li id="ref-chen2025">Changan Chen, Juze Zhang, Shrinidhi K. Lakshmikanth, Yusu Fang, Ruizhi Shao, Gordon Wetzstein, Li Fei-Fei, and Ehsan Adeli. <em>The Language of Motion: Unifying Verbal and Non-verbal Language of 3D Human Motion</em>. CVPR, 2025.</li>
+                        <li id="ref-bian2024">Yuxuan Bian, Ailing Zeng, Xuan Ju, Xian Liu, Zhaoyang Zhang, Wei Liu, and Qiang Xu. <em>MotionCraft: Crafting Whole-Body Motion with Plug-and-Play Multimodal Controls</em>. Proceedings of the AAAI Conference on Artificial Intelligence, 39(2), 1880-1888.</li>
+                        <li id="ref-zhang2026">Andrew Zhang, Tong Ding, Sophia J. Wagner, Caiwei Tian, Ming Y. Lu, Rowland Pettit, Joshua E. Lewis, Alexandre Misrahi, Dandan Mo, Long Phi Le, and Faisal Mahmood. <em>A multimodal and temporal foundation model for virtual patient representations at healthcare system scale</em>. arXiv preprint arXiv:2604.18570, 2026.</li>
+                        <li id="ref-nguyen2024">Nguyen, M. D., Yang, H. J., Ho, N. H., Kim, S. H., Kim, S., and Shin, J. E. <em>Vector quantized diffusion models for multiple appropriate reactions generation</em>. 2024 IEEE 18th International Conference on Automatic Face and Gesture Recognition (FG), 1-5.</li>
+                    </ol>
+                </section>
+            </div>
+        </article>
+    </main>
+</body>
+</html>
