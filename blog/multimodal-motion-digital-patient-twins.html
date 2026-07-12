@@ -6,14 +6,22 @@
     <title>From Multimodal Motion Generation to Digital Patient Twins - Duc Nguyen</title>
     <meta name="description" content="Essay on transferring ideas from multimodal motion generation to temporal digital patient twins.">
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('portfolio-theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        } catch (error) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/site.css?v=21">
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=La+Belle+Aurore&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css?v=47">
 </head>
-<body>
+<body class="essay-page" data-page="blog">
     <main class="blog-post-page">
-        <a class="blog-back" href="../index.html#learning">Back</a>
+        <a class="blog-back" href="../blog/">Back to blog</a>
 
         <article class="blog-post blog-post--wide">
             <header class="blog-post-header">
@@ -144,6 +152,6 @@
             </div>
         </article>
     </main>
-    <script src="../assets/site.js?v=13"></script>
+    <script src="../assets/site.js?v=17"></script>
 </body>
 </html>

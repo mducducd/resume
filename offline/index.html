@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline — Duc Nguyen</title>
+    <meta name="description" content="Photography, playlists, and slower ongoing interests by Duc Nguyen.">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('portfolio-theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        } catch (error) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=La+Belle+Aurore&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css?v=47">
+</head>
+<body data-page="offline">
+    <header class="topbar">
+        <a class="brand" href="../index.html">Duc Nguyen</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="primary-nav" aria-label="Primary"></nav>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span class="theme-toggle-label">Dark</span>
+        </button>
+    </header>
+
+    <main class="page-main">
+        <section class="page-intro">
+            <p class="section-label">Offline</p>
+            <h1>Slower shelves outside the main research work.</h1>
+            <p>Photography, playlists, and small creative routines that make the site feel more complete without crowding the front page.</p>
+        </section>
+
+        <section class="music-section">
+            <div class="music-grid">
+                <div class="music-col">
+                    <article class="quiet-card">
+                        <p class="card-label">Photography</p>
+                        <p>A separate stream of observation and composition outside research work — black-and-white studies, street fragments, and quiet architectural frames.</p>
+                        <p class="card-cta">
+                            <a href="https://www.flickr.com/photos/146230380@N08/" target="_blank" rel="noopener">
+                                <svg class="flickr-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14"><circle cx="8" cy="12" r="4.2" fill="#ff0084"/><circle cx="16" cy="12" r="4.2" fill="#0063dc"/></svg>
+                                Visit Flickr →
+                            </a>
+                        </p>
+                    </article>
+
+                    <article class="quiet-card">
+                        <p class="card-label">Art</p>
+                        <p>Sketches, studies, and visual notes kept loosely as a digital sketchbook.</p>
+                        <p class="card-cta">
+                            <a href="https://shell-gram-46d.notion.site/Digital-Sketchbook-964764ce424b83be89f601e1eea4583d?source=copy_link" target="_blank" rel="noopener">
+                                <svg class="gallery-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14" r="1.2" fill="currentColor" stroke="none"/><path d="M12 22c0 0-2-2-2-5a2 2 0 0 1 4 0c0 1-.5 2-2 2z" fill="currentColor" stroke="none"/></svg>
+                                My Gallery →
+                            </a>
+                        </p>
+                    </article>
+                </div>
+
+                <article class="quiet-card">
+                    <p class="card-label">Playlists</p>
+                    <div class="playlist-stack">
+                        <div class="playlist-group">
+                            <button class="playlist-open" type="button" id="playlist-toggle-1" data-playlist-toggle="1" aria-expanded="true">
+                                <span class="chevron" aria-hidden="true">▸</span>
+                                <span>
+                                    <strong>Random Rhymes for Lovely Minds</strong>
+                                    <span class="track-meta">SoundCloud playlist</span>
+                                </span>
+                            </button>
+                            <div class="track-list open" id="track-list-1">
+                                <div class="track-loading" id="track-loading-1">Loading tracks…</div>
+                            </div>
+                        </div>
+
+                        <div class="playlist-group">
+                            <button class="playlist-open" type="button" id="playlist-toggle-2" data-playlist-toggle="2" aria-expanded="false">
+                                <span class="chevron" aria-hidden="true">▸</span>
+                                <span>
+                                    <strong>Time Dissolve Here</strong>
+                                    <span class="track-meta">SoundCloud playlist</span>
+                                </span>
+                            </button>
+                            <div class="track-list" id="track-list-2">
+                                <div class="track-loading" id="track-loading-2">Loading tracks…</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <p>&copy; <span id="year">2026</span> Duc Nguyen — Dresden, Germany</p>
+    </footer>
+
+    <div id="player-bar" aria-live="polite">
+        <button id="player-close" type="button" aria-label="Close SoundCloud player" title="Close player">&#10005;</button>
+        <iframe id="sc-player" allow="autoplay" title="SoundCloud floating player"></iframe>
+    </div>
+
+    <iframe id="sc-widget-iframe-1" title="SoundCloud widget playlist 1" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/random-rhymes-for-lovely-minds&amp;auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
+    <iframe id="sc-widget-iframe-2" title="SoundCloud widget playlist 2" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/minh-duc-nguyen-967585376/sets/time-dissolve-here&amp;auto_play=false" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
+
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    <script src="../assets/site.js?v=17"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

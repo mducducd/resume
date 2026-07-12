@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog — Duc Nguyen</title>
+    <meta name="description" content="Blog essays and reading-oriented writing by Duc Nguyen.">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('portfolio-theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        } catch (error) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=La+Belle+Aurore&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css?v=47">
+</head>
+<body data-page="blog">
+    <header class="topbar">
+        <a class="brand" href="../index.html">Duc Nguyen</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="primary-nav" aria-label="Primary"></nav>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span class="theme-toggle-label">Dark</span>
+        </button>
+    </header>
+
+    <main class="page-main">
+        <section class="page-intro">
+            <p class="section-label">Blog</p>
+            <h1>Longer writing from the study shelf.</h1>
+            <p>A compact archive for essays that deserve more room than a home page preview.</p>
+        </section>
+
+        <section class="learning-section">
+            <div class="home-preview-grid blog-preview-grid">
+                <article class="quiet-card">
+                    <p class="card-label">Essay</p>
+                    <a class="learning-blog-link" href="../blog/multimodal-motion-digital-patient-twins.html">
+                        <span>From Multimodal Motion Generation to Digital Patient Twins</span>
+                        <time datetime="2026-06-27">June 27, 2026</time>
+                    </a>
+                    <p class="preview-copy">On adapting ideas from multimodal motion generation into temporal clinical representation, trajectory modeling, and digital patient twins.</p>
+                    <p class="card-cta"><a href="../blog/multimodal-motion-digital-patient-twins.html">Read essay →</a></p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <p>&copy; <span id="year">2026</span> Duc Nguyen — Dresden, Germany</p>
+    </footer>
+
+    <script src="../assets/site.js?v=17"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

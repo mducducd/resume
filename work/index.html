@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work — Duc Nguyen</title>
+    <meta name="description" content="Selected projects and research systems by Duc Nguyen.">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('portfolio-theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        } catch (error) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=La+Belle+Aurore&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/site.css?v=47">
+</head>
+<body data-page="work">
+    <header class="topbar">
+        <a class="brand" href="../index.html">Duc Nguyen</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="primary-nav" aria-label="Primary"></nav>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span class="theme-toggle-label">Dark</span>
+        </button>
+    </header>
+
+    <main class="page-main">
+        <section class="page-intro">
+            <p class="section-label">Work</p>
+            <h1>Projects, research systems, and clinical AI tools.</h1>
+            <p>The home page stays selective; this is the fuller archive. I keep the masonry layout here so project cards can stay visually varied without making the front page feel crowded.</p>
+        </section>
+
+        <section class="work-section">
+            <ul class="project-list">
+                <li class="project-grid-sizer" aria-hidden="true"></li>
+                <li class="project-gutter-sizer" aria-hidden="true"></li>
+
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/STAMP-Multiplex" target="_blank" rel="noopener">
+                        <img src="../assets/thumbnails/multiplex.png" alt="STAMP-Multiplex thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Jun 17, 2026 · Python</p>
+                        <h3 class="project-title">STAMP-Multiplex</h3>
+                        <p class="project-desc">An end-to-end deep-learning pipeline for multiplex images, built to support pathology workflows from image ingestion through model prediction and analysis.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/STAMP-Multiplex" target="_blank" rel="noopener">Code</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">
+                        <img src="../assets/thumbnails/aml_agent_logo.png" alt="Pathology Agent thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Mar 2026 · Python</p>
+                        <h3 class="project-title">Pathology Agent</h3>
+                        <p class="project-desc">An intelligent WSI agent combining embedding-based retrieval with vision-language model reasoning to deliver robust and explainable region-of-interest ranking in histopathology slides.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/Pathology_agent" target="_blank" rel="noopener">Code</a>
+                            <button class="demo-trigger" type="button" data-demo-target="pathology-agent" data-demo-kind="video" data-demo-src="../assets/demo/aml_agent_demo.mp4">Demo</button>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <a class="project-thumb project-thumb--logo" href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">
+                        <img src="../assets/thumbnails/STAMP_logo.svg" alt="STAMP logo" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Sep 2024 · Python · KatherLab Team</p>
+                        <h3 class="project-title">STAMP</h3>
+                        <p class="project-desc">An open-source computational pathology pipeline from the KatherLab team for discovering and evaluating image-based biomarkers from gigapixel histopathology slides without pixel-level annotations. The peer-reviewed workflow helps clinical researchers and ML engineers run reproducible studies across multiple tumor types.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/KatherLab/STAMP" target="_blank" rel="noopener">Code</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">
+                        <img src="../assets/thumbnails/face_reaction.png" alt="Multiple Appropriate Facial Reaction Generation thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">2024 · Python · Published</p>
+                        <h3 class="project-title">Multiple Appropriate Facial Reaction Generation</h3>
+                        <p class="project-desc">Research on generating multiple appropriate and diverse facial reactions in dyadic interactions using latent diffusion models. Work published at two international venues.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/VQ_DDIM" target="_blank" rel="noopener">Code</a>
+                            <a href="https://link.springer.com/chapter/10.1007/978-3-031-78389-0_16" target="_blank" rel="noopener">ICPR 2024</a>
+                            <a href="https://ieeexplore.ieee.org/document/10581978" target="_blank" rel="noopener">IEEE FG 2024</a>
+                            <button class="demo-trigger" type="button" data-demo-target="face-reaction" data-demo-kind="video" data-demo-src="../assets/demo/face_synthesis.mp4">Demo</button>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <div class="project-thumb">
+                        <img src="../assets/thumbnails/nurse_sim.png" alt="Nursing Simulation thumbnail" loading="lazy">
+                    </div>
+                    <div class="project-body">
+                        <p class="project-meta">2024 · Python · Web</p>
+                        <h3 class="project-title">Nursing Simulation</h3>
+                        <p class="project-desc">A full web application leveraging ChatGPT to generate detailed patient scenarios and simulation-based training content for healthcare education, enhancing clinical learning through AI-driven interactive scenarios.</p>
+                        <div class="project-links">
+                            <button class="demo-trigger" type="button" data-demo-target="nursing-sim" data-demo-kind="image" data-demo-src="../assets/demo/Nursing Simulation.gif">Demo</button>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <a class="project-thumb" href="https://github.com/mducducd/Multimodal_Pain" target="_blank" rel="noopener">
+                        <img src="../assets/thumbnails/pain_assessment.png" alt="Multimodal Pain Assessment thumbnail" loading="lazy">
+                    </a>
+                    <div class="project-body">
+                        <p class="project-meta">Dec 2024 · Python · Published</p>
+                        <h3 class="project-title">Multimodal Pain Assessment</h3>
+                        <p class="project-desc">A multimodal transformer framework for automated pain assessment from facial and physiological signals. This work moves toward a foundation model for pain by leveraging masked auto-encoder to build generalizable representations across modalities.</p>
+                        <div class="project-links">
+                            <a href="https://github.com/mducducd/Multimodal_Pain" target="_blank" rel="noopener">Code</a>
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/40989383/" target="_blank" rel="noopener">Paper</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="project-row project-item">
+                    <div class="project-thumb project-thumb--compact">
+                        <img src="../assets/thumbnails/talking_face.png" alt="TalkingChat thumbnail" loading="lazy">
+                    </div>
+                    <div class="project-body">
+                        <p class="project-meta">Nov 2023 · Python · Gold Prize (Regional) — Generative AI Hackathon, CNU</p>
+                        <h3 class="project-title">TalkingChat</h3>
+                        <p class="project-desc">A child-friendly chatbot with a changable talking face and voice, making the conversation feel personal, playful, and easy to engage with.</p>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="project-demo-stage" id="project-demo-stage" aria-live="polite" hidden>
+                <button class="project-demo-stage__close" id="project-demo-close" type="button" aria-label="Close demo">&#10005;</button>
+                <div class="project-demo-stage__body" id="project-demo-body"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <p>&copy; <span id="year">2026</span> Duc Nguyen — Dresden, Germany</p>
+    </footer>
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="../assets/site.js?v=17"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

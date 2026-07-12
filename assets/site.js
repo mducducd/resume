@@ -1,10 +1,6 @@
 (() => {
     const DEFAULT_THEME = "light";
     const THEME_STORAGE_KEY = "portfolio-theme";
-    const HASH_ALIASES = {
-        works: "work",
-        favorites: "music"
-    };
     const PLAYLISTS = {
         1: {
             iframeId: "sc-widget-iframe-1",
@@ -31,6 +27,8 @@
             return;
         }
 
+        normalizePrimaryNav(topbar);
+
         const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 40);
         window.addEventListener("scroll", onScroll, { passive: true });
         onScroll();
@@ -55,29 +53,40 @@
         }
     }
 
+    function normalizePrimaryNav(topbar) {
+        const nav = topbar.querySelector(".nav");
+
+        if (!nav) {
+            return;
+        }
+
+        const page = document.body.getAttribute("data-page") || "";
+        const isNestedPage = window.location.pathname.split("/").filter(Boolean).length > 1 ||
+            window.location.pathname !== "/" && !window.location.pathname.endsWith("index.html");
+        const prefix = isNestedPage ? "../" : "";
+        const items = [
+            { label: "Work", href: prefix + "work/", key: "/work" },
+            { label: "Study", href: prefix + "study/", key: "/study" },
+            { label: "Blog", href: prefix + "blog/", key: "/blog" },
+            { label: "Offline", href: prefix + "offline/", key: "/offline" }
+        ];
+
+        nav.replaceChildren();
+        items.forEach((item) => {
+            const link = document.createElement("a");
+            link.href = item.href;
+            link.textContent = item.label;
+
+            if (page === item.key.slice(1)) {
+                link.setAttribute("aria-current", "page");
+            }
+
+            nav.appendChild(link);
+        });
+    }
+
     function toArray(value) {
         return Array.from(value || []);
-    }
-
-    function getHashTarget(href) {
-        if (!href || href.charAt(0) !== "#") {
-            return null;
-        }
-
-        return href.replace(/^#/, "");
-    }
-
-    function normalizeHashTarget(target) {
-        return HASH_ALIASES[target] || target;
-    }
-
-    function normalizeCurrentHash() {
-        const currentTarget = getHashTarget(window.location.hash || "");
-        const normalizedTarget = currentTarget ? normalizeHashTarget(currentTarget) : null;
-
-        if (currentTarget && normalizedTarget !== currentTarget) {
-            window.history.replaceState(null, "", "#" + normalizedTarget);
-        }
     }
 
     function escapeHtml(value) {
@@ -117,6 +126,7 @@
         const themeToggle = document.getElementById("theme-toggle");
 
         function applyTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme);
             document.body.setAttribute("data-theme", theme);
 
             if (!themeToggle) {
@@ -144,7 +154,9 @@
                 /* ignore storage failures */
             }
 
-            return document.body.getAttribute("data-theme") || DEFAULT_THEME;
+            return document.documentElement.getAttribute("data-theme") ||
+                document.body.getAttribute("data-theme") ||
+                DEFAULT_THEME;
         }
 
         if (themeToggle) {
@@ -164,156 +176,16 @@
         applyTheme(getInitialTheme());
     }
 
-    function initNavigation() {
-        normalizeCurrentHash();
-
-        const trackedNavLinks = toArray(document.querySelectorAll(".top-nav a, .sidebar-links a, .nav a[href^='#'], .brand[href^='#']"));
-        const sections = toArray(document.querySelectorAll("main > section[id]"));
-        let scrollAnimationFrame = null;
-        let scrollAnimationToken = 0;
-
-        function easeOutCubic(t) {
-            return 1 - Math.pow(1 - t, 3);
-        }
-
-        function smoothScrollToSection(targetSection, duration) {
-            if (!targetSection) {
-                return;
-            }
-
-            const startY = window.scrollY || window.pageYOffset || 0;
-            const sectionTop = targetSection.getBoundingClientRect().top + startY;
-            const sectionMarginTop = parseFloat(window.getComputedStyle(targetSection).scrollMarginTop) || 0;
-            const destinationY = Math.max(0, sectionTop - sectionMarginTop);
-            const travel = destinationY - startY;
-
-            if (Math.abs(travel) < 2) {
-                window.scrollTo({ top: destinationY, behavior: "auto" });
-                return;
-            }
-
-            if (scrollAnimationFrame) {
-                window.cancelAnimationFrame(scrollAnimationFrame);
-            }
-
-            scrollAnimationToken += 1;
-            const token = scrollAnimationToken;
-            const startedAt = performance.now();
-            const animationDuration = duration || 280;
-
-            function step(now) {
-                if (token !== scrollAnimationToken) {
-                    return;
-                }
-
-                const elapsed = now - startedAt;
-                const progress = Math.min(1, elapsed / animationDuration);
-                const eased = easeOutCubic(progress);
-                window.scrollTo({ top: startY + (travel * eased), behavior: "auto" });
-
-                if (progress < 1) {
-                    scrollAnimationFrame = window.requestAnimationFrame(step);
-                } else {
-                    scrollAnimationFrame = null;
-                }
-            }
-
-            scrollAnimationFrame = window.requestAnimationFrame(step);
-        }
-
-        function getLinkTarget(link) {
-            const target = getHashTarget(link.getAttribute("href") || "");
-
-            return target ? normalizeHashTarget(target) : target;
-        }
-
-        function setActiveNav(sectionId) {
-            trackedNavLinks.forEach((link) => {
-                const target = getLinkTarget(link);
-
-                if (!target) {
-                    return;
-                }
-
-                link.classList.toggle("active", target === sectionId);
-
-                if (target === sectionId) {
-                    link.setAttribute("aria-current", "page");
-                } else {
-                    link.removeAttribute("aria-current");
-                }
+    function initPageTransitions() {
+        const markReady = () => {
+            window.requestAnimationFrame(() => {
+                document.body.classList.add("is-ready");
+                document.body.classList.remove("is-transitioning");
             });
-        }
+        };
 
-        function updateActiveNavFromScroll() {
-            if (sections.length === 0) {
-                return;
-            }
-
-            const navOffset = 96;
-            let bestSection = null;
-            let bestDistance = Infinity;
-
-            sections.forEach((section) => {
-                const rect = section.getBoundingClientRect();
-                const distance = Math.abs(rect.top - navOffset);
-
-                if (rect.top <= navOffset && distance < bestDistance) {
-                    bestDistance = distance;
-                    bestSection = section;
-                }
-            });
-
-            if (!bestSection) {
-                bestSection = sections[0];
-            }
-
-            if (bestSection) {
-                setActiveNav(bestSection.id);
-            }
-        }
-
-        trackedNavLinks.forEach((link) => {
-            const targetId = normalizeHashTarget(getHashTarget(link.getAttribute("href") || ""));
-
-            if (!targetId) {
-                return;
-            }
-
-            link.addEventListener("click", (event) => {
-                const targetSection = document.getElementById(targetId);
-
-                if (!targetSection) {
-                    return;
-                }
-
-                event.preventDefault();
-                setActiveNav(targetId);
-                smoothScrollToSection(targetSection, 260);
-                link.blur();
-            });
-        });
-
-        if (sections.length > 0) {
-            if ("IntersectionObserver" in window) {
-                const observer = new IntersectionObserver(() => {
-                    updateActiveNavFromScroll();
-                }, {
-                    rootMargin: "-12% 0px -70% 0px",
-                    threshold: [0, 0.2, 0.5, 1]
-                });
-
-                sections.forEach((section) => {
-                    observer.observe(section);
-                });
-            } else {
-                window.addEventListener("scroll", updateActiveNavFromScroll, { passive: true });
-            }
-
-            window.addEventListener("resize", updateActiveNavFromScroll);
-            updateActiveNavFromScroll();
-        }
-
+        markReady();
+        window.addEventListener("pageshow", markReady);
     }
 
     function initDresdenPhoto() {
@@ -479,8 +351,18 @@
         const playerBar = document.getElementById("player-bar");
         const playerIframe = document.getElementById("sc-player");
         const playerClose = document.getElementById("player-close");
+        const widgetIframes = Object.keys(PLAYLISTS).reduce((acc, key) => {
+            acc[key] = document.getElementById(PLAYLISTS[key].iframeId);
+            return acc;
+        }, {});
         let playerWidget = null;
         let activePlaylistIndex = null;
+
+        if (playlistToggles.length === 0 && !playerBar && !playerIframe && !playerClose) {
+            return {
+                closePlayer: () => {}
+            };
+        }
 
         function setPlaylistOpen(index, open) {
             const toggle = document.getElementById("playlist-toggle-" + index);
@@ -576,12 +458,13 @@
 
         function initializePlaylist(index) {
             const playlist = PLAYLISTS[index];
+            const widgetIframe = widgetIframes[index];
 
-            if (!playlist || !window.SC || !SC.Widget) {
+            if (!playlist || !widgetIframe || !window.SC || !SC.Widget) {
                 return;
             }
 
-            playlist.widget = SC.Widget(document.getElementById(playlist.iframeId));
+            playlist.widget = SC.Widget(widgetIframe);
             playlist.widget.bind(SC.Widget.Events.READY, () => {
                 playlist.widget.getSounds((sounds) => {
                     renderPlaylist(index, sounds || []);
@@ -1100,7 +983,7 @@
     function initSite() {
         initTopbar();
         initTheme();
-        initNavigation();
+        initPageTransitions();
         const projectMasonry = initProjectMasonry();
         const projectDemos = initProjectDemos(projectMasonry);
         const lightbox = initLightbox();
