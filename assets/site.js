@@ -1,6 +1,15 @@
 (() => {
+    document.documentElement.classList.add("js");
+
     const DEFAULT_THEME = "light";
     const THEME_STORAGE_KEY = "portfolio-theme";
+    const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+    const ROOT_PREFIX = (() => {
+        const currentScript = document.currentScript;
+        const src = currentScript ? currentScript.getAttribute("src") || "" : "";
+
+        return src.indexOf("../") === 0 ? "../" : "";
+    })();
     const PLAYLISTS = {
         1: {
             iframeId: "sc-widget-iframe-1",
@@ -19,6 +28,28 @@
             widget: null
         }
     };
+
+    function getBasePrefix() {
+        return ROOT_PREFIX;
+    }
+
+    function getAssetPath(relativePath) {
+        return ROOT_PREFIX + String(relativePath || "").replace(/^\.\//, "");
+    }
+
+    function prefersReducedMotion() {
+        return Boolean(window.matchMedia && window.matchMedia(REDUCED_MOTION_QUERY).matches);
+    }
+
+    function safeInit(initializer, fallbackValue) {
+        try {
+            const result = initializer();
+
+            return typeof result === "undefined" ? fallbackValue : result;
+        } catch (error) {
+            return fallbackValue;
+        }
+    }
 
     function initTopbar() {
         const topbar = document.querySelector(".topbar");
@@ -61,9 +92,7 @@
         }
 
         const page = document.body.getAttribute("data-page") || "";
-        const isNestedPage = window.location.pathname.split("/").filter(Boolean).length > 1 ||
-            window.location.pathname !== "/" && !window.location.pathname.endsWith("index.html");
-        const prefix = isNestedPage ? "../" : "";
+        const prefix = getBasePrefix();
         const items = [
             { label: "Work", href: prefix + "work/", key: "/work" },
             { label: "Study", href: prefix + "study/", key: "/study" },
@@ -98,13 +127,29 @@
             .replace(/'/g, "&#39;");
     }
 
-    function fetchJson(url) {
-        return window.fetch(url, { mode: "cors" }).then((response) => {
+    function fetchJson(url, timeoutMs) {
+        const controller = "AbortController" in window ? new AbortController() : null;
+        let timeoutId = 0;
+
+        if (controller) {
+            timeoutId = window.setTimeout(() => {
+                controller.abort();
+            }, timeoutMs || 4500);
+        }
+
+        return window.fetch(url, {
+            mode: "cors",
+            signal: controller ? controller.signal : undefined
+        }).then((response) => {
             if (!response.ok) {
                 throw new Error("Request failed");
             }
 
             return response.json();
+        }).finally(() => {
+            if (timeoutId) {
+                window.clearTimeout(timeoutId);
+            }
         });
     }
 
@@ -188,6 +233,14 @@
         window.addEventListener("pageshow", markReady);
     }
 
+    function initFooterYear() {
+        const year = document.getElementById("year");
+
+        if (year) {
+            year.textContent = String(new Date().getFullYear());
+        }
+    }
+
     function initDresdenPhoto() {
         const dresdenPhoto = document.getElementById("dresden-photo");
 
@@ -212,6 +265,13 @@
 
         const dresdenFigure = document.getElementById("dresden-figure") || (dresdenPhoto.closest ? dresdenPhoto.closest(".dresden-figure") : null);
         const dresdenCaption = dresdenFigure ? dresdenFigure.querySelector("figcaption") : null;
+        const fallbackPhoto = {
+            image: getAssetPath("assets/dresden-fallback.jpg"),
+            alt: "Daily landscape view from Germany",
+            caption: "Daily view from Germany"
+        };
+        let photoSettled = false;
+        let fallbackTimer = 0;
 
         function cleanCommonsText(value) {
             if (!value) {
@@ -255,12 +315,29 @@
             }
         }
 
+        function settlePhoto() {
+            photoSettled = true;
+
+            if (fallbackTimer) {
+                window.clearTimeout(fallbackTimer);
+                fallbackTimer = 0;
+            }
+        }
+
         function applyDresdenPhoto(photo) {
+            if (photoSettled) {
+                return Promise.resolve(false);
+            }
+
             if (!photo || !photo.image) {
                 return Promise.reject(new Error("Missing Dresden photo"));
             }
 
             return preloadImage(photo.image).then((image) => {
+                if (photoSettled) {
+                    return false;
+                }
+
                 const aspectRatio = image && image.naturalWidth && image.naturalHeight ? image.naturalWidth / image.naturalHeight : 0;
                 const captionText = photo.caption || photo.alt || "Daily view from Germany";
 
@@ -274,6 +351,29 @@
                     dresdenCaption.textContent = captionText;
                 }
                 markFigureLoaded();
+                settlePhoto();
+
+                return true;
+            });
+        }
+
+        function showFallbackPhoto() {
+            if (photoSettled) {
+                return;
+            }
+
+            applyDresdenPhoto(fallbackPhoto).catch(() => {
+                if (photoSettled) {
+                    return;
+                }
+
+                dresdenPhoto.removeAttribute("src");
+                dresdenPhoto.alt = fallbackPhoto.alt;
+                if (dresdenCaption) {
+                    dresdenCaption.textContent = fallbackPhoto.caption;
+                }
+                markFigureLoaded();
+                settlePhoto();
             });
         }
 
@@ -300,7 +400,9 @@
             "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=Berlin%20Germany&gsrnamespace=6&gsrlimit=24&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=1600&format=json&origin=*"
         ];
 
-        Promise.all(searchUrls.map((url) => fetchJson(url).catch(() => null)))
+        fallbackTimer = window.setTimeout(showFallbackPhoto, 4500);
+
+        Promise.all(searchUrls.map((url) => fetchJson(url, 4500).catch(() => null)))
             .then((results) => {
                 const pages = results.reduce((acc, data) => {
                     if (data && data.query && data.query.pages) {
@@ -342,7 +444,7 @@
                 return tryDresdenCandidates(orderedCandidates, 0);
             })
             .catch(() => {
-                /* keep the running-cat loader visible if the photo fetch fails */
+                showFallbackPhoto();
             });
     }
 
@@ -513,7 +615,7 @@
         function playTrack(element, playlistIndex, trackIndex) {
             const playlist = PLAYLISTS[playlistIndex];
 
-            if (!playlist || !playlist.tracks[trackIndex] || !playerIframe) {
+            if (!playlist || !playlist.tracks[trackIndex] || !playerIframe || !playerBar) {
                 return;
             }
 
@@ -738,7 +840,7 @@
                 media.scrollIntoView({
                     block: "center",
                     inline: "nearest",
-                    behavior: "smooth"
+                    behavior: prefersReducedMotion() ? "auto" : "smooth"
                 });
             }, 460);
         }
@@ -943,7 +1045,6 @@
         ];
         const elements = toArray(document.querySelectorAll(selectors.join(",")))
             .filter((element) => !element.classList.contains("reveal-item"));
-        const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (elements.length === 0) {
             return;
@@ -954,7 +1055,7 @@
             element.style.setProperty("--reveal-delay", Math.min(index % 6, 5) * 45 + "ms");
         });
 
-        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+        if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
             elements.forEach((element) => {
                 element.classList.add("is-visible");
             });
@@ -981,20 +1082,32 @@
     }
 
     function initSite() {
-        initTopbar();
-        initTheme();
         initPageTransitions();
-        const projectMasonry = initProjectMasonry();
-        const projectDemos = initProjectDemos(projectMasonry);
-        const lightbox = initLightbox();
+        initFooterYear();
 
-        initDresdenPhoto();
-        initPlaylists();
-        initReveals();
-        initEscapeHandling({
+        safeInit(initTopbar);
+        safeInit(initTheme);
+
+        const projectMasonry = safeInit(initProjectMasonry, {
+            refresh: () => {},
+            getMasonry: () => null
+        });
+        const projectDemos = safeInit(() => initProjectDemos(projectMasonry), {
+            closeProjectDemo: () => {},
+            isOpen: () => false
+        });
+        const lightbox = safeInit(initLightbox, {
+            closeLightbox: () => {},
+            isOpen: () => false
+        });
+
+        safeInit(initDresdenPhoto);
+        safeInit(initPlaylists);
+        safeInit(initReveals);
+        safeInit(() => initEscapeHandling({
             projectDemos: projectDemos,
             lightbox: lightbox
-        });
+        }));
     }
 
     if (document.readyState === "loading") {

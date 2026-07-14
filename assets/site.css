@@ -48,8 +48,8 @@ body {
     transition: background-color var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard);
 }
 
-body:not(.is-ready) main,
-body:not(.is-ready) .foot {
+html.js body:not(.is-ready) main,
+html.js body:not(.is-ready) .foot {
     opacity: 0;
     transform: translateY(8px);
 }
