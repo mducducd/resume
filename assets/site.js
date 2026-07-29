@@ -4,37 +4,63 @@
     const DEFAULT_THEME = "light";
     const THEME_STORAGE_KEY = "portfolio-theme";
     const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-    const ROOT_PREFIX = (() => {
-        const currentScript = document.currentScript;
-        const src = currentScript ? currentScript.getAttribute("src") || "" : "";
-
-        return src.indexOf("../") === 0 ? "../" : "";
-    })();
+    const PLAYER_STATE_STORAGE_KEY = "portfolio-soundcloud-player";
+    const SOUNDCLOUD_API_SRC = "https://w.soundcloud.com/player/api.js";
+    const SOUNDCLOUD_PLAYER_SRC = "https://w.soundcloud.com/player/";
+    const NOOP_OVERLAY = {
+        closeProjectDemo: () => {},
+        closeLightbox: () => {},
+        isOpen: () => false
+    };
     const PLAYLISTS = {
         1: {
             iframeId: "sc-widget-iframe-1",
             listId: "track-list-1",
             loadingId: "track-loading-1",
+            playlistUrl: "https://soundcloud.com/minh-duc-nguyen-967585376/sets/random-rhymes-for-lovely-minds",
             tracks: [],
             currentTrackIndex: -1,
-            widget: null
+            widget: null,
+            initialized: false
         },
         2: {
             iframeId: "sc-widget-iframe-2",
             listId: "track-list-2",
             loadingId: "track-loading-2",
+            playlistUrl: "https://soundcloud.com/minh-duc-nguyen-967585376/sets/time-dissolve-here",
             tracks: [],
             currentTrackIndex: -1,
-            widget: null
+            widget: null,
+            initialized: false
         }
+    };
+    let soundCloudApiPromise = null;
+    let soundCloudPlayerWidget = null;
+    let soundCloudActivePlaylistIndex = null;
+    let soundCloudCloseBound = false;
+    let soundCloudStateRestored = false;
+    const siteState = {
+        currentFeatures: {
+            projectDemos: NOOP_OVERLAY,
+            lightbox: NOOP_OVERLAY
+        },
+        loadedScriptUrls: new Set(Array.from(document.scripts || []).map((script) => script.src).filter(Boolean)),
+        navigationToken: 0,
+        topbarDocumentBound: false,
+        topbarScrollBound: false,
+        pageTransitionsBound: false,
+        escapeBound: false,
+        clientNavigationBound: false
     };
 
     function getBasePrefix() {
-        return ROOT_PREFIX;
+        const page = document.body ? document.body.getAttribute("data-page") || "" : "";
+
+        return page === "home" ? "" : "../";
     }
 
     function getAssetPath(relativePath) {
-        return ROOT_PREFIX + String(relativePath || "").replace(/^\.\//, "");
+        return getBasePrefix() + String(relativePath || "").replace(/^\.\//, "");
     }
 
     function prefersReducedMotion() {
@@ -60,27 +86,56 @@
 
         normalizePrimaryNav(topbar);
 
-        const onScroll = () => topbar.classList.toggle("scrolled", window.scrollY > 40);
-        window.addEventListener("scroll", onScroll, { passive: true });
+        const onScroll = () => {
+            const currentTopbar = document.querySelector(".topbar");
+
+            if (currentTopbar) {
+                currentTopbar.classList.toggle("scrolled", window.scrollY > 40);
+            }
+        };
+
+        if (!siteState.topbarScrollBound) {
+            window.addEventListener("scroll", onScroll, { passive: true });
+            siteState.topbarScrollBound = true;
+        }
         onScroll();
+
+        if (!siteState.topbarDocumentBound) {
+            document.addEventListener("click", (event) => {
+                const currentTopbar = document.querySelector(".topbar");
+                const currentToggle = currentTopbar ? currentTopbar.querySelector(".nav-toggle") : null;
+                const currentNav = currentTopbar ? currentTopbar.querySelector(".nav") : null;
+                const clickTarget = event.target && event.target.closest ? event.target.closest(".nav-toggle, .nav a") : null;
+
+                if (!currentTopbar || !currentToggle || !currentNav) {
+                    return;
+                }
+
+                if (clickTarget && clickTarget.classList.contains("nav-toggle")) {
+                    const open = currentTopbar.classList.toggle("nav-open");
+                    currentToggle.setAttribute("aria-expanded", open ? "true" : "false");
+                    return;
+                }
+
+                if (clickTarget && currentNav.contains(clickTarget)) {
+                    currentTopbar.classList.remove("nav-open");
+                    currentToggle.setAttribute("aria-expanded", "false");
+                    return;
+                }
+
+                if (!currentTopbar.contains(event.target)) {
+                    currentTopbar.classList.remove("nav-open");
+                    currentToggle.setAttribute("aria-expanded", "false");
+                }
+            });
+            siteState.topbarDocumentBound = true;
+        }
 
         const navToggle = topbar.querySelector(".nav-toggle");
         const nav = topbar.querySelector(".nav");
+
         if (navToggle && nav) {
-            const closeNav = () => {
-                topbar.classList.remove("nav-open");
-                navToggle.setAttribute("aria-expanded", "false");
-            };
-            navToggle.addEventListener("click", () => {
-                const open = topbar.classList.toggle("nav-open");
-                navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-            });
-            nav.addEventListener("click", (event) => {
-                if (event.target.tagName === "A") closeNav();
-            });
-            document.addEventListener("click", (event) => {
-                if (!topbar.contains(event.target)) closeNav();
-            });
+            navToggle.setAttribute("aria-expanded", topbar.classList.contains("nav-open") ? "true" : "false");
         }
     }
 
@@ -151,6 +206,128 @@
                 window.clearTimeout(timeoutId);
             }
         });
+    }
+
+    function getPlaylistWidgetSrc(playlistUrl) {
+        return SOUNDCLOUD_PLAYER_SRC +
+            "?url=" + encodeURIComponent(playlistUrl) +
+            "&auto_play=false";
+    }
+
+    function loadSoundCloudApi() {
+        if (window.SC && SC.Widget) {
+            return Promise.resolve();
+        }
+
+        if (soundCloudApiPromise) {
+            return soundCloudApiPromise;
+        }
+
+        soundCloudApiPromise = new Promise((resolve, reject) => {
+            const existingScript = document.querySelector('script[src="' + SOUNDCLOUD_API_SRC + '"]');
+            const script = existingScript || document.createElement("script");
+
+            function handleLoad() {
+                resolve();
+            }
+
+            function handleError() {
+                soundCloudApiPromise = null;
+                reject(new Error("Failed to load SoundCloud API"));
+            }
+
+            script.addEventListener("load", handleLoad, { once: true });
+            script.addEventListener("error", handleError, { once: true });
+
+            if (!existingScript) {
+                script.src = SOUNDCLOUD_API_SRC;
+                document.body.appendChild(script);
+            }
+        });
+
+        return soundCloudApiPromise;
+    }
+
+    function ensureSoundCloudShell() {
+        if (!document.body) {
+            return null;
+        }
+
+        let playerBar = document.getElementById("player-bar");
+        let playerClose = document.getElementById("player-close");
+        let playerIframe = document.getElementById("sc-player");
+
+        if (!playerBar) {
+            playerBar = document.createElement("div");
+            playerBar.id = "player-bar";
+            playerBar.setAttribute("aria-live", "polite");
+            playerBar.innerHTML =
+                '<button id="player-close" type="button" aria-label="Close SoundCloud player" title="Close player">&#10005;</button>' +
+                '<iframe id="sc-player" allow="autoplay" title="SoundCloud floating player"></iframe>';
+            document.body.appendChild(playerBar);
+            playerClose = playerBar.querySelector("#player-close");
+            playerIframe = playerBar.querySelector("#sc-player");
+        }
+
+        Object.keys(PLAYLISTS).forEach((key) => {
+            const playlist = PLAYLISTS[key];
+
+            if (document.getElementById(playlist.iframeId)) {
+                return;
+            }
+
+            const iframe = document.createElement("iframe");
+            iframe.id = playlist.iframeId;
+            iframe.title = "SoundCloud widget playlist " + key;
+            iframe.allow = "autoplay";
+            iframe.src = getPlaylistWidgetSrc(playlist.playlistUrl);
+            iframe.tabIndex = -1;
+            iframe.setAttribute("aria-hidden", "true");
+            iframe.style.position = "absolute";
+            iframe.style.left = "-9999px";
+            iframe.style.width = "1px";
+            iframe.style.height = "1px";
+            iframe.style.border = "0";
+            document.body.appendChild(iframe);
+        });
+
+        return {
+            playerBar: playerBar,
+            playerClose: playerClose || document.getElementById("player-close"),
+            playerIframe: playerIframe || document.getElementById("sc-player")
+        };
+    }
+
+    function readPlayerState() {
+        try {
+            const rawValue = window.sessionStorage.getItem(PLAYER_STATE_STORAGE_KEY);
+
+            if (!rawValue) {
+                return null;
+            }
+
+            const parsed = JSON.parse(rawValue);
+
+            return parsed && typeof parsed === "object" ? parsed : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writePlayerState(state) {
+        try {
+            window.sessionStorage.setItem(PLAYER_STATE_STORAGE_KEY, JSON.stringify(state));
+        } catch (error) {
+            /* ignore storage failures */
+        }
+    }
+
+    function clearPlayerState() {
+        try {
+            window.sessionStorage.removeItem(PLAYER_STATE_STORAGE_KEY);
+        } catch (error) {
+            /* ignore storage failures */
+        }
     }
 
     function preloadImage(src) {
@@ -230,7 +407,10 @@
         };
 
         markReady();
-        window.addEventListener("pageshow", markReady);
+        if (!siteState.pageTransitionsBound) {
+            window.addEventListener("pageshow", markReady);
+            siteState.pageTransitionsBound = true;
+        }
     }
 
     function initFooterYear() {
@@ -450,15 +630,15 @@
 
     function initPlaylists() {
         const playlistToggles = toArray(document.querySelectorAll("[data-playlist-toggle]"));
-        const playerBar = document.getElementById("player-bar");
-        const playerIframe = document.getElementById("sc-player");
-        const playerClose = document.getElementById("player-close");
+        const soundCloudShell = ensureSoundCloudShell();
+        const playerBar = soundCloudShell ? soundCloudShell.playerBar : null;
+        const playerIframe = soundCloudShell ? soundCloudShell.playerIframe : null;
+        const playerClose = soundCloudShell ? soundCloudShell.playerClose : null;
         const widgetIframes = Object.keys(PLAYLISTS).reduce((acc, key) => {
             acc[key] = document.getElementById(PLAYLISTS[key].iframeId);
             return acc;
         }, {});
-        let playerWidget = null;
-        let activePlaylistIndex = null;
+        const savedPlayerState = readPlayerState();
 
         if (playlistToggles.length === 0 && !playerBar && !playerIframe && !playerClose) {
             return {
@@ -490,9 +670,9 @@
         }
 
         function closePlayer() {
-            if (playerWidget) {
+            if (soundCloudPlayerWidget) {
                 try {
-                    playerWidget.unbind(SC.Widget.Events.FINISH);
+                    soundCloudPlayerWidget.unbind(SC.Widget.Events.FINISH);
                 } catch (error) {
                     /* ignore stale widget instances */
                 }
@@ -508,8 +688,9 @@
             }
 
             document.body.classList.remove("player-open");
-            activePlaylistIndex = null;
-            playerWidget = null;
+            soundCloudActivePlaylistIndex = null;
+            soundCloudPlayerWidget = null;
+            clearPlayerState();
 
             Object.keys(PLAYLISTS).forEach((key) => {
                 PLAYLISTS[key].currentTrackIndex = -1;
@@ -524,6 +705,8 @@
             const playlist = PLAYLISTS[index];
             const list = document.getElementById(playlist.listId);
             const loading = document.getElementById(playlist.loadingId);
+
+            playlist.tracks = sounds || [];
 
             if (!list) {
                 return;
@@ -540,11 +723,13 @@
                 return;
             }
 
-            playlist.tracks = sounds;
             sounds.forEach((sound, soundIndex) => {
                 const item = document.createElement("button");
                 item.type = "button";
                 item.className = "track-item";
+                if (Number(index) === Number(soundCloudActivePlaylistIndex) && soundIndex === playlist.currentTrackIndex) {
+                    item.classList.add("playing");
+                }
                 item.innerHTML =
                     '<span class="track-index">' + String(soundIndex + 1).padStart(2, "0") + "</span>" +
                     "<span>" +
@@ -558,6 +743,25 @@
             });
         }
 
+        function updateTrackHighlight() {
+            toArray(document.querySelectorAll(".track-item")).forEach((item) => {
+                item.classList.remove("playing");
+            });
+
+            if (soundCloudActivePlaylistIndex === null) {
+                return;
+            }
+
+            const playlist = PLAYLISTS[soundCloudActivePlaylistIndex];
+            const items = toArray(document.querySelectorAll("#track-list-" + soundCloudActivePlaylistIndex + " .track-item"));
+
+            if (!playlist || !items[playlist.currentTrackIndex]) {
+                return;
+            }
+
+            items[playlist.currentTrackIndex].classList.add("playing");
+        }
+
         function initializePlaylist(index) {
             const playlist = PLAYLISTS[index];
             const widgetIframe = widgetIframes[index];
@@ -567,6 +771,12 @@
             }
 
             playlist.widget = SC.Widget(widgetIframe);
+            if (playlist.initialized) {
+                renderPlaylist(index, playlist.tracks || []);
+                return;
+            }
+
+            playlist.initialized = true;
             playlist.widget.bind(SC.Widget.Events.READY, () => {
                 playlist.widget.getSounds((sounds) => {
                     renderPlaylist(index, sounds || []);
@@ -575,22 +785,18 @@
         }
 
         function playNextTrack() {
-            if (activePlaylistIndex === null) {
+            if (soundCloudActivePlaylistIndex === null) {
                 return;
             }
 
-            const playlist = PLAYLISTS[activePlaylistIndex];
+            const playlist = PLAYLISTS[soundCloudActivePlaylistIndex];
 
             if (!playlist || playlist.tracks.length === 0) {
                 return;
             }
 
             const nextIndex = (playlist.currentTrackIndex + 1) % playlist.tracks.length;
-            const items = document.querySelectorAll("#track-list-" + activePlaylistIndex + " .track-item");
-
-            if (items[nextIndex]) {
-                playTrack(items[nextIndex], activePlaylistIndex, nextIndex);
-            }
+            playTrack(null, soundCloudActivePlaylistIndex, nextIndex);
         }
 
         function bindPlayerFinish() {
@@ -598,18 +804,42 @@
                 return;
             }
 
-            if (playerWidget) {
+            if (soundCloudPlayerWidget) {
                 try {
-                    playerWidget.unbind(SC.Widget.Events.FINISH);
+                    soundCloudPlayerWidget.unbind(SC.Widget.Events.FINISH);
                 } catch (error) {
                     /* ignore stale widget instances */
                 }
             }
 
-            playerWidget = SC.Widget(playerIframe);
-            playerWidget.bind(SC.Widget.Events.FINISH, () => {
+            soundCloudPlayerWidget = SC.Widget(playerIframe);
+            soundCloudPlayerWidget.bind(SC.Widget.Events.FINISH, () => {
                 playNextTrack();
             });
+        }
+
+        function openPlayer(trackUrl, options) {
+            if (!trackUrl || !playerIframe || !playerBar) {
+                return;
+            }
+
+            if (playerBar) {
+                playerBar.classList.add("visible");
+            }
+
+            document.body.classList.add("player-open");
+            playerIframe.onload = bindPlayerFinish;
+            playerIframe.src = SOUNDCLOUD_PLAYER_SRC + "?url=" +
+                encodeURIComponent(trackUrl) +
+                "&color=%2385906f&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
+
+            if (options && options.persist !== false) {
+                writePlayerState({
+                    playlistIndex: options.playlistIndex,
+                    trackIndex: options.trackIndex,
+                    permalinkUrl: trackUrl
+                });
+            }
         }
 
         function playTrack(element, playlistIndex, trackIndex) {
@@ -619,26 +849,13 @@
                 return;
             }
 
-            activePlaylistIndex = playlistIndex;
+            soundCloudActivePlaylistIndex = playlistIndex;
             playlist.currentTrackIndex = trackIndex;
-
-            toArray(document.querySelectorAll(".track-item")).forEach((item) => {
-                item.classList.remove("playing");
+            updateTrackHighlight();
+            openPlayer(playlist.tracks[trackIndex].permalink_url, {
+                playlistIndex: playlistIndex,
+                trackIndex: trackIndex
             });
-
-            element.classList.add("playing");
-
-            const src = "https://w.soundcloud.com/player/?url=" +
-                encodeURIComponent(playlist.tracks[trackIndex].permalink_url) +
-                "&color=%2385906f&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
-
-            if (playerBar) {
-                playerBar.classList.add("visible");
-            }
-
-            document.body.classList.add("player-open");
-            playerIframe.onload = bindPlayerFinish;
-            playerIframe.src = src;
         }
 
         playlistToggles.forEach((toggle) => {
@@ -647,17 +864,43 @@
             });
         });
 
-        if (playerClose) {
+        if (playerClose && !soundCloudCloseBound) {
             playerClose.addEventListener("click", closePlayer);
+            soundCloudCloseBound = true;
         }
 
-        if (window.SC && SC.Widget) {
-            initializePlaylist(1);
-            initializePlaylist(2);
+        if (!soundCloudStateRestored && savedPlayerState && savedPlayerState.permalinkUrl && playerIframe && !playerIframe.getAttribute("src")) {
+            if (PLAYLISTS[savedPlayerState.playlistIndex]) {
+                soundCloudActivePlaylistIndex = Number(savedPlayerState.playlistIndex);
+                PLAYLISTS[soundCloudActivePlaylistIndex].currentTrackIndex = Number(savedPlayerState.trackIndex);
+            }
+
+            openPlayer(savedPlayerState.permalinkUrl, {
+                playlistIndex: savedPlayerState.playlistIndex,
+                trackIndex: savedPlayerState.trackIndex,
+                persist: false
+            });
+            soundCloudStateRestored = true;
         }
 
         setPlaylistOpen(1, true);
         setPlaylistOpen(2, false);
+
+        loadSoundCloudApi().then(() => {
+            initializePlaylist(1);
+            initializePlaylist(2);
+            if (playerIframe && playerIframe.getAttribute("src")) {
+                bindPlayerFinish();
+            }
+        }).catch(() => {
+            Object.keys(PLAYLISTS).forEach((key) => {
+                const loading = document.getElementById(PLAYLISTS[key].loadingId);
+
+                if (loading) {
+                    loading.textContent = "SoundCloud failed to load.";
+                }
+            });
+        });
 
         return {
             closePlayer: closePlayer
@@ -1008,20 +1251,29 @@
     }
 
     function initEscapeHandling(features) {
+        siteState.currentFeatures = features;
+
+        if (siteState.escapeBound) {
+            return;
+        }
+
         document.addEventListener("keydown", (event) => {
+            const currentFeatures = siteState.currentFeatures;
+
             if (event.key !== "Escape") {
                 return;
             }
 
-            if (features.lightbox.isOpen()) {
-                features.lightbox.closeLightbox();
+            if (currentFeatures.lightbox.isOpen()) {
+                currentFeatures.lightbox.closeLightbox();
                 return;
             }
 
-            if (features.projectDemos.isOpen()) {
-                features.projectDemos.closeProjectDemo();
+            if (currentFeatures.projectDemos.isOpen()) {
+                currentFeatures.projectDemos.closeProjectDemo();
             }
         });
+        siteState.escapeBound = true;
     }
 
     function initReveals() {
@@ -1081,10 +1333,8 @@
         });
     }
 
-    function initSite() {
-        initPageTransitions();
+    function initPageFeatures() {
         initFooterYear();
-
         safeInit(initTopbar);
         safeInit(initTheme);
 
@@ -1108,6 +1358,248 @@
             projectDemos: projectDemos,
             lightbox: lightbox
         }));
+    }
+
+    function getPersistentBodyNodes() {
+        const nodeIds = ["player-bar", "sc-widget-iframe-1", "sc-widget-iframe-2"];
+
+        return nodeIds.map((id) => document.getElementById(id)).filter(Boolean);
+    }
+
+    function updateDocumentMetadata(nextDocument) {
+        const nextDescription = nextDocument.querySelector('meta[name="description"]');
+        const currentDescription = document.querySelector('meta[name="description"]');
+
+        if (nextDocument.title) {
+            document.title = nextDocument.title;
+        }
+
+        if (currentDescription && nextDescription) {
+            currentDescription.setAttribute("content", nextDescription.getAttribute("content") || "");
+        }
+    }
+
+    function copyBodyAttributes(nextBody) {
+        const playerOpen = document.body.classList.contains("player-open");
+        const currentTheme = document.documentElement.getAttribute("data-theme") ||
+            document.body.getAttribute("data-theme") ||
+            DEFAULT_THEME;
+
+        toArray(document.body.attributes).forEach((attribute) => {
+            document.body.removeAttribute(attribute.name);
+        });
+        toArray(nextBody.attributes).forEach((attribute) => {
+            document.body.setAttribute(attribute.name, attribute.value);
+        });
+
+        document.body.setAttribute("data-theme", currentTheme);
+        document.body.classList.remove("is-ready");
+        document.body.classList.add("is-transitioning");
+
+        if (playerOpen) {
+            document.body.classList.add("player-open");
+        }
+    }
+
+    function buildBodyFragment(nextBody) {
+        const fragment = document.createDocumentFragment();
+
+        toArray(nextBody.childNodes).forEach((node) => {
+            if (node.nodeType === 1 && node.tagName === "SCRIPT") {
+                return;
+            }
+
+            fragment.appendChild(node.cloneNode(true));
+        });
+
+        return fragment;
+    }
+
+    function loadScript(src) {
+        if (!src || siteState.loadedScriptUrls.has(src)) {
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+
+            script.src = src;
+            script.async = false;
+            script.onload = () => {
+                siteState.loadedScriptUrls.add(src);
+                resolve();
+            };
+            script.onerror = reject;
+            document.body.appendChild(script);
+        });
+    }
+
+    function loadRequiredScripts(nextDocument, targetUrl) {
+        const scriptUrls = toArray(nextDocument.querySelectorAll("script[src]"))
+            .map((script) => script.getAttribute("src"))
+            .filter(Boolean)
+            .map((src) => new URL(src, targetUrl).href)
+            .filter((src) => src !== SOUNDCLOUD_API_SRC);
+
+        return Promise.all(scriptUrls.map((src) => loadScript(src)));
+    }
+
+    function teardownPageFeatures() {
+        if (siteState.currentFeatures.lightbox && siteState.currentFeatures.lightbox.isOpen()) {
+            siteState.currentFeatures.lightbox.closeLightbox();
+        }
+
+        if (siteState.currentFeatures.projectDemos && siteState.currentFeatures.projectDemos.isOpen()) {
+            siteState.currentFeatures.projectDemos.closeProjectDemo();
+        }
+
+        document.body.style.overflow = "";
+    }
+
+    function applyFetchedPage(nextDocument) {
+        const nextBody = nextDocument.body;
+        const persistentNodes = getPersistentBodyNodes();
+        const anchorNode = persistentNodes[0] || null;
+
+        copyBodyAttributes(nextBody);
+
+        toArray(document.body.childNodes).forEach((node) => {
+            if (persistentNodes.indexOf(node) === -1) {
+                node.remove();
+            }
+        });
+
+        if (anchorNode && anchorNode.parentNode === document.body) {
+            document.body.insertBefore(buildBodyFragment(nextBody), anchorNode);
+        } else {
+            document.body.appendChild(buildBodyFragment(nextBody));
+        }
+
+        persistentNodes.forEach((node) => {
+            if (node.parentNode !== document.body) {
+                document.body.appendChild(node);
+            }
+        });
+    }
+
+    function scrollAfterNavigation(targetUrl) {
+        if (targetUrl.hash) {
+            const target = document.getElementById(targetUrl.hash.slice(1));
+
+            if (target) {
+                target.scrollIntoView();
+                return;
+            }
+        }
+
+        window.scrollTo(0, 0);
+    }
+
+    function navigateToPage(target, options) {
+        const targetUrl = new URL(target, window.location.href);
+        const navigationToken = ++siteState.navigationToken;
+
+        teardownPageFeatures();
+
+        return window.fetch(targetUrl.href, {
+            credentials: "same-origin"
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Navigation request failed");
+            }
+
+            return response.text();
+        }).then((html) => {
+            if (navigationToken !== siteState.navigationToken) {
+                return;
+            }
+
+            const parser = new DOMParser();
+            const nextDocument = parser.parseFromString(html, "text/html");
+
+            if (!nextDocument.body) {
+                throw new Error("Missing body in fetched page");
+            }
+
+            if (!options || options.history !== "ignore") {
+                const historyMethod = options && options.history === "replace" ? "replaceState" : "pushState";
+                window.history[historyMethod]({}, "", targetUrl.href);
+            }
+
+            document.documentElement.lang = nextDocument.documentElement.lang || document.documentElement.lang;
+            updateDocumentMetadata(nextDocument);
+            applyFetchedPage(nextDocument);
+
+            return loadRequiredScripts(nextDocument, targetUrl.href).catch(() => {}).then(() => {
+                initPageTransitions();
+                initPageFeatures();
+                scrollAfterNavigation(targetUrl);
+            });
+        }).catch(() => {
+            window.location.href = targetUrl.href;
+        });
+    }
+
+    function shouldHandleClientNavigation(link, event) {
+        const href = link.getAttribute("href") || "";
+        const targetUrl = new URL(link.href, window.location.href);
+
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return false;
+        }
+
+        if (!href || href.charAt(0) === "#" || link.hasAttribute("download") || link.getAttribute("target")) {
+            return false;
+        }
+
+        if (targetUrl.origin !== window.location.origin) {
+            return false;
+        }
+
+        if (/^(mailto|tel|javascript):/i.test(href)) {
+            return false;
+        }
+
+        if (/\.(pdf|png|jpe?g|gif|webp|svg|heic|mp4)$/i.test(targetUrl.pathname)) {
+            return false;
+        }
+
+        if (targetUrl.pathname === window.location.pathname && targetUrl.search === window.location.search && targetUrl.hash) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function initClientNavigation() {
+        if (siteState.clientNavigationBound) {
+            return;
+        }
+
+        document.addEventListener("click", (event) => {
+            const link = event.target && event.target.closest ? event.target.closest("a[href]") : null;
+
+            if (!link || !shouldHandleClientNavigation(link, event)) {
+                return;
+            }
+
+            event.preventDefault();
+            navigateToPage(link.href);
+        });
+
+        window.addEventListener("popstate", () => {
+            navigateToPage(window.location.href, {
+                history: "ignore"
+            });
+        });
+
+        siteState.clientNavigationBound = true;
+    }
+
+    function initSite() {
+        initPageTransitions();
+        initPageFeatures();
+        initClientNavigation();
     }
 
     if (document.readyState === "loading") {
